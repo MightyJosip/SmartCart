@@ -21,5 +21,6 @@ from smartCart import views
 urlpatterns = [
     path('smartcart/', include('smartCart.urls')),
     path('admin/', admin.site.urls),
-    path('', views.index, name = 'index')
+    path('', views.index, name = 'index'),
+    path('login', views.login, name = 'login')
 ]
