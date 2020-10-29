@@ -3,4 +3,4 @@ from django.http import HttpResponse
 
 
 def index(request):
-    return HttpResponse("Početna stranica")
+    return render(request, 'smartCart/index.html', {})

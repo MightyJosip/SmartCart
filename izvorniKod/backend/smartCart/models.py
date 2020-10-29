@@ -10,3 +10,10 @@ class Artikl(models.Model):
 
     # def uvjet(self):
     #     return test_nad_uvjetom
+
+class Trgovina(models.Model):
+    sifTrgovina = models.IntegerField(primary_key=True)
+    nazTrgovina = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f'BARKOD: {self.sifTrgovina}, NAZIV: {self.nazTrgovina}'
