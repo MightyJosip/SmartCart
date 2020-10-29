@@ -12,11 +12,11 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 
-KEY = ''  # Key for the smartcart
+KEY = 'buxj)xs5pXDl4c4$b@a69&a5kp%vr0$rtx0#ubt(=eu1-=i)h3'  # Key for the smartcart
 
 DATABASE_NAME = 'smartcart'
-DATABASE_USERNAME = ''  # Usermane for PostgreSQL
-DATABASE_PASSWORD = ''  # Password for PostgreSQL
+DATABASE_USERNAME = 'postgres'  # Usermane for PostgreSQL
+DATABASE_PASSWORD = 'bazepodataka'  # Password for PostgreSQL
 DATABASE_IP = '127.0.0.1'
 DATABASE_PORT = '5432'
 
