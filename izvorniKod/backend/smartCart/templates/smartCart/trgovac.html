@@ -8,13 +8,45 @@
 <body>
     <h1>Welcome, {{ username }}</h1>
 
+    <hr />
+
     <h2>Pregled trgovina</h2>
+
+    <hr />
 
     <h2>Pregled namirnica</h2>
 
-    <form action="/logout" method="get">
-        <button type="submit">Logout</button>
+    <hr />
+
+    <h2>Dodavanje trgovina</h2>
+
+    <form action="" method="POST">
+        {%csrf_token%}
+        <label for="sifTrgovina">Sifra trgovine</label><br>
+        <input type="text" id="sifTrgovina" name="sifTrgovina" value=""><br>
+        <label for="nazTrgovina">Naziv trgovine</label><br>
+        <input type="text" id="nazTrgovina" name="nazTrgovina" value=""><br>
+        <label for="koordinate">Koordinate</label><br>
+        <input type="text" id="koordinate" name="koordinate" value=""><br><br>
+        <input type="submit" value="Submit">
     </form>
+
+    <hr />
+
+    <h2>Dodavanje namirnica</h2>
+
+    <form action="" method="POST">
+        {%csrf_token%}
+        <label for="barkod">Barkod</label><br>
+        <input type="text" id="barkod" name="barkod" value=""><br>
+        <label for="nazArtikl">Naziv artikla</label><br>
+        <input type="text" id="nazArtikl" name="nazArtikl" value=""><br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <hr />
+
+
 </body>
 
 
