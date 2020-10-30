@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login as logging_in, logout as log
 from django.shortcuts import redirect
 from django.urls import reverse
 
-from smartCart.models import Trgovina
+from smartCart.models import Trgovina, Artikl
 
 # entry point
 def index(request):
@@ -37,8 +37,9 @@ def trgovac(request):
         if(request.user.is_authenticated):
             #------
             trgovine = list(Trgovina.objects.all())
+            artikli = list(Artikl.objects.all())
             #------
-            return render(request, 'smartCart/trgovac.html', {'trgovine': trgovine})
+            return render(request, 'smartCart/trgovac.html', {'trgovine': trgovine, 'artikli': artikli})
         else:
             return render(request, 'smartCart/index.html', {})
 
@@ -54,6 +55,34 @@ def trgovac(request):
 
     return redirect(request.META['HTTP_REFERER'])
 
+# adding trgovine
+def dodaj_trgovine(request):
+    if (request.method == 'GET'):
+        return redirect(request.META['HTTP_REFERER'])
+
+    sifTrgovina = request.POST['sifTrgovina']
+    nazTrgovina = request.POST['nazTrgovina']
+
+    print(sifTrgovina + ' ' + nazTrgovina)
+
+    trgovina = Trgovina(sifTrgovina=sifTrgovina, nazTrgovina=nazTrgovina)
+    trgovina.save()
+
+    return redirect(request.META['HTTP_REFERER'])
+
+# adding artikli
+
+def dodaj_artikle(request):
+    if (request.method == 'GET'):
+        return redirect(request.META['HTTP_REFERER'])
+
+    barkod_artikla = request.POST['barkod']
+    naziv_artikla = request.POST['nazArtikl']
+
+    artikl = Artikl(naziv_artikla=naziv_artikla, barkod_artikla=barkod_artikla)
+    artikl.save()
+
+    return redirect(request.META['HTTP_REFERER'])
 
 
 # logout page, cannot be rendered

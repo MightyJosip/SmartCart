@@ -19,12 +19,16 @@
     <hr />
 
     <h2>Pregled namirnica</h2>
-
+    <ul>
+        {% for t in artikli %}
+        <li>{{ t.naziv_artikla }} <a href="/artikl/{{t.barkod_artikla}}">Detaljnije o namirnici</a></li> <!--add link regex for this shit-->
+        {% endfor %}
+    </ul>
     <hr />
 
     <h2>Dodavanje trgovina</h2>
 
-    <form action="" method="POST">
+    <form action="/trgovac/dodaj-trgovine" method="POST">
         {%csrf_token%}
         <label for="sifTrgovina">Sifra trgovine</label><br>
         <input type="text" id="sifTrgovina" name="sifTrgovina" value=""><br>
@@ -37,7 +41,7 @@
 
     <h2>Dodavanje namirnica</h2>
 
-    <form action="" method="POST">
+    <form action="/trgovac/dodaj-artikle" method="POST">
         {%csrf_token%}
         <label for="barkod">Barkod</label><br>
         <input type="text" id="barkod" name="barkod" value=""><br>
