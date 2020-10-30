@@ -10,7 +10,7 @@
         android:theme="@style/Theme.SmartCart">
         <activity android:name=".MainActivity">
 
-            
+
         </activity>
         <activity android:name=".SignUpActivity">
             <intent-filter>
