@@ -20,9 +20,9 @@ from smartCart import views
 
 urlpatterns = [
     path('smartcart/', include('smartCart.urls')),
-    path('admin/', admin.site.urls),
+    path('admin', admin.site.urls),
     path('', views.index, name = 'index'),
-    path('login', views.login, name = 'login'),
-    path('trgovac', views.login, name='trgovac'),
-    path('logout', views.logout, name='logout')
+    path('login/', views.login, name = 'login'),
+    path('trgovac/', views.login, name='trgovac'),
+    path('logout/', views.logout, name='logout')
 ]
