@@ -14,6 +14,7 @@ class Artikl(models.Model):
 class Trgovina(models.Model):
     sifTrgovina = models.IntegerField(primary_key=True)
     nazTrgovina = models.CharField(max_length=100)
+    #trgovine = models.Manager() ##
 
     def __str__(self):
         return f'BARKOD: {self.sifTrgovina}, NAZIV: {self.nazTrgovina}'

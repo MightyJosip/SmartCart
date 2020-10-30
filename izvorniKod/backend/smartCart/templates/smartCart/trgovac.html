@@ -11,7 +11,11 @@
     <hr />
 
     <h2>Pregled trgovina</h2>
-
+    <ul>
+        {% for t in trgovine %}
+        <li>{{ t.nazTrgovina }} <a href="/trgovina/{{t.sifTrgovina}}">Detaljnije o trgovini</a></li> <!--add link regex for this shit-->
+        {% endfor %}
+    </ul>
     <hr />
 
     <h2>Pregled namirnica</h2>
@@ -26,8 +30,6 @@
         <input type="text" id="sifTrgovina" name="sifTrgovina" value=""><br>
         <label for="nazTrgovina">Naziv trgovine</label><br>
         <input type="text" id="nazTrgovina" name="nazTrgovina" value=""><br>
-        <label for="koordinate">Koordinate</label><br>
-        <input type="text" id="koordinate" name="koordinate" value=""><br><br>
         <input type="submit" value="Submit">
     </form>
 

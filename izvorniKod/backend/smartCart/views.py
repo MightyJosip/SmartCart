@@ -6,6 +6,8 @@ from django.contrib.auth import authenticate, login as logging_in, logout as log
 from django.shortcuts import redirect
 from django.urls import reverse
 
+from smartCart.models import Trgovina
+
 # entry point
 def index(request):
     print("u indexu")
@@ -33,11 +35,23 @@ def trgovac(request):
     print("u trgovcu")
     if (request.method == 'GET'):
         if(request.user.is_authenticated):
-            return render(request, 'smartCart/trgovac.html', {})
+            #------
+            trgovine = list(Trgovina.objects.all())
+            #------
+            return render(request, 'smartCart/trgovac.html', {'trgovine': trgovine})
         else:
             return render(request, 'smartCart/index.html', {})
 
     #return the same page and avoid js on client side..
+
+    sifTrgovina = request.POST['sifTrgovina']
+    nazTrgovina = request.POST['nazTrgovina']
+
+    print(sifTrgovina + ' ' + nazTrgovina)
+
+    trgovina = Trgovina(sifTrgovina=sifTrgovina, nazTrgovina=nazTrgovina)
+    trgovina.save()
+
     return redirect(request.META['HTTP_REFERER'])
 
 
