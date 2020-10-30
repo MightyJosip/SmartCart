@@ -11,17 +11,19 @@
     <hr />
 
     <h2>Pregled trgovina</h2>
+    
     <ul>
         {% for t in trgovine %}
-        <li>{{ t.nazTrgovina }} <a href="/trgovina/{{t.sifTrgovina}}">Detaljnije o trgovini</a></li> <!--add link regex for this shit-->
+        <li>{{ t.nazTrgovina }} <a href="{% url 'trgovina' t.sifTrgovina %}">Detaljnije o trgovini</a></li> <!--ne radi-->
         {% endfor %}
     </ul>
+    
     <hr />
 
     <h2>Pregled namirnica</h2>
     <ul>
         {% for t in artikli %}
-        <li>{{ t.naziv_artikla }} <a href="/artikl/{{t.barkod_artikla}}">Detaljnije o namirnici</a></li> <!--add link regex for this shit-->
+        <li>{{ t.naziv_artikla }} <a href="{% url 'artikl' t.barkod_artikla %}">Detaljnije o namirnici</a></li> <!--štoviše, zajebava-->
         {% endfor %}
     </ul>
     <hr />

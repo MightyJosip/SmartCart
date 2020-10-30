@@ -71,7 +71,6 @@ def dodaj_trgovine(request):
     return redirect(request.META['HTTP_REFERER'])
 
 # adding artikli
-
 def dodaj_artikle(request):
     if (request.method == 'GET'):
         return redirect(request.META['HTTP_REFERER'])
@@ -84,6 +83,12 @@ def dodaj_artikle(request):
 
     return redirect(request.META['HTTP_REFERER'])
 
+# webpage for each trgovina
+def trgovina(request, sifTrgovina):
+    return render(request, 'smartCart/trgovina.html', {'sifTrgovina': sifTrgovina})
+
+def artikl(request, barkod_artikla):
+    return render(request, 'smartCart/artikl.html', {'barkod_artikla': barkod_artikla})
 
 # logout page, cannot be rendered
 def logout(request):
