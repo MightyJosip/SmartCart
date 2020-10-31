@@ -108,7 +108,8 @@ def trgovina(request, sifTrgovina):
     return render(request, 'smartCart/trgovina.html', {'sifTrgovina': sifTrgovina, 'nazTrgovina': t.nazTrgovina, 'artikli': t.artikli.all()})
 
 def artikl(request, barkod_artikla):
-    return render(request, 'smartCart/artikl.html', {'barkod_artikla': barkod_artikla})
+    a = Artikl.objects.get(barkod_artikla=barkod_artikla)
+    return render(request, 'smartCart/artikl.html', {'barkod_artikla': barkod_artikla, 'artikl': a})
 
 # logout page, cannot be rendered
 def logout(request):
