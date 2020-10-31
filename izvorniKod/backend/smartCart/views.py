@@ -85,7 +85,27 @@ def dodaj_artikle(request):
 
 # webpage for each trgovina
 def trgovina(request, sifTrgovina):
-    return render(request, 'smartCart/trgovina.html', {'sifTrgovina': sifTrgovina})
+    if (request.method == 'POST'):
+        print("uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu")
+        bar_k = request.POST['barkod']
+        sif_t = request.POST['sifTrgovina']
+        print(bar_k + ' ' + sif_t)
+        t = Trgovina.objects.get(sifTrgovina=sifTrgovina)
+        a = Artikl.objects.get(barkod_artikla=bar_k)
+
+        t.artikli.add(a) #odbija poslušnost
+        t.save()
+        print(t)       
+        print(a)
+        print("--------")
+        print(t.artikli.all())
+        return redirect(request.META['HTTP_REFERER'])
+
+    t = Trgovina.objects.get(sifTrgovina=sifTrgovina)
+    print(t)
+    print(t.artikli.all())
+    #print(t.artikli.all()[0].barkod_artikla)
+    return render(request, 'smartCart/trgovina.html', {'sifTrgovina': sifTrgovina, 'nazTrgovina': t.nazTrgovina, 'artikli': t.artikli.all()})
 
 def artikl(request, barkod_artikla):
     return render(request, 'smartCart/artikl.html', {'barkod_artikla': barkod_artikla})
