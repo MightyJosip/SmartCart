@@ -73,6 +73,12 @@ def dodaj_trgovine(request):
 # Nisam postavio default vrijednosti pa sam išao nullovima
 # ako se objekt stvori, i pospremi u bazu, one varijable koje njemu nismo napunili idu odmah u NULL ili default vrijednost
 # npr. u artiklu nisam nigdje napucao niti jedan vote_count!!!!, spremaju se NULL vrijednosti
+# P.S. Ako pod "Zemlja porijekla" probaš upisati "ikaguhskadghaskfhasfkhasf" dobijaš err
+# Stvar je u tome da se radi o 1..1 : N..0 vezi tj. iz zemlje dolazi 0..N proizvoda, a proizvod ima točno jednu zemlju porijekla!
+# Zemlja porijekla je foreign key u artiklu
+# Uh... Kako 1..1 pretvoriti u 0..1? Staviti null? Probao sam i ne ide.
+# ovo bih trebao pisati u models.py, zar ne?
+
 def dodaj_artikle(request):
     if (request.method == 'GET'):
         return redirect(request.META['HTTP_REFERER'])

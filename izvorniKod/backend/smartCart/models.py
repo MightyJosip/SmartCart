@@ -1,17 +1,28 @@
 from django.db import models
 
-
+# predstavlja proizvođača u bazi podataka
+# trenutno ima samo jedan atribut - naziv
+# TODO: dodati još atributa
 class Proizvođač(models.Model):
     naziv = models.CharField(primary_key=True, max_length=100)
 
     def __str__(self):
         return f'NAZIV: {self.naziv}'
 
+# predstavlja zemlju porijekla
+# trenutno ima jedan atribut - naziv
+# TODO: dodaj više atributa
+# ovu bi tablicu mi trebali napuniti
 class Zemlja_porijekla(models.Model):
     naziv = models.CharField(primary_key=True, max_length=100)
     def __str__(self):
         return f'NAZIV: {self.naziv}'
 
+# klasa artikl
+# atribute barkod_artikla, naziv_artikla, opis_artikla, proizvođač, zemlja_porijekla i vegan dodaje korisnik
+# autor atributa bi se trebao sam ispuniti
+# vote count bi trebao biti postavljen na nulu
+# TODO: srediti vote count atribude iz NULL prebaciti u DEFAULT = 0
 class Artikl(models.Model):
     barkod_artikla = models.IntegerField(primary_key=True)
     
@@ -39,6 +50,16 @@ class Artikl(models.Model):
     # def uvjet(self):
     #     return test_nad_uvjetom
 
+# klasa trgovina
+# sve jasno
+# TODO: dodaj atribute tipa lokacija, adresa itd..
+# TODO: rastaviti ovaj "many to many fields" u zasebnu klasu, dodati "dostupnost" i "cijena" kao atribute
+# stvar je u tome da je N:N veza ne isparava pretvaranjem iz ER u Relacijski model
+# ovdje je pak stvar da N:N veza može biti dio neke druge veze sve dok....
+# nema svoje atribute.
+# E al mi znamo da svaka trgovina određuje svoju cijenu za artikle koji se razlikuju od trgovine do trgovine
+# Na istu foru dodaj "dostupnost"
+# udari u google py django many to many relationship i otvori službenu stranicu i šamaraj
 class Trgovina(models.Model):
     sifTrgovina = models.IntegerField(primary_key=True)
     nazTrgovina = models.CharField(max_length=100)
