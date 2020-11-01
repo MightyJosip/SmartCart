@@ -1,21 +1,22 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-#from django.contrib.auth.hashers import *
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as logging_in, logout as logging_out
 from django.shortcuts import redirect
 from django.urls import reverse
-
 from smartCart.models import Trgovina, Artikl
 
-# entry point
+# kad se zatraži "/", funkcija vraća početnu stranicu
+# koja se zove index.html
 def index(request):
-    print("u indexu")
     return render(request, 'smartCart/index.html', {})
 
-# login page
+# stranica za ulogiravanje korisnika
+# ako joj se pristupa metodi GET, vraća se stranica za ulogriavanje: login.html
+# ako joj se pristupa metodi POST, podaci se validiraju
+# ako se uspješno validiraju, šalje se HTML GET upit na "/trgovac"
+# ako se neuspješno validiraju, stranica login.html se ponovno učitava
 def login(request):
-    print("u loginu")
     if(request.method == 'GET'):
         return render(request, 'smartCart/login.html', {})
 
@@ -26,13 +27,14 @@ def login(request):
     if (user is not None):
         logging_in(request, user)
         return redirect('trgovac')
-        #return render(request, 'smartCart/trgovac.html', {'username' : username})
     else:
         return render(request, 'smartCart/login.html', {})
 
-# trgovac page
+# glavna stranica za trgovca, vraća se stranica "trgovac.html"
+# služi za pregled svih namirnica i svih trgovina
+# postoje i formulari preko kojih se može dodati nova trgovina i novi proizvod
+# može joj se pristupiti metodi GET
 def trgovac(request):
-    print("u trgovcu")
     if (request.method == 'GET'):
         if(request.user.is_authenticated):
             #------
@@ -43,19 +45,12 @@ def trgovac(request):
         else:
             return render(request, 'smartCart/index.html', {})
 
-    #return the same page and avoid js on client side..
-
-    sifTrgovina = request.POST['sifTrgovina']   #bespotrebno, sad postoji dodaj_trgovine!
-    nazTrgovina = request.POST['nazTrgovina']
-
-    print(sifTrgovina + ' ' + nazTrgovina)
-
-    trgovina = Trgovina(sifTrgovina=sifTrgovina, nazTrgovina=nazTrgovina)
-    trgovina.save()
-
+    # ako metoda nije post ova grana se izvršava, trebalo bi baciti err
+    # sljedeća funkcija vraća prethodnu stranicu, ostatak od prošlih kemijanja
     return redirect(request.META['HTTP_REFERER'])
 
-# adding trgovine
+# pomoćni view za dodavanje trgovine
+# kad se dodaju trgovine
 def dodaj_trgovine(request):
     if (request.method == 'GET'):
         return redirect(request.META['HTTP_REFERER'])
@@ -63,10 +58,8 @@ def dodaj_trgovine(request):
     sifTrgovina = request.POST['sifTrgovina']
     nazTrgovina = request.POST['nazTrgovina']
 
-    print(sifTrgovina + ' ' + nazTrgovina)
-
     trgovina = Trgovina(sifTrgovina=sifTrgovina, nazTrgovina=nazTrgovina)
-    trgovina.save()
+    trgovina.save() 
 
     return redirect(request.META['HTTP_REFERER'])
 
@@ -109,25 +102,15 @@ def dodaj_artikle(request):
 # webpage for each trgovina
 def trgovina(request, sifTrgovina):
     if (request.method == 'POST'):
-        print("uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu")
         bar_k = request.POST['barkod']
         sif_t = request.POST['sifTrgovina']
-        print(bar_k + ' ' + sif_t)
-        t = Trgovina.objects.get(sifTrgovina=sifTrgovina)
+        t = Trgovina.objects.get(sifTrgovina=sif_t)
         a = Artikl.objects.get(barkod_artikla=bar_k)
-
-        t.artikli.add(a) #odbija poslušnost
+        t.artikli.add(a) 
         t.save()
-        print(t)       
-        print(a)
-        print("--------")
-        print(t.artikli.all())
         return redirect(request.META['HTTP_REFERER'])
 
     t = Trgovina.objects.get(sifTrgovina=sifTrgovina)
-    print(t)
-    print(t.artikli.all())
-    #print(t.artikli.all()[0].barkod_artikla)
     return render(request, 'smartCart/trgovina.html', {'sifTrgovina': sifTrgovina, 'nazTrgovina': t.nazTrgovina, 'artikli': t.artikli.all()})
 
 def artikl(request, barkod_artikla):
@@ -136,6 +119,5 @@ def artikl(request, barkod_artikla):
 
 # logout page, cannot be rendered
 def logout(request):
-    print("u logoutu")
     logging_out(request)
     return render(request, 'smartCart/index.html', {})
