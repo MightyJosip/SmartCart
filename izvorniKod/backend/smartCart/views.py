@@ -50,7 +50,9 @@ def trgovac(request):
     return redirect(request.META['HTTP_REFERER'])
 
 # pomoćni view za dodavanje trgovine
-# kad se dodaju trgovine
+# kad se dodaju trgovine, šalje se HTTP POST na "trgovac/dodaj-trgovine"
+# trgovina se dodaje u bazu podatka i zatim
+# se šalje HTTP GET zahtjev za "/trgovac" da se sve lijepo refresha i pokaže promjena
 def dodaj_trgovine(request):
     if (request.method == 'GET'):
         return redirect(request.META['HTTP_REFERER'])
@@ -63,7 +65,14 @@ def dodaj_trgovine(request):
 
     return redirect(request.META['HTTP_REFERER'])
 
-# adding artikli
+# pomoćno view za dodavanje artikala
+# kad se dodaju artikli, šalje se HTTP POST na "/trgovac/dodaj-artikle"
+# artikl se dodaje i bazu podataka
+# zatim se šalje HTTP GET zahtjev za "/trgovac" 
+# KOMENTAR: ima masu ovih "if then var = None" jer se to translatira u NULL vrijednosti u bazi podataka
+# Nisam postavio default vrijednosti pa sam išao nullovima
+# ako se objekt stvori, i pospremi u bazu, one varijable koje njemu nismo napunili idu odmah u NULL ili default vrijednost
+# npr. u artiklu nisam nigdje napucao niti jedan vote_count!!!!, spremaju se NULL vrijednosti
 def dodaj_artikle(request):
     if (request.method == 'GET'):
         return redirect(request.META['HTTP_REFERER'])
@@ -75,7 +84,7 @@ def dodaj_artikle(request):
     zemlja_porijekla = request.POST['zemlja_porijekla']
     vegan = request.POST['vegan']
 
-    if proizvođač == '':    #potrebno je nabaciti masovnu validaciju ulaznih podataka,
+    if proizvođač == '':   
         proizvođač = None
     
     if zemlja_porijekla == '':
@@ -99,7 +108,10 @@ def dodaj_artikle(request):
 
     return redirect(request.META['HTTP_REFERER'])
 
-# webpage for each trgovina
+# stranica za prikaz trgovine, informacije o trgovini i proizvoda dostupnim u tim trgovinama
+# slanjem HTTP GET upita na "/trgovina/<int>" gdje je <int> cijeli broj koji predstavlja unikatnu šifru baš te trgovine
+# vraća se "trgovina.html" s podacije o toj trgovini
+# slanjem HTTP POST upita na "/trgovina" sa informacijama o artiklu (konkretnike: barkoda artikla), artikl se može dodati u trgovinu
 def trgovina(request, sifTrgovina):
     if (request.method == 'POST'):
         bar_k = request.POST['barkod']
@@ -113,11 +125,18 @@ def trgovina(request, sifTrgovina):
     t = Trgovina.objects.get(sifTrgovina=sifTrgovina)
     return render(request, 'smartCart/trgovina.html', {'sifTrgovina': sifTrgovina, 'nazTrgovina': t.nazTrgovina, 'artikli': t.artikli.all()})
 
+# stranica za prikaz artikla i informacija o artiklu
+# slanjem HTTP GET upita na "/artikl/<int>" gdje je <int> cijeli broj koji predstavlja unikatnu šifru tog artikla
+# vraća se "artikl.html" koji sadrži podatke o baš tom artiklu
 def artikl(request, barkod_artikla):
     a = Artikl.objects.get(barkod_artikla=barkod_artikla)
     return render(request, 'smartCart/artikl.html', {'barkod_artikla': barkod_artikla, 'artikl': a})
 
-# logout page, cannot be rendered
+# logout stranica, ne može se prikazati
+# ovo je potrebno doraditi, zajedno s prikazom ostalih stranica. Treba provjeriti tko je ulogiran i tko radi što
+# request.user.is_authenticated je funkcija korištena pri logiranju
+# TODO:
+# u slučaju da je korisnik izlogiran i pokuša se izlogirati treba vratiti grešku
 def logout(request):
     logging_out(request)
     return render(request, 'smartCart/index.html', {})
