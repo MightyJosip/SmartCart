@@ -45,7 +45,7 @@ def trgovac(request):
 
     #return the same page and avoid js on client side..
 
-    sifTrgovina = request.POST['sifTrgovina']
+    sifTrgovina = request.POST['sifTrgovina']   #bespotrebno, sad postoji dodaj_trgovine!
     nazTrgovina = request.POST['nazTrgovina']
 
     print(sifTrgovina + ' ' + nazTrgovina)
@@ -75,10 +75,33 @@ def dodaj_artikle(request):
     if (request.method == 'GET'):
         return redirect(request.META['HTTP_REFERER'])
 
-    barkod_artikla = request.POST['barkod']
-    naziv_artikla = request.POST['nazArtikl']
+    barkod_artikla = request.POST['barkod_artikla']
+    naziv_artikla = request.POST['naziv_artikla']
+    opis_artikla = request.POST['opis_artikla']
+    proizvođač = request.POST['proizvođač']
+    zemlja_porijekla = request.POST['zemlja_porijekla']
+    vegan = request.POST['vegan']
 
-    artikl = Artikl(naziv_artikla=naziv_artikla, barkod_artikla=barkod_artikla)
+    if proizvođač == '':    #potrebno je nabaciti masovnu validaciju ulaznih podataka,
+        proizvođač = None
+    
+    if zemlja_porijekla == '':
+        zemlja_porijekla = None
+
+    if opis_artikla == '':
+        opis_artikla = None
+
+    if vegan == '':
+        vegan = None
+
+    artikl = Artikl(
+        naziv_artikla=naziv_artikla, 
+        barkod_artikla=barkod_artikla,
+        opis_artikla=opis_artikla,
+        proizvođač=proizvođač,
+        zemlja_porijekla=zemlja_porijekla,
+        vegan=vegan
+    )
     artikl.save()
 
     return redirect(request.META['HTTP_REFERER'])

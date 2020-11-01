@@ -15,23 +15,23 @@ class Zemlja_porijekla(models.Model):
 class Artikl(models.Model):
     barkod_artikla = models.IntegerField(primary_key=True)
     
-    naziv_artikla = models.CharField(max_length=100)
-    autor_naziva = models.CharField(max_length=100)
-    vote_count_naziva = models.IntegerField()
+    naziv_artikla = models.CharField(max_length=100, null=False)
+    autor_naziva = models.CharField(max_length=100, null=True)
+    vote_count_naziva = models.IntegerField(null=True)
     
-    opis_artikla = models.CharField(max_length=5000)
-    autor_opisa = models.CharField(max_length=100)
-    vote_count_opisa = models.IntegerField()
+    opis_artikla = models.CharField(max_length=5000, null=True)
+    autor_opisa = models.CharField(max_length=100, null=True)
+    vote_count_opisa = models.IntegerField(null=True)
     
     proizvođač = models.ForeignKey(Proizvođač, on_delete=models.SET_NULL, null=True)       #uh, može i set default ali brate ima tu posla
-    autor_proizvođača = models.CharField(max_length=100)
-    vote_count_proizvođača = models.IntegerField()
+    autor_proizvođača = models.CharField(max_length=100, null=True)
+    vote_count_proizvođača = models.IntegerField(null=True)
 
     zemlja_porijekla = models.ForeignKey(Zemlja_porijekla, on_delete=models.SET_NULL, null=True)   #krivo jer može biti točnije. Npr. uzmite bilo koji med i pisat će "Zemlja porijeka: 5% iz hrvatske, 99.9% iz kine"
-    autor_zemlje_porijekla = models.CharField(max_length=100)
-    vote_count_zemlje_porijekla = models.IntegerField()
+    autor_zemlje_porijekla = models.CharField(max_length=100, null=True)
+    vote_count_zemlje_porijekla = models.IntegerField(null=True)
 
-    vegan = models.CharField(max_length=2)
+    vegan = models.CharField(max_length=2, null=True)
     
     def __str__(self):
         return f'BARKOD: {self.barkod_artikla}, NAZIV: {self.naziv_artikla}'

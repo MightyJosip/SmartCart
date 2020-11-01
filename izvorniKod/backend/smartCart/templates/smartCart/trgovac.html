@@ -45,10 +45,24 @@
 
     <form action="/trgovac/dodaj-artikle" method="POST">
         {%csrf_token%}
-        <label for="barkod">Barkod</label><br>
-        <input type="text" id="barkod" name="barkod" value=""><br>
+        <label for="barkod">Barkod artikla</label><br>
+        <input type="text" id="barkod_artikla" name="barkod_artikla" value=""><br>
+
         <label for="nazArtikl">Naziv artikla</label><br>
-        <input type="text" id="nazArtikl" name="nazArtikl" value=""><br>
+        <input type="text" id="naziv_artikla" name="naziv_artikla" value=""><br>
+
+        <label for="nazArtikl">Opis artikla</label><br>
+        <input type="text" id="opis_artikla" name="opis_artikla" value=""><br>
+
+        <label for="nazArtikl">Proizvođač</label><br>
+        <input type="text" id="proizvođač" name="proizvođač" value=""><br>
+
+        <label for="nazArtikl">Zemlja porijekla</label><br>
+        <input type="text" id="zemlja_porijekla" name="zemlja_porijekla" value=""><br>
+
+        <label for="nazArtikl">Proizvod je veganski?</label><br>
+        <input type="text" id="vegan" name="vegan" value=""><br>
+
         <input type="submit" value="Submit">
     </form>
 
