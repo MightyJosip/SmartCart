@@ -11,7 +11,7 @@
         android:id="@+id/imageView"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:contentDescription="@null"
+        android:contentDescription="@string/smartcartlogo"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         app:srcCompat="@drawable/logo" />
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="130dp"
-        android:contentDescription="@null"
+        android:contentDescription="@string/smartcartTextLogo"
         app:srcCompat="@drawable/logo_smartcart" />
 
     <EditText
@@ -32,11 +32,11 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="290dp"
         android:background="#11000000"
-        android:drawableLeft="@drawable/ic_action_user"
+        android:drawableStart="@drawable/ic_action_user"
         android:ems="10"
-        android:hint="Username"
+        android:hint="@string/username"
         android:inputType="textPersonName"
-        android:textSize="20dp" />
+        android:textSize="20sp" />
 
     <EditText
         android:id="@+id/editTextTextPassword"
@@ -45,9 +45,9 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="350dp"
         android:background="#11000000"
-        android:drawableLeft="@drawable/ic_action_password"
+        android:drawableStart="@drawable/ic_action_password"
         android:ems="10"
-        android:hint="Password"
+        android:hint="@string/password"
         android:inputType="textPassword" />
 
     <androidx.cardview.widget.CardView
@@ -68,7 +68,7 @@
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Login"
+                android:text="@string/login"
                 android:textColor="#fff"
                 android:layout_centerInParent="true"
                 android:textSize="20sp"/>
@@ -77,6 +77,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="300dp"
+        android:id="@+id/CardView2"
         android:layout_height="50dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="485dp"
@@ -93,7 +94,7 @@
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sign in as guest"
+                android:text="@string/continue_as_guest"
                 android:textColor="#fff"
                 android:layout_centerInParent="true"
                 android:textSize="20sp"/>
@@ -104,7 +105,7 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Register Here!"
+        android:text="@string/register_here"
         android:textColor="#fff"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="600dp"
