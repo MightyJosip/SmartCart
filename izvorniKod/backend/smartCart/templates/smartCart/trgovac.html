@@ -42,10 +42,9 @@
 
     <form action="/trgovac/dodaj-trgovine" method="POST">
         {%csrf_token%}
-        <label for="sifTrgovina">Sifra trgovine</label><br>
-        <input type="text" id="sifTrgovina" name="sifTrgovina" value=""><br>
-        <label for="nazTrgovina">Naziv trgovine</label><br>
-        <input type="text" id="nazTrgovina" name="nazTrgovina" value=""><br>
+        {% for field in trg_form  %}
+            {{ field.label_tag }}<br> {{ field }}<br><br>
+        {% endfor %}
         <input type="submit" value="Submit">
     </form>
 
@@ -55,32 +54,11 @@
 
     <form action="/trgovac/dodaj-artikle" method="POST">
         {%csrf_token%}
-        <label for="barkod_artikla">Barkod artikla</label><br>
-        <input type="text" id="barkod_artikla" name="barkod_artikla" value=""><br>
-
-        <label for="naziv_artikla">Naziv artikla</label><br>
-        <input type="text" id="naziv_artikla" name="naziv_artikla" value=""><br>
-
-        <label for="opis_artikla">Opis artikla</label><br>
-        <input type="text" id="opis_artikla" name="opis_artikla" value=""><br>
-
-        <label for="proizvođač">Proizvođač</label><br>
-        <input type="text" id="proizvođač" name="proizvođač" value=""><br>
-
-        <label for="zemlja_porijekla">Zemlja porijekla</label><br>
-        <input type="text" id="zemlja_porijekla" name="zemlja_porijekla" value=""><br>
-
-        <label for="vegan">Proizvod je veganski?</label><br>
-        <input type="text" id="vegan" name="vegan" value=""><br>
-
+        {% for field in art_form  %}
+            {{ field.label_tag }}<br> {{ field }}<br><br>
+        {% endfor %}
         <input type="submit" value="Submit">
     </form>
-
     <hr />
-
-
 </body>
-
-
-
 </html>

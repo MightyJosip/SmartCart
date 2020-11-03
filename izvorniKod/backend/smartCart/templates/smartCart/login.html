@@ -17,10 +17,9 @@
 
     <form action="" method="POST">
         {%csrf_token%}
-        <label for="username">Username</label><br>
-        <input type="text" id="username" name="username" value=""><br>
-        <label for="password">Password</label><br>
-        <input type="password" id="password" name="password" value=""><br><br>
+        {% for field in form  %}
+            <b>{{ field.label_tag }}</b><br> {{ field }}<br><br>
+        {% endfor %}
         <input type="submit" value="Submit">
         <div class="fail-login">{{message}}</div>
     </form>

@@ -8,7 +8,7 @@ class Proizvođač(models.Model):
     naziv = models.CharField(primary_key=True, max_length=100)
 
     def __str__(self):
-        return f'NAZIV: {self.naziv}'
+        return f'{self.naziv}'
 
 
 # predstavlja zemlju porijekla
@@ -19,7 +19,7 @@ class Zemlja_porijekla(models.Model):
     naziv = models.CharField(primary_key=True, max_length=100)
 
     def __str__(self):
-        return f'NAZIV: {self.naziv}'
+        return f'{self.naziv}'
 
 
 # klasa artikl
@@ -47,7 +47,7 @@ class Artikl(models.Model):
     autor_zemlje_porijekla = models.CharField(max_length=100, null=True)
     vote_count_zemlje_porijekla = models.IntegerField(null=True)
 
-    vegan = models.CharField(max_length=2, null=True)
+    vegan = models.BooleanField(default=False)
 
     def __str__(self):
         return f'BARKOD: {self.barkod_artikla}, NAZIV: {self.naziv_artikla}'
@@ -67,7 +67,7 @@ class Artikl(models.Model):
 # Na istu foru dodaj "dostupnost"
 # udari u google py django many to many relationship i otvori službenu stranicu i šamaraj
 class Trgovina(models.Model):
-    sifTrgovina = models.IntegerField(primary_key=True)
+    sifTrgovina = models.AutoField(primary_key=True)
     nazTrgovina = models.CharField(max_length=100)
     artikli = models.ManyToManyField(Artikl)
 

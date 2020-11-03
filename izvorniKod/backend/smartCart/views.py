@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.urls import reverse
 from .models import Trgovina, Artikl, SecretCode, Proizvođač, Zemlja_porijekla
+from .forms import LoginForm, DodajTrgovinu, DodajArtikl
 
 
 def index(request):
@@ -52,21 +53,22 @@ def login(request):
     """
     if request.user.is_authenticated:
         return redirect('trgovac')
-    if request.method == 'GET':
-        return render(request, 'smartCart/login.html', {})
-
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(request, username=username, password=password)
-
-    if user is not None:
-        logging_in(request, user)
-        return redirect('trgovac')
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = request.POST['username']
+            password = request.POST['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                logging_in(request, user)
+                return redirect('trgovac')
+            else:
+                return render(request, 'smartCart/login.html', {'message': 'Invalid username or password\n', 'form': form})
     else:
-        return render(request, 'smartCart/login.html', {'message': 'Invalid username or password\n'})
+        form = LoginForm()
+        return render(request, 'smartCart/login.html', {'form': form})
 
 
-@login_required
 def trgovac(request):
     """
     glavna stranica za trgovca, vraća se stranica "trgovac.html"
@@ -79,8 +81,11 @@ def trgovac(request):
             # ------
             trgovine = list(Trgovina.objects.all())
             artikli = list(Artikl.objects.all())
+            nova_trgovina = DodajTrgovinu()
+            novi_artikl = DodajArtikl()
             # ------
-            return render(request, 'smartCart/trgovac.html', {'trgovine': trgovine, 'artikli': artikli})
+            return render(request, 'smartCart/trgovac.html', {'trgovine': trgovine, 'artikli': artikli,
+                                                              'trg_form': nova_trgovina, 'art_form': novi_artikl})
         else:
             return render(request, 'smartCart/index.html', {})
 
@@ -98,12 +103,11 @@ def dodaj_trgovine(request):
     """
     if request.method == 'GET':
         return redirect(request.META['HTTP_REFERER'])
-
-    sifTrgovina = request.POST['sifTrgovina']
-    nazTrgovina = request.POST['nazTrgovina']
-
-    trgovina = Trgovina(sifTrgovina=sifTrgovina, nazTrgovina=nazTrgovina)
-    trgovina.save()
+    form = DodajTrgovinu(request.POST)
+    if form.is_valid():
+        naz_trgovina = request.POST['nazTrgovina']
+        trgovina = Trgovina(nazTrgovina=naz_trgovina)
+        trgovina.save()
 
     return redirect(request.META['HTTP_REFERER'])
 
@@ -126,31 +130,23 @@ def dodaj_artikle(request):
     """
     if request.method == 'GET':
         return redirect(request.META['HTTP_REFERER'])
-    barkod_artikla = request.POST['barkod_artikla']
-    naziv_artikla = request.POST['naziv_artikla']
-    opis_artikla = request.POST['opis_artikla']
-    proizvođač = request.POST['proizvođač']
-    zemlja_porijekla = request.POST['zemlja_porijekla']
-    vegan = request.POST['vegan']
-
-    proizvođač = add_proizvođač(proizvođač)
-    zemlja_porijekla = add_zemlja_porijekla(zemlja_porijekla)
-
-    if opis_artikla == '':
-        opis_artikla = None
-
-    if vegan == '':
-        vegan = None
-
-    artikl_za_dodati = Artikl(
-        naziv_artikla=naziv_artikla,
-        barkod_artikla=barkod_artikla,
-        opis_artikla=opis_artikla,
-        proizvođač=proizvođač,
-        zemlja_porijekla=zemlja_porijekla,
-        vegan=vegan
-    )
-    artikl_za_dodati.save()
+    form = DodajArtikl(request.POST)
+    if form.is_valid():
+        barkod_artikla = request.POST['barkod_artikla']
+        naziv_artikla = request.POST['naziv_artikla']
+        opis_artikla = request.POST['opis_artikla']
+        proizvođač = request.POST['proizvođač']
+        zemlja_porijekla = request.POST['zemlja_porijekla']
+        vegan = request.POST['vegan']
+        artikl_za_dodati = Artikl(
+            barkod_artikla=barkod_artikla,
+            naziv_artikla=naziv_artikla,
+            opis_artikla=opis_artikla,
+            proizvođač=proizvođač,
+            zemlja_porijekla=zemlja_porijekla,
+            vegan=vegan
+        )
+        artikl_za_dodati.save()
 
     return redirect(request.META['HTTP_REFERER'])
 
@@ -187,7 +183,6 @@ def artikl(request, barkod_artikla):
     return render(request, 'smartCart/artikl.html', {'barkod_artikla': barkod_artikla, 'artikl': a})
 
 
-# TODO: u slučaju da je korisnik izlogiran i pokuša se izlogirati treba vratiti grešku
 def logout(request):
     """
     logout stranica, ne može se prikazati
@@ -195,7 +190,6 @@ def logout(request):
     request.user.is_authenticated je funkcija korištena pri logiranju
     """
     if not request.user.is_authenticated:
-        # TODO: Vrati grešku
         pass
 
     logging_out(request)
