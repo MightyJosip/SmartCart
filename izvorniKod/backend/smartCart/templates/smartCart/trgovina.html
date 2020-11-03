@@ -1,8 +1,13 @@
 <!DOCTYPE html>
+{% load static %}
 <html>
 
 <head>
-
+    <head>
+        <meta charset="UTF-8">
+        <title>Trgovina br. {{ sifTrgovina }}</title>
+        <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+    </head>
 </head>
 
 <body>
@@ -30,7 +35,7 @@
 
     <h3>Povratak na početnu stranicu</h3>
     <form action="/trgovac" method="GET">
-        <input type="submit" value="Povratak"></input>
+        <input type="submit" value="Povratak">
     </form>
 
 </body>

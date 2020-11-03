@@ -21,12 +21,13 @@ from smartCart import views
 urlpatterns = [
     path('smartcart/', include('smartCart.urls')),
     path('admin', admin.site.urls),
-    path('', views.index, name = 'index'),
-    path('login/', views.login, name = 'login'),
-    path('trgovac', views.trgovac, name='trgovac'), ############<-------------------------------------------------
+    path('', views.index, name='index'),
+    path('signup/', views.sign_up, name='signup'),
+    path('login/', views.login, name='login'),
+    path('trgovac', views.trgovac, name='trgovac'),  ############<-------------------------------------------------
     path('logout', views.logout, name='logout'),
     path('trgovac/dodaj-trgovine', views.dodaj_trgovine, name='dodaj_trgovine'),
     path('trgovac/dodaj-artikle', views.dodaj_artikle, name='dodaj_artikle'),
-    path('trgovina/<int:sifTrgovina>', views.trgovina, name='trgovina'), #int kinda sus
+    path('trgovina/<int:sifTrgovina>', views.trgovina, name='trgovina'),  # int kinda sus
     path('artikl/<int:barkod_artikla>', views.artikl, name='artikl')
 ]

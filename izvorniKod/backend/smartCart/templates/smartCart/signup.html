@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="hr">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>Registriraj se</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'login.css' %}"/>
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+</head>
+<body>
+    <h1>Sign up stranica</h1>
+
+    <form action="" method="POST">
+        {%csrf_token%}
+        <label for="email">E-mail</label><br>
+        <input type="text" id="email" name="email" value=""><br>
+
+        <label for="password">Password</label><br>
+        <input type="password" id="password" name="password" value=""><br>
+
+        <label for="confirm_password">Confirm password</label><br>
+        <input type="password" id="confirm_password" name="confirm_password" value=""><br>
+
+        <label for="secret_code">Secret code</label><br>
+        <input type="text" id="secret_code" name="secret_code" value=""><br><br>
+
+        <input type="submit" value="Submit">
+        <div class="fail-login">{{message}}</div>
+    </form>
+</body>
+</html>

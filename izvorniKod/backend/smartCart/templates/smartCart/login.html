@@ -1,7 +1,13 @@
 <!DOCTYPE html>
 
+{% load static %}
 <html>
-
+    <head>
+        <meta charset="UTF-8">
+        <title>Prijava {{request.user.username}}</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'login.css' %}"/>
+        <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+    </head>
 <head>
 
 </head>
@@ -16,7 +22,9 @@
         <label for="password">Password</label><br>
         <input type="password" id="password" name="password" value=""><br><br>
         <input type="submit" value="Submit">
-    </form> 
+        <div class="fail-login">{{message}}</div>
+    </form>
+
 </body>
 
 </html>

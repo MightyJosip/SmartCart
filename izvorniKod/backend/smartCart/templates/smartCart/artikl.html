@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-
+{% load static %}
 <html>
     <head>
-
+        <meta charset="UTF-8">
+        <title>Artikl br. {{ barkod_artikla }}</title>
+        <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
     </head>
 
     <body>
@@ -15,25 +17,25 @@
         <h3>{{artikl.vote_count_naziva}}</h3>
 
         <h2>Opis artikla</h2>
-        <h3>{{artikl.opis_artikla}}</h2>
+        <h3>{{artikl.opis_artikla}}</h3>
         <h2>Autor opisa</h2>
-        <h3>{{artikl.autor_opisa}}</h2>
+        <h3>{{artikl.autor_opisa}}</h3>
         <h2>Vote count opisa artikla</h2>
-        <h3>{{artikl.vote_count_opisa}}</h2>
+        <h3>{{artikl.vote_count_opisa}}</h3>
 
         <h2>Proizvođač</h2>
-        <h3>{{artikl.proizvođač}}</h2>
+        <h3>{{artikl.proizvođač}}</h3>
         <h2>Autor proizvođača artikla</h2>
-        <h3>{{artikl.autor_proizvođača}}</h2>
+        <h3>{{artikl.autor_proizvođača}}</h3>
         <h2>Vote count proizvođača</h2>
-        <h3>{{artikl.vote_count_proizvođača}}</h2>
+        <h3>{{artikl.vote_count_proizvođača}}</h3>
 
         <h2>Zemlja porijekla</h2>
-        <h3>{{artikl.zemlja_porijekla}}</h2>
+        <h3>{{artikl.zemlja_porijekla}}</h3>
         <h2>Autor zemlje porijekla</h2>
-        <h3>{{artikl.autor_zemlje_porijekla}}</h2>
+        <h3>{{artikl.autor_zemlje_porijekla}}</h3>
         <h2>Vote count zemlje porijekla</h2>
-        <h3>{{artikl.vote_count_zemlje_porijekla}}</h2>
+        <h3>{{artikl.vote_count_zemlje_porijekla}}</h3>
 
         <h2>Veganski proizvod?</h2>
         <h3>{{artikl.vegan}}</h3>
@@ -42,6 +44,6 @@
         <form action="/trgovac" method="GET">
             <input type="submit" value="Povratak"></input>
         </form>
-        
+
     </body>
 </html>

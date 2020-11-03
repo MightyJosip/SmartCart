@@ -1,12 +1,22 @@
 <!DOCTYPE html>
+{% load static %}
 <html>
 
 <head>
-
+    <head>
+        <meta charset="UTF-8">
+        <title>Trgovac br. {{request.user.username}}</title>
+        <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+    </head>
 </head>
 
 <body>
-    <h1>Welcome, {{ username }}</h1>
+    <h1>Welcome, {{request.user.username}}</h1>
+
+    <form action="logout" method="POST">
+        {%csrf_token%}
+        <input type="submit" value="Log out">
+    </form>
 
     <hr />
 
@@ -45,22 +55,22 @@
 
     <form action="/trgovac/dodaj-artikle" method="POST">
         {%csrf_token%}
-        <label for="barkod">Barkod artikla</label><br>
+        <label for="barkod_artikla">Barkod artikla</label><br>
         <input type="text" id="barkod_artikla" name="barkod_artikla" value=""><br>
 
-        <label for="nazArtikl">Naziv artikla</label><br>
+        <label for="naziv_artikla">Naziv artikla</label><br>
         <input type="text" id="naziv_artikla" name="naziv_artikla" value=""><br>
 
-        <label for="nazArtikl">Opis artikla</label><br>
+        <label for="opis_artikla">Opis artikla</label><br>
         <input type="text" id="opis_artikla" name="opis_artikla" value=""><br>
 
-        <label for="nazArtikl">Proizvođač</label><br>
+        <label for="proizvođač">Proizvođač</label><br>
         <input type="text" id="proizvođač" name="proizvođač" value=""><br>
 
-        <label for="nazArtikl">Zemlja porijekla</label><br>
+        <label for="zemlja_porijekla">Zemlja porijekla</label><br>
         <input type="text" id="zemlja_porijekla" name="zemlja_porijekla" value=""><br>
 
-        <label for="nazArtikl">Proizvod je veganski?</label><br>
+        <label for="vegan">Proizvod je veganski?</label><br>
         <input type="text" id="vegan" name="vegan" value=""><br>
 
         <input type="submit" value="Submit">
