@@ -69,10 +69,11 @@ class Artikl(models.Model):
 class Trgovina(models.Model):
     sifTrgovina = models.AutoField(primary_key=True)
     nazTrgovina = models.CharField(max_length=100)
+    adresaTrgovina = models.CharField(max_length=200)
     artikli = models.ManyToManyField(Artikl)
 
     def __str__(self):
-        return f'SIFRA TRGOVINE: {self.sifTrgovina}, NAZIV: {self.nazTrgovina}'
+        return f'{self.nazTrgovina}, {self.adresaTrgovina}'
 
 
 class SecretCode(models.Model):

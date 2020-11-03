@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.urls import reverse
 from .models import Trgovina, Artikl, SecretCode, Proizvođač, Zemlja_porijekla
-from .forms import LoginForm, DodajTrgovinu, DodajArtikl
+from .forms import LoginForm, DodajTrgovinu, DodajArtikl, SignUpTrgovacForm, SignUpKupacForm
 
 
 def index(request):
@@ -20,27 +20,49 @@ def index(request):
     return render(request, 'smartCart/index.html', {})
 
 
-def sign_up(request):
-    if request.method == 'GET':
-        return render(request, 'smartCart/signup.html', {})
+def sign_up_trgovac(request):
+    if request.method == 'POST':
+        form = SignUpTrgovacForm(request.POST)
+        if form.is_valid():
+            email = request.POST['email']
+            password = request.POST['password']
+            confirm_password = request.POST['confirm_password']
+            secret_code = request.POST['secret_code']
+            try:
+                validate_email(email)
+            except ValidationError:
+                return render(request, 'smartCart/signup_trgovac.html', {'message': 'Wrong mail format\n', 'form': form})
+            if password != confirm_password:
+                return render(request, 'smartCart/signup_trgovac.html', {'message': 'Passwords don\'t match\n', 'form': form})
+            if not SecretCode.objects.filter(value=secret_code).exists():
+                return render(request, 'smartCart/signup_trgovac.html', {'message': 'Wrong secret code\n', 'form': form})
+            User.objects.create_user(email, email, password)
+            return render(request, 'smartCart/index.html', {})
+    else:
+        form = SignUpTrgovacForm()
+        return render(request, 'smartCart/signup_trgovac.html', {'form': form})
 
-    email = request.POST['email']
-    password = request.POST['password']
-    confirm_password = request.POST['confirm_password']
-    secret_code = request.POST['secret_code']
 
-    try:
-        validate_email(email)
-    except ValidationError:
-        return render(request, 'smartCart/signup.html', {'message': 'Wrong mail format\n'})
-    if password != confirm_password:
-        return render(request, 'smartCart/signup.html', {'message': 'Passwords don\'t match\n'})
-    if not SecretCode.objects.filter(value=secret_code).exists():
-        return render(request, 'smartCart/signup.html', {'message': 'Wrong secret code\n'})
-    User.objects.create_user(email, email, password)
-    return render(request, 'smartCart/index.html', {})
-
-    # if secret_code not in
+def sign_up_kupac(request):
+    if request.method == 'POST':
+        form = SignUpKupacForm(request.POST)
+        if form.is_valid():
+            email = request.POST['email']
+            password = request.POST['password']
+            confirm_password = request.POST['confirm_password']
+            try:
+                validate_email(email)
+            except ValidationError:
+                return render(request, 'smartCart/signup_kupac.html',
+                              {'message': 'Wrong mail format\n', 'form': form})
+            if password != confirm_password:
+                return render(request, 'smartCart/signup_kupac.html',
+                              {'message': 'Passwords don\'t match\n', 'form': form})
+            User.objects.create_user(email, email, password)
+            return render(request, 'smartCart/index.html', {})
+    else:
+        form = SignUpKupacForm()
+        return render(request, 'smartCart/signup_kupac.html', {'form': form})
 
 
 def login(request):
@@ -169,8 +191,10 @@ def trgovina(request, sifTrgovina):
         return redirect(request.META['HTTP_REFERER'])
 
     t = Trgovina.objects.get(sifTrgovina=sifTrgovina)
+    # return render(request, 'smartCart/trgovina.html',
+    #               {'sifTrgovina': sifTrgovina, 'nazTrgovina': t.nazTrgovina, 'artikli': t.artikli.all()})
     return render(request, 'smartCart/trgovina.html',
-                  {'sifTrgovina': sifTrgovina, 'nazTrgovina': t.nazTrgovina, 'artikli': t.artikli.all()})
+                  {'trgovina': t})
 
 
 def artikl(request, barkod_artikla):
@@ -193,7 +217,7 @@ def logout(request):
         pass
 
     logging_out(request)
-    return render(request, 'smartCart/index.html', {})
+    return redirect('index')
 
 
 def add_proizvođač(name):

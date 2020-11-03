@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="hr">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>Registriraj se kao kupac</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'login.css' %}"/>
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+</head>
+<body>
+    <h1>Sign up as kupac stranica</h1>
+
+    <form action="" method="POST">
+        {%csrf_token%}
+        {% for field in form  %}
+            <b>{{ field.label_tag }}</b><br> {{ field }}<br><br>
+        {% endfor %}
+        <input type="submit" value="Submit">
+        <div class="fail-login">{{message}}</div>
+    </form>
+</body>
+</html>

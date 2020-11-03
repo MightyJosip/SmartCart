@@ -22,7 +22,8 @@ urlpatterns = [
     path('smartcart/', include('smartCart.urls')),
     path('admin', admin.site.urls),
     path('', views.index, name='index'),
-    path('signup/', views.sign_up, name='signup'),
+    path('signup/trgovac', views.sign_up_trgovac, name='signup_trgovac'),
+    path('signup/kupac', views.sign_up_kupac, name='signup_kupac'),
     path('login/', views.login, name='login'),
     path('trgovac', views.trgovac, name='trgovac'),  ############<-------------------------------------------------
     path('logout', views.logout, name='logout'),
