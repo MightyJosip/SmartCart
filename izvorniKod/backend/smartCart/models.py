@@ -1,4 +1,10 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.conf import settings
+
+
+class BaseUserModel(AbstractUser):
+    pass
 
 
 # predstavlja proizvođača u bazi podataka
@@ -70,6 +76,7 @@ class Trgovina(models.Model):
     sifTrgovina = models.AutoField(primary_key=True)
     nazTrgovina = models.CharField(max_length=100)
     adresaTrgovina = models.CharField(max_length=200)
+    vlasnik = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     artikli = models.ManyToManyField(Artikl)
 
     def __str__(self):

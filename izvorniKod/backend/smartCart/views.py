@@ -1,15 +1,17 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as logging_in, logout as logging_out
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.urls import reverse
 from .models import Trgovina, Artikl, SecretCode, Proizvođač, Zemlja_porijekla
 from .forms import LoginForm, DodajTrgovinu, DodajArtikl, SignUpTrgovacForm, SignUpKupacForm
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
 
 
 def index(request):
@@ -101,7 +103,8 @@ def trgovac(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
             # ------
-            trgovine = list(Trgovina.objects.all())
+            # trgovine = list(Trgovina.objects.all())
+            trgovine = list(Trgovina.objects.filter(vlasnik__id=request.user.id))
             artikli = list(Artikl.objects.all())
             nova_trgovina = DodajTrgovinu()
             novi_artikl = DodajArtikl()
@@ -123,12 +126,14 @@ def dodaj_trgovine(request):
     trgovina se dodaje u bazu podatka i zatim
     se šalje HTTP GET zahtjev za "/trgovac" da se sve lijepo refresha i pokaže promjena
     """
+
     if request.method == 'GET':
         return redirect(request.META['HTTP_REFERER'])
     form = DodajTrgovinu(request.POST)
     if form.is_valid():
         naz_trgovina = request.POST['nazTrgovina']
-        trgovina = Trgovina(nazTrgovina=naz_trgovina)
+        adr_trgovina = request.POST['adresaTrgovina']
+        trgovina = Trgovina(nazTrgovina=naz_trgovina, adresaTrgovina=adr_trgovina, vlasnik=get_object_or_404(User, pk=request.user.id))
         trgovina.save()
 
     return redirect(request.META['HTTP_REFERER'])
@@ -180,7 +185,9 @@ def trgovina(request, sifTrgovina):
     vraća se "trgovina.html" s podacije o toj trgovini
     slanjem HTTP POST upita na "/trgovina" sa informacijama o artiklu (konkretnike: barkoda artikla), artikl se može dodati u trgovinu
     """
-
+    t = Trgovina.objects.get(sifTrgovina=sifTrgovina)
+    if request.user.id != t.vlasnik.id:  # Stop "hacking" into trgovina website
+        return redirect('index')
     if request.method == 'POST':
         bar_k = request.POST['barkod']
         sif_t = request.POST['sifTrgovina']
@@ -190,7 +197,6 @@ def trgovina(request, sifTrgovina):
         t.save()
         return redirect(request.META['HTTP_REFERER'])
 
-    t = Trgovina.objects.get(sifTrgovina=sifTrgovina)
     # return render(request, 'smartCart/trgovina.html',
     #               {'sifTrgovina': sifTrgovina, 'nazTrgovina': t.nazTrgovina, 'artikli': t.artikli.all()})
     return render(request, 'smartCart/trgovina.html',
