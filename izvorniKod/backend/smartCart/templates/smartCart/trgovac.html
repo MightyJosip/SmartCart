@@ -5,13 +5,13 @@
 <head>
     <head>
         <meta charset="UTF-8">
-        <title>Trgovac {{request.user.username}}</title>
+        <title>Trgovac {{request.user.email}}</title>
         <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
     </head>
 </head>
 
 <body>
-    <h1>Welcome, {{request.user.username}}</h1>
+    <h1>Welcome, {{request.user.email}}</h1>
 
     <form action="logout" method="POST">
         {%csrf_token%}
@@ -20,11 +20,17 @@
 
     <hr />
 
-    <h2>Pregled trgovina</h2>
+    <h2>Moje trgovine</h2>
     
     <ul>
         {% for t in trgovine %}
-        <li>{{ t.nazTrgovina }} <a href="{% url 'trgovina' t.sifTrgovina %}">Detaljnije o trgovini</a></li> <!--ne radi-->
+            {{ t }}
+            <a href="{% url 'trgovina' t.sifTrgovina %}">Detaljnije o trgovini</a>
+            <form action="trgovina/delete/{{t.sifTrgovina}}" method="POST">
+                {%csrf_token%}
+                <input type="submit" value="Obriši trgovinu" onclick="return confirm('Je si li siguran da želiš obrisati trgovinu?')">
+            </form>
+            <br>
         {% endfor %}
     </ul>
     
@@ -60,5 +66,13 @@
         <input type="submit" value="Submit">
     </form>
     <hr />
+    <h2>Dodavanje proizvođača</h2>
+    <form action="/trgovac/dodaj-proizvodace" method="POST">
+        {%csrf_token%}
+        {% for field in pro_form  %}
+            {{ field.label_tag }}<br> {{ field }}<br><br>
+        {% endfor %}
+        <input type="submit" value="Submit">
+    </form>
 </body>
 </html>

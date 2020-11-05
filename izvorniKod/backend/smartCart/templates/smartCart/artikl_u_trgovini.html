@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<html lang="hr">
 {% load static %}
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>Registriraj se kao trgovac</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'login.css' %}"/>
+    <title>Uredi artikl</title>
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
 </head>
 <body>
-    <h1>Sign up as trgovac stranica</h1>
-    To get Secret code please contact SmartCart admin on the following email: smart_cart_app@gmail.com
+    <h1>Uredi artikl: "{{artikl}}" u trgovini: "{{trgovina}}"</h1>
     <br><br>
     <form action="" method="POST">
         {%csrf_token%}
@@ -17,7 +15,6 @@
             <b>{{ field.label_tag }}</b><br> {{ field }}<br><br>
         {% endfor %}
         <input type="submit" value="Submit">
-        <div class="fail-login">{{message}}</div>
     </form>
 </body>
 </html>

@@ -4,14 +4,19 @@ from django.core.validators import validate_email
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login as logging_in, logout as logging_out
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import redirect
-from django.urls import reverse
-from .models import Trgovina, Artikl, SecretCode, Proizvođač, Zemlja_porijekla
-from .forms import LoginForm, DodajTrgovinu, DodajArtikl, SignUpTrgovacForm, SignUpKupacForm
+from .models import Trgovina, Artikl, SecretCode, Proizvođač, Zemlja_porijekla, TrgovinaArtikli
+from .forms import LoginForm, DodajTrgovinu, DodajArtikl, SignUpTrgovacForm, SignUpKupacForm, DodajProizvođača, \
+    DodajArtiklUTrgovinu, UrediArtiklUTrgovini, PromijeniRadnoVrijeme, EditLogin
 from django.contrib.auth import get_user_model
+import os
+
 User = get_user_model()
 
+
+def trgovac_login_required(user):
+    return user.is_trgovac if user.is_authenticated else False
 
 
 def index(request):
@@ -19,7 +24,7 @@ def index(request):
     kad se zatraži "/", funkcija vraća početnu stranicu
     koja se zove index.html
     """
-    return render(request, 'smartCart/index.html', {})
+    return render(request, 'smartCart/index.html', {'user': request.user})
 
 
 def sign_up_trgovac(request):
@@ -33,12 +38,15 @@ def sign_up_trgovac(request):
             try:
                 validate_email(email)
             except ValidationError:
-                return render(request, 'smartCart/signup_trgovac.html', {'message': 'Wrong mail format\n', 'form': form})
+                return render(request, 'smartCart/signup_trgovac.html',
+                              {'message': 'Wrong mail format\n', 'form': form})
             if password != confirm_password:
-                return render(request, 'smartCart/signup_trgovac.html', {'message': 'Passwords don\'t match\n', 'form': form})
+                return render(request, 'smartCart/signup_trgovac.html',
+                              {'message': 'Passwords don\'t match\n', 'form': form})
             if not SecretCode.objects.filter(value=secret_code).exists():
-                return render(request, 'smartCart/signup_trgovac.html', {'message': 'Wrong secret code\n', 'form': form})
-            User.objects.create_user(email, email, password)
+                return render(request, 'smartCart/signup_trgovac.html',
+                              {'message': 'Wrong secret code\n', 'form': form})
+            User.objects.create_user(email, password, is_trgovac=True)
             return render(request, 'smartCart/index.html', {})
     else:
         form = SignUpTrgovacForm()
@@ -60,7 +68,7 @@ def sign_up_kupac(request):
             if password != confirm_password:
                 return render(request, 'smartCart/signup_kupac.html',
                               {'message': 'Passwords don\'t match\n', 'form': form})
-            User.objects.create_user(email, email, password)
+            User.objects.create_user(email, password, is_kupac=True)
             return render(request, 'smartCart/index.html', {})
     else:
         form = SignUpKupacForm()
@@ -76,7 +84,10 @@ def login(request):
     ako se neuspješno validiraju, stranica login.html se ponovno učitava
     """
     if request.user.is_authenticated:
-        return redirect('trgovac')
+        if trgovac_login_required(request.user):
+            return redirect('trgovac')
+        else:
+            return redirect('index')
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -87,12 +98,33 @@ def login(request):
                 logging_in(request, user)
                 return redirect('trgovac')
             else:
-                return render(request, 'smartCart/login.html', {'message': 'Invalid username or password\n', 'form': form})
+                return render(request, 'smartCart/login.html',
+                              {'message': 'Invalid username or password\n', 'form': form})
     else:
         form = LoginForm()
         return render(request, 'smartCart/login.html', {'form': form})
 
 
+@login_required(login_url='login/')
+def edit_profile(request):
+    if request.method == 'POST':
+        form = EditLogin(request.POST)
+        if form.is_valid():
+            password = request.POST['password']
+            confirm_password = request.POST['confirm_password']
+            if password == confirm_password:
+                request.user.set_password(password)
+                request.user.save()
+                return redirect('index')
+            else:
+                return render(request, 'smartCart/edit_profile.html',
+                              {'message': 'Passwords don\'t match\n', 'form': form})
+    else:
+        form = EditLogin()
+        return render(request, 'smartCart/edit_profile.html', {'form': form})
+
+
+@user_passes_test(trgovac_login_required, login_url='login/')
 def trgovac(request):
     """
     glavna stranica za trgovca, vraća se stranica "trgovac.html"
@@ -101,24 +133,21 @@ def trgovac(request):
     može joj se pristupiti metodi GET
     """
     if request.method == 'GET':
-        if request.user.is_authenticated:
-            # ------
-            # trgovine = list(Trgovina.objects.all())
-            trgovine = list(Trgovina.objects.filter(vlasnik__id=request.user.id))
-            artikli = list(Artikl.objects.all())
-            nova_trgovina = DodajTrgovinu()
-            novi_artikl = DodajArtikl()
-            # ------
-            return render(request, 'smartCart/trgovac.html', {'trgovine': trgovine, 'artikli': artikli,
-                                                              'trg_form': nova_trgovina, 'art_form': novi_artikl})
-        else:
-            return render(request, 'smartCart/index.html', {})
+        trgovine = list(Trgovina.objects.filter(vlasnik__id=request.user.id))
+        artikli = list(Artikl.objects.all())
+        nova_trgovina = DodajTrgovinu()
+        novi_artikl = DodajArtikl()
+        novi_proizvođač = DodajProizvođača()
+        return render(request, 'smartCart/trgovac.html', {'trgovine': trgovine, 'artikli': artikli,
+                                                          'trg_form': nova_trgovina, 'art_form': novi_artikl,
+                                                          'pro_form': novi_proizvođač})
 
     # ako metoda nije post ova grana se izvršava, trebalo bi baciti err
     # sljedeća funkcija vraća prethodnu stranicu, ostatak od prošlih kemijanja
     return redirect(request.META['HTTP_REFERER'])
 
 
+@user_passes_test(trgovac_login_required, login_url='login/')
 def dodaj_trgovine(request):
     """
     pomoćni view za dodavanje trgovine
@@ -133,12 +162,19 @@ def dodaj_trgovine(request):
     if form.is_valid():
         naz_trgovina = request.POST['nazTrgovina']
         adr_trgovina = request.POST['adresaTrgovina']
-        trgovina = Trgovina(nazTrgovina=naz_trgovina, adresaTrgovina=adr_trgovina, vlasnik=get_object_or_404(User, pk=request.user.id))
+        rad_vri_početak = request.POST['radno_vrijeme_početak']
+        rad_vri_kraj = request.POST['radno_vrijeme_kraj']
+        trgovina = Trgovina(nazTrgovina=naz_trgovina,
+                            adresaTrgovina=adr_trgovina,
+                            vlasnik=get_object_or_404(User, pk=request.user.id),
+                            radno_vrijeme_početak=rad_vri_početak,
+                            radno_vrijeme_kraj=rad_vri_kraj)
         trgovina.save()
 
     return redirect(request.META['HTTP_REFERER'])
 
 
+@user_passes_test(trgovac_login_required, login_url='login/')
 def dodaj_artikle(request):
     """
     pomoćno view za dodavanje artikala
@@ -162,9 +198,9 @@ def dodaj_artikle(request):
         barkod_artikla = request.POST['barkod_artikla']
         naziv_artikla = request.POST['naziv_artikla']
         opis_artikla = request.POST['opis_artikla']
-        proizvođač = request.POST['proizvođač']
-        zemlja_porijekla = request.POST['zemlja_porijekla']
-        vegan = request.POST['vegan']
+        proizvođač = add_proizvođač(request.POST['proizvođač'])
+        zemlja_porijekla = add_zemlja_porijekla(request.POST['zemlja_porijekla'])
+        vegan = True if 'vegan' in request.POST else False
         artikl_za_dodati = Artikl(
             barkod_artikla=barkod_artikla,
             naziv_artikla=naziv_artikla,
@@ -178,31 +214,66 @@ def dodaj_artikle(request):
     return redirect(request.META['HTTP_REFERER'])
 
 
-def trgovina(request, sifTrgovina):
+@user_passes_test(trgovac_login_required, login_url='login/')
+def dodaj_proizvođače(request):
+    if request.method == 'GET':
+        return redirect(request.META['HTTP_REFERER'])
+    form = DodajProizvođača(request.POST)
+    if form.is_valid():
+        naziv_proizvođača = request.POST['naziv']
+        proizvođač_za_dodati = Proizvođač(naziv=naziv_proizvođača)
+        proizvođač_za_dodati.save()
+    return redirect(request.META['HTTP_REFERER'])
+
+
+@user_passes_test(trgovac_login_required, login_url='login/')
+def trgovina(request, sif_trgovina):
     """
     stranica za prikaz trgovine, informacije o trgovini i proizvoda dostupnim u tim trgovinama
     slanjem HTTP GET upita na "/trgovina/<int>" gdje je <int> cijeli broj koji predstavlja unikatnu šifru baš te trgovine
     vraća se "trgovina.html" s podacije o toj trgovini
     slanjem HTTP POST upita na "/trgovina" sa informacijama o artiklu (konkretnike: barkoda artikla), artikl se može dodati u trgovinu
     """
-    t = Trgovina.objects.get(sifTrgovina=sifTrgovina)
+    t = Trgovina.objects.get(sifTrgovina=sif_trgovina)
     if request.user.id != t.vlasnik.id:  # Stop "hacking" into trgovina website
-        return redirect('index')
-    if request.method == 'POST':
-        bar_k = request.POST['barkod']
-        sif_t = request.POST['sifTrgovina']
-        t = Trgovina.objects.get(sifTrgovina=sif_t)
+        return redirect('trgovac')
+    if request.method == 'GET':
+        dodaj_artikl_form = DodajArtiklUTrgovinu(request.POST)
+        radno_vrijeme_form = PromijeniRadnoVrijeme(request.POST)
+        return render(request, 'smartCart/trgovina.html',
+                      {'trgovina': t, 'artikli': get_artikli_from_trgovina(sif_trgovina), 'artikl_form': dodaj_artikl_form, 'vrijeme_form': radno_vrijeme_form})
+    dodaj_artikl_form = DodajArtiklUTrgovinu(request.POST)
+    radno_vrijeme_form = PromijeniRadnoVrijeme(request.POST)
+    if dodaj_artikl_form.is_valid():
+        bar_k = request.POST['artikl']
+        cijena = request.POST['cijena']
+        akcija = True if 'akcija' in request.POST else False
+        dostupan = True if 'dostupan' in request.POST else False
         a = Artikl.objects.get(barkod_artikla=bar_k)
-        t.artikli.add(a)
+        try:
+            old_trg_art = TrgovinaArtikli.objects.get(artikl__barkod_artikla=bar_k)
+            old_trg_art.cijena = cijena
+            old_trg_art.akcija = akcija
+            old_trg_art.dostupan = dostupan
+            old_trg_art.save()
+        except TrgovinaArtikli.DoesNotExist:
+            trg_art = TrgovinaArtikli(trgovina=t,
+                                      artikl=a,
+                                      cijena=cijena,
+                                      akcija=akcija,
+                                      dostupan=dostupan)
+            trg_art.save()
+    if radno_vrijeme_form.is_valid():
+        pocetak = request.POST['radno_vrijeme_početak']
+        kraj = request.POST['radno_vrijeme_kraj']
+        t.radno_vrijeme_početak = pocetak
+        t.radno_vrijeme_kraj = kraj
         t.save()
-        return redirect(request.META['HTTP_REFERER'])
 
-    # return render(request, 'smartCart/trgovina.html',
-    #               {'sifTrgovina': sifTrgovina, 'nazTrgovina': t.nazTrgovina, 'artikli': t.artikli.all()})
-    return render(request, 'smartCart/trgovina.html',
-                  {'trgovina': t})
+    return redirect(request.META['HTTP_REFERER'])
 
 
+@user_passes_test(trgovac_login_required, login_url='login/')
 def artikl(request, barkod_artikla):
     """
     stranica za prikaz artikla i informacija o artiklu
@@ -213,17 +284,78 @@ def artikl(request, barkod_artikla):
     return render(request, 'smartCart/artikl.html', {'barkod_artikla': barkod_artikla, 'artikl': a})
 
 
+@user_passes_test(trgovac_login_required, login_url='login/')
+def uredi_artikl_u_trgovini(request, artikl_trgovina):
+    t_id = TrgovinaArtikli.objects.get(id=artikl_trgovina).trgovina.sifTrgovina
+    t = Trgovina.objects.get(sifTrgovina=t_id)
+    if request.user.id != t.vlasnik.id:  # Stop "hacking" into trgovina website
+        return redirect('index')
+    if request.method == 'GET':
+        old_art = TrgovinaArtikli.objects.get(id=artikl_trgovina)
+        form = UrediArtiklUTrgovini(initial={
+            'cijena': old_art.cijena,
+            'akcija': old_art.akcija,
+            'dostupan': old_art.dostupan
+        })
+        return render(request, 'smartCart/artikl_u_trgovini.html',
+                      {'form': form, 'trgovina': t, 'artikl': old_art.artikl.naziv_artikla})
+    form = UrediArtiklUTrgovini(request.POST)
+    if form.is_valid():
+        cijena = request.POST['cijena']
+        akcija = True if 'akcija' in request.POST else False
+        dostupan = True if 'dostupan' in request.POST else False
+        old_art = TrgovinaArtikli.objects.get(id=artikl_trgovina)
+        old_art.cijena = cijena
+        old_art.akcija = akcija
+        old_art.dostupan = dostupan
+        old_art.save()
+    return redirect(f'/trgovina/{t_id}')
+
+
+@user_passes_test(trgovac_login_required, login_url='login/')
+def obrisi_artikl_u_trgovini(request, artikl_trgovina):
+    t_id = TrgovinaArtikli.objects.get(id=artikl_trgovina).trgovina.sifTrgovina
+    t = Trgovina.objects.get(sifTrgovina=t_id)
+    if request.user.id != t.vlasnik.id:  # Stop "hacking" into trgovina website
+        return redirect('index')
+    if request.method == 'GET':
+        old_art = TrgovinaArtikli.objects.get(id=artikl_trgovina)
+        old_art.delete()
+        return redirect(request.META['HTTP_REFERER'])
+    return redirect(request.META['HTTP_REFERER'])
+
+
+@login_required(login_url='login/')
 def logout(request):
     """
     logout stranica, ne može se prikazati
     ovo je potrebno doraditi, zajedno s prikazom ostalih stranica. Treba provjeriti tko je ulogiran i tko radi što
     request.user.is_authenticated je funkcija korištena pri logiranju
     """
-    if not request.user.is_authenticated:
-        pass
-
     logging_out(request)
     return redirect('index')
+
+
+@login_required(login_url='login/')
+def delete_account(request):
+    print("HELLO")
+    if request.method == 'POST':
+        request.user.delete()
+        return redirect('index')
+
+@user_passes_test(trgovac_login_required, login_url='login/')
+def delete_trgovina(request, sif_trgovina):
+    """
+    logout stranica, ne može se prikazati
+    ovo je potrebno doraditi, zajedno s prikazom ostalih stranica. Treba provjeriti tko je ulogiran i tko radi što
+    request.user.is_authenticated je funkcija korištena pri logiranju
+    """
+    if not request.user.is_authenticated and request.user != get_vlasnik_trgovine(sif_trgovina):
+        return redirect('trgovac')
+
+    Trgovina.objects.filter(sifTrgovina=sif_trgovina).delete()
+
+    return redirect('trgovac')
 
 
 def add_proizvođač(name):
@@ -238,3 +370,11 @@ def add_zemlja_porijekla(name):
         return Zemlja_porijekla.objects.get(naziv=name)
     except Zemlja_porijekla.DoesNotExist:
         return None
+
+
+def get_vlasnik_trgovine(sifTrgovine):
+    return Trgovina.objects.get(sifTrgovina=sifTrgovine).vlasnik
+
+
+def get_artikli_from_trgovina(sifTrgovina):
+    return TrgovinaArtikli.objects.filter(trgovina=sifTrgovina)

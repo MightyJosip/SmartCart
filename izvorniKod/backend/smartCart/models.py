@@ -1,10 +1,56 @@
+from django.contrib.admin import ModelAdmin
+from django.contrib.auth.base_user import BaseUserManager
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 
 
+class AccountManager(BaseUserManager):
+    use_in_migrations = True
+
+    def create_user(self, email, password, **extra_fields):
+        if not email:
+            raise ValueError('The Email must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save()
+        return user
+
+    def create_superuser(self, email, password, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
+        extra_fields.setdefault('is_kupac', True)
+        extra_fields.setdefault('is_trgovac', True)
+
+        return self.create_user(email, password, **extra_fields)
+
+
 class BaseUserModel(AbstractUser):
-    pass
+    username = None
+    first_name = None
+    last_name = None
+    is_kupac = models.BooleanField(default=False)
+    is_trgovac = models.BooleanField(default=False)
+    email = models.EmailField(unique=True)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+
+    objects = AccountManager()
+
+    def __str__(self):
+        return self.email
+
+
+class MyUserAdmin(ModelAdmin):
+    model = BaseUserModel
+    list_display = ('email', 'is_staff', 'is_kupac', 'is_trgovac')
+    list_filter = ()
+    search_fields = ('email',)
+    ordering = ('email', )
+    filter_horizontal = ()
 
 
 # predstavlja proizvođača u bazi podataka
@@ -34,7 +80,7 @@ class Zemlja_porijekla(models.Model):
 # vote count bi trebao biti postavljen na nulu
 # TODO: srediti vote count atribude iz NULL prebaciti u DEFAULT = 0
 class Artikl(models.Model):
-    barkod_artikla = models.IntegerField(primary_key=True)
+    barkod_artikla = models.CharField(max_length=13, primary_key=True)
 
     naziv_artikla = models.CharField(max_length=100, null=False)
     autor_naziva = models.CharField(max_length=100, null=True)
@@ -56,10 +102,7 @@ class Artikl(models.Model):
     vegan = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'BARKOD: {self.barkod_artikla}, NAZIV: {self.naziv_artikla}'
-
-    # def uvjet(self):
-    #     return test_nad_uvjetom
+        return f'{self.naziv_artikla}'
 
 
 # klasa trgovina
@@ -76,15 +119,24 @@ class Trgovina(models.Model):
     sifTrgovina = models.AutoField(primary_key=True)
     nazTrgovina = models.CharField(max_length=100)
     adresaTrgovina = models.CharField(max_length=200)
+    radno_vrijeme_početak = models.TimeField()
+    radno_vrijeme_kraj = models.TimeField()
     vlasnik = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    artikli = models.ManyToManyField(Artikl)
 
     def __str__(self):
         return f'{self.nazTrgovina}, {self.adresaTrgovina}'
+
+
+class TrgovinaArtikli(models.Model):
+    trgovina = models.ForeignKey(Trgovina, on_delete=models.CASCADE)
+    artikl = models.ForeignKey(Artikl, on_delete=models.CASCADE)
+    cijena = models.DecimalField(max_digits=8, decimal_places=2)
+    akcija = models.BooleanField(default=False)
+    dostupan = models.BooleanField(default=False)
 
 
 class SecretCode(models.Model):
     value = models.IntegerField(primary_key=True)
 
     def __str__(self):
-        return f'SECRET CODE: {self.value}'
+        return f'{self.value}'

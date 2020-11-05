@@ -6,34 +6,65 @@
     <head>
         <meta charset="UTF-8">
         <title>Trgovina {{ trgovina.sifTrgovina }}</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'tablica.css' %}"/>
         <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
     </head>
 </head>
 
 <body>
-    <h1>Ovdje su prikazani podaci za trgovinu {{trgovina.nazTrgovina}} </h1>
-    <h1>Sifra trgovine : {{trgovina.sifTrgovina }}</h1>
+    <h1>Ovdje su prikazani podaci za trgovinu {{trgovina}} </h1>
+    <h2>Radno vrijeme : {{trgovina.radno_vrijeme_početak|time:"H:i"}}-{{trgovina.radno_vrijeme_kraj|time:"H:i"}}</h2>
 
     <hr>
 
     <h2>Artikli dostupni u ovoj trgovini</h2>
-    <ul>
-        {% for t in trgovina.artikli.all %}
-        <li>{{ t.naziv_artikla }} <a href="{% url 'artikl' t.barkod_artikla %}">Detaljnije o namirnici</a></li> <!--štoviše, zajebava-->
+    <table summary="artikli_u_trgovini">
+        {% if artikli %}
+            <tr><th>Barkod</th><th>Naziv</th><th>Cijena</th><th>Akcija</th><th>Dostupan</th><th>Uredi</th><th>Obriši</th>
+        {% endif %}
+        {% for trgartikl in artikli %}
+            <tr>
+                <td>{{ trgartikl.artikl.barkod_artikla }}</td>
+                <td>{{ trgartikl.artikl.naziv_artikla }}</td>
+                <td>{{ trgartikl.cijena }}</td>
+                {% if trgartikl.akcija %}
+                    <td>Da</td>
+                {% else %}
+                    <td>Ne</td>
+                {% endif %}
+                {% if trgartikl.dostupan %}
+                    <td>Da</td>
+                {% else %}
+                    <td>Ne</td>
+                {% endif %}
+                <td><a href="{% url 'uredi_artikl_u_trgovini' trgartikl.id %}">Uredi</a></li></td>
+                <td><a href="{% url 'obrisi_artikl_u_trgovini' trgartikl.id %}">Obrisi</a></li></td>
+            </tr>
         {% endfor %}
-    </ul>
+    </table>
     <hr>
 
     <h2>Dodaj artikle u ovu trgovinu</h2>
     <form action="/trgovina/{{trgovina.sifTrgovina}}" method="POST"> <!-- /0 because of parsing, stupid premanent temporary hack which works -->
         {%csrf_token%}
-        <label for="barkod">Barkod</label><br>
-        <input type="text" id="barkod" name="barkod" value=""><br>
-        <input type="hidden" id="sifTrgovina" name="sifTrgovina" value="{{trgovina.sifTrgovina}}"><br>
+        {% for field in artikl_form %}
+            <b>{{ field.label_tag }}</b><br> {{ field }}<br><br>
+        {% endfor %}
         <input type="submit" value="Submit">
     </form>
+    <hr>
 
-    <h3>Povratak na početnu stranicu</h3>
+    <h2>Promijeni radno vrijeme trgovine</h2>
+    <form action="/trgovina/{{trgovina.sifTrgovina}}" method="POST"> <!-- /0 because of parsing, stupid premanent temporary hack which works -->
+        {%csrf_token%}
+        {% for field in vrijeme_form %}
+            <b>{{ field.label_tag }}</b><br> {{ field }}<br><br>
+        {% endfor %}
+        <input type="submit" value="Submit">
+    </form>
+    <hr>
+
+    <h3>Povratak na stranicu trgovca</h3>
     <form action="/trgovac" method="GET">
         <input type="submit" value="Povratak">
     </form>

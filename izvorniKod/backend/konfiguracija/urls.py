@@ -19,16 +19,22 @@ from django.urls import include, path
 from smartCart import views
 
 urlpatterns = [
-    path('smartcart/', include('smartCart.urls')),
+    # path('smartcart/', include('smartCart.urls')),
     path('admin', admin.site.urls),
     path('', views.index, name='index'),
     path('signup/trgovac', views.sign_up_trgovac, name='signup_trgovac'),
     path('signup/kupac', views.sign_up_kupac, name='signup_kupac'),
     path('login/', views.login, name='login'),
+    path('edit_profile', views.edit_profile, name='edit_profile'),
+    path('delete_account', views.delete_account, name='delete_account'),
     path('trgovac', views.trgovac, name='trgovac'),  ############<-------------------------------------------------
     path('logout', views.logout, name='logout'),
     path('trgovac/dodaj-trgovine', views.dodaj_trgovine, name='dodaj_trgovine'),
     path('trgovac/dodaj-artikle', views.dodaj_artikle, name='dodaj_artikle'),
-    path('trgovina/<int:sifTrgovina>', views.trgovina, name='trgovina'),  # int kinda sus
-    path('artikl/<int:barkod_artikla>', views.artikl, name='artikl')
+    path('trgovac/dodaj-proizvodace', views.dodaj_proizvođače, name='dodaj_proizvođače'),
+    path('trgovina/<int:sif_trgovina>', views.trgovina, name='trgovina'),  # int kinda sus
+    path('trgovina/delete/<int:sif_trgovina>', views.delete_trgovina, name='delete_trgovina'),  # int kinda sus
+    path('artikl/<int:barkod_artikla>', views.artikl, name='artikl'),
+    path('uredi_artikl/<int:artikl_trgovina>', views.uredi_artikl_u_trgovini, name='uredi_artikl_u_trgovini'),
+    path('obrisi_artikl/<int:artikl_trgovina>', views.obrisi_artikl_u_trgovini, name='obrisi_artikl_u_trgovini')
 ]
