@@ -43,9 +43,12 @@ def sign_up_trgovac(request):
             if password != confirm_password:
                 return render(request, 'smartCart/signup_trgovac.html',
                               {'message': 'Passwords don\'t match\n', 'form': form})
-            if not SecretCode.objects.filter(value=secret_code).exists():
+            secret_code = SecretCode.objects.filter(value=secret_code)
+            if not secret_code.exists():
                 return render(request, 'smartCart/signup_trgovac.html',
                               {'message': 'Wrong secret code\n', 'form': form})
+            else:
+                secret_code.delete()
             User.objects.create_user(email, password, is_trgovac=True)
             return render(request, 'smartCart/index.html', {})
     else:
@@ -241,7 +244,8 @@ def trgovina(request, sif_trgovina):
         dodaj_artikl_form = DodajArtiklUTrgovinu(request.POST)
         radno_vrijeme_form = PromijeniRadnoVrijeme(request.POST)
         return render(request, 'smartCart/trgovina.html',
-                      {'trgovina': t, 'artikli': get_artikli_from_trgovina(sif_trgovina), 'artikl_form': dodaj_artikl_form, 'vrijeme_form': radno_vrijeme_form})
+                      {'trgovina': t, 'artikli': get_artikli_from_trgovina(sif_trgovina),
+                       'artikl_form': dodaj_artikl_form, 'vrijeme_form': radno_vrijeme_form})
     dodaj_artikl_form = DodajArtiklUTrgovinu(request.POST)
     radno_vrijeme_form = PromijeniRadnoVrijeme(request.POST)
     if dodaj_artikl_form.is_valid():
@@ -338,10 +342,10 @@ def logout(request):
 
 @login_required(login_url='login/')
 def delete_account(request):
-    print("HELLO")
     if request.method == 'POST':
         request.user.delete()
         return redirect('index')
+
 
 @user_passes_test(trgovac_login_required, login_url='login/')
 def delete_trgovina(request, sif_trgovina):
