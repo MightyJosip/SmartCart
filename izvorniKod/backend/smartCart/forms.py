@@ -26,7 +26,7 @@ class SignUpKupacForm(forms.Form):
     password = forms.CharField(max_length=32, widget=forms.PasswordInput)
     confirm_password = forms.CharField(max_length=32, widget=forms.PasswordInput)
 
-
+# TODO: proširiti formu za latitude i logitude
 class DodajTrgovinu(forms.ModelForm):
     class Meta:
         model = Trgovina

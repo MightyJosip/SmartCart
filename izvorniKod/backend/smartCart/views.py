@@ -24,13 +24,25 @@ def trgovac_login_required(user):
 #------------------------------------------------------------------------------------------
 # funkcija kojom se vraća json svih artikala
 def android_artikli(request):
-    artikli = Artikl.objects.all()
+
+    try:
+        naziv_artikla = request.POST['naziv_artikla']
+    except:
+        naziv_artikla = ''
+
+    artikli = Artikl.objects.filter(naziv_artikla__contains='%s' %naziv_artikla)
     artikli_json = serializers.serialize('json', artikli)
     return HttpResponse(artikli_json, content_type='application/json') 
 
 # funkcija kojom se vraća json svih trgovina
 def android_trgovine(request):
-    trgovine = Trgovina.objects.all()
+
+    try:
+        naz_trgovina = request.POST['naz_trgovina']
+    except:
+        naz_trgovina = ''
+    
+    trgovine = Trgovina.objects.filter(naz_trgovina__contains='%s' %naz_trgovina)
     trgovine_json = serializers.serialize('json', trgovine)
     return HttpResponse(trgovine_json, content_type='application/json')
 
