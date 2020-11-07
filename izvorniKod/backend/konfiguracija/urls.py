@@ -36,5 +36,7 @@ urlpatterns = [
     path('trgovina/delete/<int:sif_trgovina>', views.delete_trgovina, name='delete_trgovina'),  # int kinda sus
     path('artikl/<int:barkod_artikla>', views.artikl, name='artikl'),
     path('uredi_artikl/<int:artikl_trgovina>', views.uredi_artikl_u_trgovini, name='uredi_artikl_u_trgovini'),
-    path('obrisi_artikl/<int:artikl_trgovina>', views.obrisi_artikl_u_trgovini, name='obrisi_artikl_u_trgovini')
+    path('obrisi_artikl/<int:artikl_trgovina>', views.obrisi_artikl_u_trgovini, name='obrisi_artikl_u_trgovini'),
+    path('android/artikli', views.android_artikli, name='android_artikli'),
+    path('android/trgovine', views.android_trgovine, name='android_trgovine')
 ]

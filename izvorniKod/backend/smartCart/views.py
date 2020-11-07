@@ -11,6 +11,8 @@ from .forms import LoginForm, DodajTrgovinu, DodajArtikl, SignUpTrgovacForm, Sig
     DodajArtiklUTrgovinu, UrediArtiklUTrgovini, PromijeniRadnoVrijeme, EditLogin
 from django.contrib.auth import get_user_model
 import os
+from django.core import serializers
+from django.http import HttpResponse
 
 User = get_user_model()
 
@@ -18,6 +20,23 @@ User = get_user_model()
 def trgovac_login_required(user):
     return user.is_trgovac if user.is_authenticated else False
 
+#Android
+#------------------------------------------------------------------------------------------
+# funkcija kojom se vraća json svih artikala
+def android_artikli(request):
+    artikli = Artikl.objects.all()
+    artikli_json = serializers.serialize('json', artikli)
+    return HttpResponse(artikli_json, content_type='application/json') 
+
+# funkcija kojom se vraća json svih trgovina
+def android_trgovine(request):
+    trgovine = Trgovina.objects.all()
+    trgovine_json = serializers.serialize('json', trgovine)
+    return HttpResponse(trgovine_json, content_type='application/json')
+
+def android_login(request):
+
+#------------------------------------------------------------------------------------------
 
 def index(request):
     """
@@ -162,7 +181,10 @@ def dodaj_trgovine(request):
     if request.method == 'GET':
         return redirect(request.META['HTTP_REFERER'])
     form = DodajTrgovinu(request.POST)
+    print(form)
+    print(form.is_valid())
     if form.is_valid():
+        print("tu sam-----------------------------------------------------------------------------")
         naz_trgovina = request.POST['nazTrgovina']
         adr_trgovina = request.POST['adresaTrgovina']
         rad_vri_početak = request.POST['radno_vrijeme_početak']
@@ -172,6 +194,7 @@ def dodaj_trgovine(request):
                             vlasnik=get_object_or_404(User, pk=request.user.id),
                             radno_vrijeme_početak=rad_vri_početak,
                             radno_vrijeme_kraj=rad_vri_kraj)
+        print(trgovina)
         trgovina.save()
 
     return redirect(request.META['HTTP_REFERER'])

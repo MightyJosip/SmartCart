@@ -32,7 +32,7 @@
         <br>
         <hr />
     {% else %}
-        <form action="/login" method="get">
+        <form action="/login" method="GET">
             {%csrf_token%}
             <button type="submit">Log in</button>
         </form>
