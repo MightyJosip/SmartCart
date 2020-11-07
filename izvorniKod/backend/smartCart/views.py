@@ -35,7 +35,16 @@ def android_trgovine(request):
     return HttpResponse(trgovine_json, content_type='application/json')
 
 def android_login(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
 
+    if user is not None:
+        pass #nešto
+    else:
+        #nešto drugo
+        pass
+    return
 #------------------------------------------------------------------------------------------
 
 def index(request):
