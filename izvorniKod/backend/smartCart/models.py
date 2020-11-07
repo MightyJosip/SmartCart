@@ -116,15 +116,17 @@ class Artikl(models.Model):
 # Na istu foru dodaj "dostupnost"
 # udari u google py django many to many relationship i otvori službenu stranicu i šamaraj
 class Trgovina(models.Model):
-    sifTrgovina = models.AutoField(primary_key=True)
-    nazTrgovina = models.CharField(max_length=100)
-    adresaTrgovina = models.CharField(max_length=200)
+    sif_trgovina = models.AutoField(primary_key=True)
+    naz_trgovina = models.CharField(max_length=100)
+    adresa_trgovina = models.CharField(max_length=200)
     radno_vrijeme_početak = models.TimeField()
     radno_vrijeme_kraj = models.TimeField()
+    latitude = models.CharField(max_length=100, null=True)
+    longitude = models.CharField(max_length=100, null=True)
     vlasnik = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.nazTrgovina}, {self.adresaTrgovina}'
+        return f'{self.naz_trgovina}, {self.adresa_trgovina}'
 
 
 class TrgovinaArtikli(models.Model):

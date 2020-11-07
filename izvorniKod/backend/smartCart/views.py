@@ -194,12 +194,12 @@ def dodaj_trgovine(request):
     print(form.is_valid())
     if form.is_valid():
         print("tu sam-----------------------------------------------------------------------------")
-        naz_trgovina = request.POST['nazTrgovina']
-        adr_trgovina = request.POST['adresaTrgovina']
+        naz_trgovina = request.POST['naz_trgovina']
+        adr_trgovina = request.POST['adresa_trgovina']
         rad_vri_početak = request.POST['radno_vrijeme_početak']
         rad_vri_kraj = request.POST['radno_vrijeme_kraj']
-        trgovina = Trgovina(nazTrgovina=naz_trgovina,
-                            adresaTrgovina=adr_trgovina,
+        trgovina = Trgovina(naz_trgovina=naz_trgovina,
+                            adresa_trgovina=adr_trgovina,
                             vlasnik=get_object_or_404(User, pk=request.user.id),
                             radno_vrijeme_početak=rad_vri_početak,
                             radno_vrijeme_kraj=rad_vri_kraj)
@@ -269,7 +269,7 @@ def trgovina(request, sif_trgovina):
     vraća se "trgovina.html" s podacije o toj trgovini
     slanjem HTTP POST upita na "/trgovina" sa informacijama o artiklu (konkretnike: barkoda artikla), artikl se može dodati u trgovinu
     """
-    t = Trgovina.objects.get(sifTrgovina=sif_trgovina)
+    t = Trgovina.objects.get(sif_trgovina=sif_trgovina)
     if request.user.id != t.vlasnik.id:  # Stop "hacking" into trgovina website
         return redirect('trgovac')
     if request.method == 'GET':
@@ -322,8 +322,8 @@ def artikl(request, barkod_artikla):
 
 @user_passes_test(trgovac_login_required, login_url='login/')
 def uredi_artikl_u_trgovini(request, artikl_trgovina):
-    t_id = TrgovinaArtikli.objects.get(id=artikl_trgovina).trgovina.sifTrgovina
-    t = Trgovina.objects.get(sifTrgovina=t_id)
+    t_id = TrgovinaArtikli.objects.get(id=artikl_trgovina).trgovina.sif_trgovina
+    t = Trgovina.objects.get(sif_trgovina=t_id)
     if request.user.id != t.vlasnik.id:  # Stop "hacking" into trgovina website
         return redirect('index')
     if request.method == 'GET':
@@ -350,8 +350,8 @@ def uredi_artikl_u_trgovini(request, artikl_trgovina):
 
 @user_passes_test(trgovac_login_required, login_url='login/')
 def obrisi_artikl_u_trgovini(request, artikl_trgovina):
-    t_id = TrgovinaArtikli.objects.get(id=artikl_trgovina).trgovina.sifTrgovina
-    t = Trgovina.objects.get(sifTrgovina=t_id)
+    t_id = TrgovinaArtikli.objects.get(id=artikl_trgovina).trgovina.sif_trgovina
+    t = Trgovina.objects.get(sif_trgovina=t_id)
     if request.user.id != t.vlasnik.id:  # Stop "hacking" into trgovina website
         return redirect('index')
     if request.method == 'GET':
@@ -389,7 +389,7 @@ def delete_trgovina(request, sif_trgovina):
     if not request.user.is_authenticated and request.user != get_vlasnik_trgovine(sif_trgovina):
         return redirect('trgovac')
 
-    Trgovina.objects.filter(sifTrgovina=sif_trgovina).delete()
+    Trgovina.objects.filter(sif_trgovina=sif_trgovina).delete()
 
     return redirect('trgovac')
 
@@ -409,7 +409,7 @@ def add_zemlja_porijekla(name):
 
 
 def get_vlasnik_trgovine(sifTrgovine):
-    return Trgovina.objects.get(sifTrgovina=sifTrgovine).vlasnik
+    return Trgovina.objects.get(sif_trgovina=sifTrgovine).vlasnik
 
 
 def get_artikli_from_trgovina(sifTrgovina):

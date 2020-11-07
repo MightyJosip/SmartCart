@@ -25,7 +25,7 @@
     <ul>
         {% for t in trgovine %}
             {{ t }}
-            <a href="{% url 'trgovina' t.sifTrgovina %}">Detaljnije o trgovini</a>
+            <a href="{% url 'trgovina' t.sif_trgovina %}">Detaljnije o trgovini</a>
             <form action="trgovina/delete/{{t.sifTrgovina}}" method="POST">
                 {%csrf_token%}
                 <input type="submit" value="Obriši trgovinu" onclick="return confirm('Je si li siguran da želiš obrisati trgovinu?')">

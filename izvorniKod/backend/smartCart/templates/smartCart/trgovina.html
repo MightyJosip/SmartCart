@@ -45,7 +45,7 @@
     <hr>
 
     <h2>Dodaj artikle u ovu trgovinu</h2>
-    <form action="/trgovina/{{trgovina.sifTrgovina}}" method="POST"> <!-- /0 because of parsing, stupid premanent temporary hack which works -->
+    <form action="/trgovina/{{trgovina.sif_trgovina}}" method="POST"> <!-- /0 because of parsing, stupid premanent temporary hack which works -->
         {%csrf_token%}
         {% for field in artikl_form %}
             <b>{{ field.label_tag }}</b><br> {{ field }}<br><br>
@@ -55,7 +55,7 @@
     <hr>
 
     <h2>Promijeni radno vrijeme trgovine</h2>
-    <form action="/trgovina/{{trgovina.sifTrgovina}}" method="POST"> <!-- /0 because of parsing, stupid premanent temporary hack which works -->
+    <form action="/trgovina/{{trgovina.sif_trgovina}}" method="POST"> <!-- /0 because of parsing, stupid premanent temporary hack which works -->
         {%csrf_token%}
         {% for field in vrijeme_form %}
             <b>{{ field.label_tag }}</b><br> {{ field }}<br><br>

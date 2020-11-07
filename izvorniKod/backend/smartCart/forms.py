@@ -30,10 +30,10 @@ class SignUpKupacForm(forms.Form):
 class DodajTrgovinu(forms.ModelForm):
     class Meta:
         model = Trgovina
-        fields = ['nazTrgovina', 'adresaTrgovina', 'radno_vrijeme_početak', 'radno_vrijeme_kraj']
+        fields = ['naz_trgovina', 'adresa_trgovina', 'radno_vrijeme_početak', 'radno_vrijeme_kraj']
         labels = {
-            'nazTrgovina': 'Naziv trgovine',
-            'adresaTrgovina': 'Adresa trgovine'
+            'naz_trgovina': 'Naziv trgovine',
+            'adresa_trgovina': 'Adresa trgovine'
         }
         widgets = {
             'radno_vrijeme_početak': TimeInput(format='%H:%M'),
