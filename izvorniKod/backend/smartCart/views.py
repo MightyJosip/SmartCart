@@ -13,6 +13,7 @@ from django.contrib.auth import get_user_model
 import os
 from django.core import serializers
 from django.http import HttpResponse
+import json
 
 User = get_user_model()
 
@@ -20,15 +21,13 @@ User = get_user_model()
 def trgovac_login_required(user):
     return user.is_trgovac if user.is_authenticated else False
 
-#Android
-#------------------------------------------------------------------------------------------
-# funkcija kojom se vraća json svih artikala
-
 def kupac_login_required(user):
     return user.is_kupac if user.is_authenticated else False
 
+#Android
+#------------------------------------------------------------------------------------------
+# funkcija kojom se vraća json određenih artikala
 def android_artikli(request):
-
     try:
         naziv_artikla = request.POST['naziv_artikla']
     except:
@@ -38,9 +37,20 @@ def android_artikli(request):
     artikli_json = serializers.serialize('json', artikli)
     return HttpResponse(artikli_json, content_type='application/json') 
 
+# funkcija koja vraća artikle
+# prima barkodove traženih artikala
+def android_popis(request):
+    barkodovi = json.loads(request.POST['barkodovi']) 
+    artikli = {}
+    for barkod in barkodovi:
+        artikli += Artikl.objects.filter(barkod_artikla=barkod)
+    artikli_json = serializers.serialize('json', artikli)
+    artikli_json = serializers.serialize('json', artikli)
+    return HttpResponse(artikli_json, content_type='application/json') 
+    
+
 # funkcija kojom se vraća json svih trgovina
 def android_trgovine(request):
-
     try:
         naz_trgovina = request.POST['naz_trgovina']
     except:
@@ -50,6 +60,8 @@ def android_trgovine(request):
     trgovine_json = serializers.serialize('json', trgovine)
     return HttpResponse(trgovine_json, content_type='application/json')
 
+# funkcija za ulogiravanje s android uređaja
+# vraća http odgovor 
 def android_login(request):
     username = request.POST['email']
     password = request.POST['password']
@@ -61,10 +73,14 @@ def android_login(request):
     else:
         return HttpResponse(serializers.serialize('json', {'login_successful': 'No', 'error': 'Krivi e-mail ili password'}))
 
+# funkcija za izlogiravanje s android uređaja
+# vraća http odgovor
 def android_logout(request):
     logging_out(request=request)
     return HttpResponse(serializers.serialize('json', {'login_successful': 'Yes'}))
 
+# funkcija za stvaranje računa s android uređaja
+# vraća http odgovor
 def android_sign_up(request):
     email = request.POST['email']
     password = request.POST['password']
