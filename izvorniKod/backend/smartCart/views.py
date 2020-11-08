@@ -51,20 +51,43 @@ def android_trgovine(request):
     return HttpResponse(trgovine_json, content_type='application/json')
 
 def android_login(request):
-    username = request.POST['username']
+    username = request.POST['email']
     password = request.POST['password']
     user = authenticate(username=username, password=password)
 
     if user is not None:
         logging_in(request=request, user=user)
-        return HttpResponse(serializers.serialize('json', {'login_successful': 'Da'}))
+        return HttpResponse(serializers.serialize('json', {'login_successful': 'Yes'}))
     else:
-        return HttpResponse(serializers.serialize('json', {'login_successful': 'Ne'}))
+        return HttpResponse(serializers.serialize('json', {'login_successful': 'No', 'error': 'Krivi e-mail ili password'}))
 
 def android_logout(request):
     logging_out(request=request)
-    return HttpResponse(serializers.serialize('json', {'login_successful': 'Da'}))
+    return HttpResponse(serializers.serialize('json', {'login_successful': 'Yes'}))
 
+def android_sign_up(request):
+    email = request.POST['email']
+    password = request.POST['password']
+    confirm_password = request.POST['confirm_password']
+    authorisation_level = request.POST['authorisation_level']
+
+    if (password != confirm_password):
+        return HttpResponse(serializers.serialize('json', {'sign_up_successful': 'No', 'error': 'Lozinke se ne podudaraju'}))    
+
+    if (authorisation_level == 'kupac'):
+        User.objects.create_user(email, password, is_kupac=True)
+        return HttpResponse(serializers.serialize('json', {'login_successful': 'Yes'}))
+
+    if (authorisation_level == 'trgovac'):
+        secret_code = request.POST['secret_code']
+        secret_code = SecretCode.objects.filter(value=secret_code)
+        if not secret_code.exists():
+            return HttpResponse(serializers.serialize('json', {'sign_up_successful': 'No', 'error': 'Tajna lozinka nije valjana'})) 
+        secret_code.delete()
+        User.objects.create_user(email, password, is_trgovac=True)
+        return HttpResponse(serializers.serialize('json', {'sign_up_successful': 'Yes'})) 
+
+    return HttpResponse(serializers.serialize('json', {'sign_up_successful': 'No', 'error': 'Dogodila se greška'}))
 
 #------------------------------------------------------------------------------------------
 
