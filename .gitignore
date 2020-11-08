@@ -13,3 +13,4 @@ izvorniKod/backend/smartCart/migration
 /dokumentacija/*.synctex.gz
 /dokumentacija/*.toc
 .~lock.*
+*.bak
