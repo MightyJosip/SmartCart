@@ -33,7 +33,9 @@ SECRET_KEY = KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['10.0.2.2', 'localhost'] #ne dirajte ovoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+#10.0.2.2 služi za spajanje emulatora iz android studia.
+# Možete dodati lokalni ip s mobitela da možete s njega pokretati server, a pristupati s Windowsa
+ALLOWED_HOSTS = ['10.0.2.2', 'localhost'] 
 
 
 # Application definition

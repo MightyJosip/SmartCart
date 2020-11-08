@@ -23,6 +23,10 @@ def trgovac_login_required(user):
 #Android
 #------------------------------------------------------------------------------------------
 # funkcija kojom se vraća json svih artikala
+
+def kupac_login_required(user):
+    return user.is_kupac if user.is_authenticated else False
+
 def android_artikli(request):
 
     try:
@@ -52,11 +56,16 @@ def android_login(request):
     user = authenticate(username=username, password=password)
 
     if user is not None:
-        pass #nešto
+        logging_in(request=request, user=user)
+        return HttpResponse(serializers.serialize('json', {'login_successful': 'Da'}))
     else:
-        #nešto drugo
-        pass
-    return
+        return HttpResponse(serializers.serialize('json', {'login_successful': 'Ne'}))
+
+def android_logout(request):
+    logging_out(request=request)
+    return HttpResponse(serializers.serialize('json', {'login_successful': 'Da'}))
+
+
 #------------------------------------------------------------------------------------------
 
 def index(request):
