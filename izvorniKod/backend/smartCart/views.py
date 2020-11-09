@@ -110,17 +110,20 @@ def android_logout(request):
 def android_sign_up(request):
     email = request.POST['email']
     password = request.POST['password']
-    confirm_password = request.POST['confirm_password']
+    #confirm_password = request.POST['confirm_password']
     authorisation_level = request.POST['authorisation_level']
 
+    """
     if (password != confirm_password):
-        response = HttpResponse(serializers.serialize('json', {'sign_up_successful': 'No', 'error': 'Lozinke se ne podudaraju'}))    
+        response = HttpResponse(serializers.serialize('json', {'sign_up_successful': 'No', 'error': 'Lozinke se ne podudaraju'}))   
         response.status_code = 401
         return response
+    """
 
     if (authorisation_level == 'kupac'):
         User.objects.create_user(email, password, is_kupac=True)
-        response = HttpResponse(serializers.serialize('json', {'login_successful': 'Yes'}))
+        #response = HttpResponse(serializers.serialize('json', {'login_successful': 'Yes'}))
+        response = HttpResponse()
         response.status_code = 200
         return response
 
@@ -134,7 +137,8 @@ def android_sign_up(request):
         secret_code.delete()
         User.objects.create_user(email, password, is_trgovac=True)
 
-        response = HttpResponse(serializers.serialize('json', {'sign_up_successful': 'Yes'})) 
+        #response = HttpResponse(serializers.serialize('json', {'sign_up_successful': 'Yes'}))
+        response = HttpResponse()
         response.status_code = 200
         return response
 
