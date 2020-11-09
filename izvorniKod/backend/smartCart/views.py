@@ -35,10 +35,14 @@ def android_artikli(request):
 
     artikli = Artikl.objects.filter(naziv_artikla__contains='%s' %naziv_artikla)
     artikli_json = serializers.serialize('json', artikli)
-    return HttpResponse(artikli_json, content_type='application/json') 
+
+    response = HttpResponse(artikli_json, content_type='application/json')
+    response.status_code = 200
+    return response
 
 # funkcija koja vraća artikle
 # prima barkodove traženih artikala
+# TODO: provjeriti rad ove "loads" funkcije
 def android_popis(request):
     barkodovi = json.loads(request.POST['barkodovi']) 
     artikli = {}
@@ -46,7 +50,10 @@ def android_popis(request):
         artikli += Artikl.objects.filter(barkod_artikla=barkod)
     artikli_json = serializers.serialize('json', artikli)
     artikli_json = serializers.serialize('json', artikli)
-    return HttpResponse(artikli_json, content_type='application/json') 
+    
+    response = HttpResponse(artikli_json, content_type='application/json')
+    response.status_code = 200
+    return response
     
 
 # funkcija kojom se vraća json svih trgovina
@@ -58,7 +65,10 @@ def android_trgovine(request):
     
     trgovine = Trgovina.objects.filter(naz_trgovina__contains='%s' %naz_trgovina)
     trgovine_json = serializers.serialize('json', trgovine)
-    return HttpResponse(trgovine_json, content_type='application/json')
+    
+    response = HttpResponse(trgovine_json, content_type='application/json')
+    response.status_code = 200
+    return response
 
 # funkcija za ulogiravanje s android uređaja
 # vraća http odgovor 
@@ -69,15 +79,21 @@ def android_login(request):
 
     if user is not None:
         logging_in(request=request, user=user)
-        return HttpResponse(serializers.serialize('json', {'login_successful': 'Yes'}))
+        response = HttpResponse(serializers.serialize('json', {'login_successful': 'Yes'}))
+        response.status_code = 200
+        return response
     else:
-        return HttpResponse(serializers.serialize('json', {'login_successful': 'No', 'error': 'Krivi e-mail ili password'}))
+        response = HttpResponse(serializers.serialize('json', {'login_successful': 'No', 'error': 'Krivi e-mail ili password'}))
+        response.status_code = 401
+        return response
 
 # funkcija za izlogiravanje s android uređaja
 # vraća http odgovor
 def android_logout(request):
     logging_out(request=request)
-    return HttpResponse(serializers.serialize('json', {'login_successful': 'Yes'}))
+    response = HttpResponse(serializers.serialize('json', {'login_successful': 'Yes'}))
+    response.status_code = 200
+    return response
 
 # funkcija za stvaranje računa s android uređaja
 # vraća http odgovor
@@ -88,22 +104,33 @@ def android_sign_up(request):
     authorisation_level = request.POST['authorisation_level']
 
     if (password != confirm_password):
-        return HttpResponse(serializers.serialize('json', {'sign_up_successful': 'No', 'error': 'Lozinke se ne podudaraju'}))    
+        response = HttpResponse(serializers.serialize('json', {'sign_up_successful': 'No', 'error': 'Lozinke se ne podudaraju'}))    
+        response.status_code = 401
+        return response
 
     if (authorisation_level == 'kupac'):
         User.objects.create_user(email, password, is_kupac=True)
-        return HttpResponse(serializers.serialize('json', {'login_successful': 'Yes'}))
+        response = HttpResponse(serializers.serialize('json', {'login_successful': 'Yes'}))
+        response.status_code = 200
+        return response
 
     if (authorisation_level == 'trgovac'):
         secret_code = request.POST['secret_code']
         secret_code = SecretCode.objects.filter(value=secret_code)
         if not secret_code.exists():
-            return HttpResponse(serializers.serialize('json', {'sign_up_successful': 'No', 'error': 'Tajna lozinka nije valjana'})) 
+            response = HttpResponse(serializers.serialize('json', {'sign_up_successful': 'No', 'error': 'Tajna lozinka nije valjana'})) 
+            response = 401
+            return response
         secret_code.delete()
         User.objects.create_user(email, password, is_trgovac=True)
-        return HttpResponse(serializers.serialize('json', {'sign_up_successful': 'Yes'})) 
 
-    return HttpResponse(serializers.serialize('json', {'sign_up_successful': 'No', 'error': 'Dogodila se greška'}))
+        response = HttpResponse(serializers.serialize('json', {'sign_up_successful': 'Yes'})) 
+        response.status_code = 200
+        return response
+
+    response = HttpResponse(serializers.serialize('json', {'sign_up_successful': 'No', 'error': 'Dogodila se greška'}))
+    response.status_code = 500
+    return response
 
 #------------------------------------------------------------------------------------------
 
