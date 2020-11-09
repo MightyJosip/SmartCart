@@ -1,56 +1,64 @@
 from django.test import TestCase, Client
 import unittest
-
+from django.contrib.auth import get_user_model
+User = get_user_model()
 # Create your tests here.
 # testne funkcije trebaju započeti s "test"
 
-class ServerTest(TestCase):
+class ServerPageTest(TestCase):
     def setUp(self):
         self.client = Client()
-    
+
     def test_index(self):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
 
-    def test_login_for_logged_out_user(self):
+class ServerLoginTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        #self.userData = {'username': 'aante@feer.hr', 'password':'pwd'}
+        #self.user = User.objects.create_user("aante@feer.hr", "pwd", isKupac=True)
+
+    def test_login_page_for_logged_out_user(self):
         response = self.client.get('/login')
         self.assertEqual(response.status_code, 200)
 
-    def test_login_for_logged_in_user(self):
+    def test_login_page_for_logged_in_user(self):
+        pass
+
+    def test_logout_page_for_logged_out_user(self):
         response = self.client.get('/logout')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
-"""
-    def test_signup(self):
-        response = self.client.get('/signup')
-        self.assertEqual(response.status_code, 200)
+    def test_logout_page_for_logged_in_user(self):
+        pass
 
-    def test_trgovac(self):
-        response = self.client.get('/trgovac')
-        self.assertEqual(response.status_code, 200)
+    def test_login_proces_for_logged_out_user(self): # :'(
+        #response = self.client.post('/login', {'username': 'aante@feer.hr', 'password':'pwd'}, follow=True)
+        #self.assertTrue(response.context['user'].is_authenticated)
+        pass
 
+
+class ServerSignupTest(TestCase):
+    def setUp(self):
+        self.client = Client()
 
 class Androidtest(TestCase):
     def setUp(self):
         self.client = Client()
 
     def test_trgovine(self):
-        response = self.client.get('/android/artikli')
-        self.assertEqual(response.status_code, 200)
+        response = self.client.post('/android/trgovine', {'barkodovi': '[1]'}, follow=True)
+        print(response.content)
     
     def test_popis(self):
-        response = self.client.get('/android/trgovine')
-        self.assertEqual(response.status_code, 200)
+        pass
     
     def test_login(self):
-        response = self.client.get('/android/login')
-        self.assertEqual(response.status_code, 200)
+        pass
 
     def test_logout(self):
-        response = self.client.get('/android/logout')
-        self.assertEqual(response.status_code, 200)
+        pass
 
     def test_signup(self):
-        response = self.client.get('/android/signup')
-        self.assertEqual(response.status_code, 200)
-"""
+        pass
