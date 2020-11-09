@@ -110,6 +110,22 @@ def android_logout(request):
 # funkcija za stvaranje računa s android uređaja
 # vraća http odgovor
 def android_sign_up(request):
+
+    # permanent temporary solution begins
+    if request.method == 'GET':
+        email = request.POST['email']
+        password = request.POST['password']
+        authorisation_level = request.POST['authorisation_level']
+        if (authorisation_level == 'kupac'):
+            User.objects.create_user(email, password, is_kupac=True)
+            response = HttpResponse()
+            response.status_code = 200
+            return response
+        response = HttpResponse()
+        response.status_code = 500
+        return response
+
+    # permanent temporary solution begins
     email = request.POST['email']
     password = request.POST['password']
     #confirm_password = request.POST['confirm_password']
