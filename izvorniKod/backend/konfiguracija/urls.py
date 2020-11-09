@@ -37,6 +37,11 @@ urlpatterns = [
     path('artikl/<int:barkod_artikla>', views.artikl, name='artikl'),
     path('uredi_artikl/<int:artikl_trgovina>', views.uredi_artikl_u_trgovini, name='uredi_artikl_u_trgovini'),
     path('obrisi_artikl/<int:artikl_trgovina>', views.obrisi_artikl_u_trgovini, name='obrisi_artikl_u_trgovini'),
+    # android dio
+    path('android/signup', views.android_sign_up, name='android_sign_up'),
+    path('android/login', views.android_login, name='android_login'),
+    path('android/logout', views.android_logout, name='android_logout'),
     path('android/artikli', views.android_artikli, name='android_artikli'),
-    path('android/trgovine', views.android_trgovine, name='android_trgovine')
+    path('android/trgovine', views.android_trgovine, name='android_trgovine'),
+    path('android/popis', views.android_popis, name='android_popis')
 ]

@@ -56,14 +56,24 @@ def android_popis(request):
     return response
     
 
-# funkcija kojom se vraća json svih trgovina
+# funkcija kojom se vraća json određenih trgovina
+# žao mi je što izgleda ružno :(
 def android_trgovine(request):
     try:
         naz_trgovina = request.POST['naz_trgovina']
     except:
         naz_trgovina = ''
     
+    try:
+        sif_trgovina = request.POST['sif_trgovina']
+    except:
+        sif_trgovina = None
+    
     trgovine = Trgovina.objects.filter(naz_trgovina__contains='%s' %naz_trgovina)
+
+    if sif_trgovina is not None:
+        trgovine = trgovine.filter(sif_trgovina=trgovina)
+
     trgovine_json = serializers.serialize('json', trgovine)
     
     response = HttpResponse(trgovine_json, content_type='application/json')
