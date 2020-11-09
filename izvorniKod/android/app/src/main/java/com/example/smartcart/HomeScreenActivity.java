@@ -64,7 +64,8 @@ public class HomeScreenActivity extends AppCompatActivity{
     }
 
     public void startSignUpActivity(MenuItem mi) {
-        return;
+        Intent intent = new Intent(this, SignUpActivity.class);
+        startActivity(intent);
     }
 
 
