@@ -83,9 +83,9 @@ def android_trgovine(request):
 # funkcija za ulogiravanje s android uređaja
 # vraća http odgovor 
 def android_login(request):
-    username = request.POST['email']
-    password = request.POST['password']
-    user = authenticate(username=username, password=password)
+    email = request.GET['email']
+    password = request.GET['password']
+    user = authenticate(email=email, password=password)
 
     if user is not None:
         logging_in(request=request, user=user)
