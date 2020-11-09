@@ -85,7 +85,7 @@ def android_trgovine(request):
 def android_login(request):
     email = request.GET['email']
     password = request.GET['password']
-    user = authenticate(email=email, password=password)
+    user = authenticate(request, username=email, password=password)
 
     if user is not None:
         logging_in(request=request, user=user)
