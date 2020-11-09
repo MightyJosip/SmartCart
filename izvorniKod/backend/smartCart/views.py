@@ -89,11 +89,13 @@ def android_login(request):
 
     if user is not None:
         logging_in(request=request, user=user)
-        response = HttpResponse(serializers.serialize('json', {'login_successful': 'Yes'}))
+        #response = HttpResponse(serializers.serialize('json', {'login_successful': 'Yes'}))
+        response = HttpResponse()
         response.status_code = 200
         return response
     else:
-        response = HttpResponse(serializers.serialize('json', {'login_successful': 'No', 'error': 'Krivi e-mail ili password'}))
+        #response = HttpResponse(serializers.serialize('json', {'login_successful': 'No', 'error': 'Krivi e-mail ili password'}))
+        response = HttpResponse()
         response.status_code = 401
         return response
 
