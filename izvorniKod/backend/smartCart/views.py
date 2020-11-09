@@ -83,6 +83,25 @@ def android_trgovine(request):
 # funkcija za ulogiravanje s android uređaja
 # vraća http odgovor 
 def android_login(request):
+    # permanent temporary solution begins
+    if request.method == 'GET':
+        username = request.GET['email']
+        password = request.GET['password']
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            logging_in(request=request, user=user)
+            #response = HttpResponse(serializers.serialize('json', {'login_successful': 'Yes'}))
+            response = HttpResponse()
+            response.status_code = 200
+            return response
+        else:
+            #response = HttpResponse(serializers.serialize('json', {'login_successful': 'No', 'error': 'Krivi e-mail ili password'}))
+            response = HttpResponse()
+            response.status_code = 401
+            return response
+    # permanent temporary solution begins
+
     username = request.POST['email']
     password = request.POST['password']
     user = authenticate(username=username, password=password)
@@ -124,8 +143,8 @@ def android_sign_up(request):
         response = HttpResponse()
         response.status_code = 500
         return response
-
     # permanent temporary solution begins
+
     email = request.POST['email']
     password = request.POST['password']
     #confirm_password = request.POST['confirm_password']
