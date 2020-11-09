@@ -49,14 +49,12 @@ public class SignUpActivity extends AppCompatActivity {
 
         String url = Constants.HOST + "android/signup?email=" + email + "&password=" + etPwd.getText().toString() + "&confirm_password=" + etPwd.getText().toString() + "&authorisation_level=kupac";
 
-
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 response -> {
                     // Display the first 20 characters of the response string.
                     Toast t = Toast.makeText(this, "Response is: " + response.substring(0, 20), Toast.LENGTH_LONG);
                     t.show();
                 }, error -> Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show());
-
 
 // Add the request to the RequestQueue.
         queue.add(stringRequest);
