@@ -30,34 +30,21 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void sendData(View v) {
-        RequestQueue queue = Volley.newRequestQueue(this);
-        MessageDigest md;
-        try {
-            md = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
-            Toast.makeText(this , "Can't hash password", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        // TODO: dodati provjeru jesu li lozinke iste, možda ovou obradu izbaciti u zasebnu klasu
+        // TODO: dodati provjeru jesu li lozinke iste
         // TODO: dodati mogućnost za trgovca, validaciju
-        EditText etPwd = (EditText) findViewById(R.id.edit_password);
-        md.update(etPwd.getText().toString().getBytes());
-        String pwdDigest = String.format("%064x", new BigInteger(1, md.digest()));
+        EditText etPassword = findViewById(R.id.edit_password);
+        String password = etPassword.getText().toString();
 
         EditText etEmail = (EditText) findViewById(R.id.edit_email);
         String email = etEmail.getText().toString();
 
-        String url = Constants.HOST + "android/signup?email=" + email + "&password=" + etPwd.getText().toString() + "&confirm_password=" + etPwd.getText().toString() + "&authorisation_level=kupac";
+        Connector conn = Connector.getInstance(this);
+        conn.signUp(email, password, 0, response -> {
+            // Display the first 20 characters of the response string.
+            Toast t = Toast.makeText(this, "Response is: " + response.toString(), Toast.LENGTH_LONG);
+            t.show();
+        }, error -> Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show());
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                response -> {
-                    // Display the first 20 characters of the response string.
-                    Toast t = Toast.makeText(this, "Response is: " + response.substring(0, 20), Toast.LENGTH_LONG);
-                    t.show();
-                }, error -> Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show());
-
-// Add the request to the RequestQueue.
-        queue.add(stringRequest);
 
     }
 }

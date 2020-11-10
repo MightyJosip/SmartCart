@@ -25,18 +25,13 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
 
-        TextView signup = (TextView) findViewById(R.id.textView3);
-        CardView continueAsGuest = (CardView) findViewById(R.id.CardView2);
+        TextView signup = findViewById(R.id.textView3);
+        CardView continueAsGuest = findViewById(R.id.CardView2);
         // zašto ovo nisu gumbi?
 
-        signup.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v){
-                Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
-                startActivity(intent);
-
-            }
+        signup.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
+            startActivity(intent);
         });
 
         continueAsGuest.setOnClickListener(v -> {
