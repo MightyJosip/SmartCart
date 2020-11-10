@@ -28,7 +28,7 @@ def kupac_login_required(user):
 # funkcija kojom se vraća json određenih artikala
 def android_artikli(request):
     try:
-        naziv_artikla = request.POST['naziv_artikla']
+        naziv_artikla = request.GET['naziv_artikla']
     except:
         naziv_artikla = ''
 
