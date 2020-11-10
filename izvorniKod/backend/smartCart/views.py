@@ -4,13 +4,15 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import authenticate, login as logging_in, logout as logging_out
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import redirect
-from .models import Trgovina, Artikl, SecretCode, Proizvodac, Zemlja_porijekla, TrgovinaArtikli
+from .models import Trgovina, Artikl, SecretCode, Proizvodac, Zemlja_porijekla, TrgovinaArtikli, BaseUserModel
 from .forms import LoginForm, DodajTrgovinu, DodajArtikl, SignUpTrgovacForm, SignUpKupacForm, DodajProizvodaca, \
     DodajArtiklUTrgovinu, UrediArtiklUTrgovini, PromijeniRadnoVrijeme, EditLogin
 from django.contrib.auth import get_user_model
 from django.core import serializers
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 import json
+from .models import UserSession
+from django.contrib.auth.signals import user_logged_in
 
 User = get_user_model()
 
@@ -95,7 +97,10 @@ def android_login(request):
 
     if user is not None:
         logging_in(request=request, user=user)
-        json_response = JsonResponse({'session_id': f'{request.session.session_key}'})
+        #print(user_logged_in.connect(user_logged_in_handler(sender=android_login ,user=user, request=request)))  ### dodano
+        json_response = JsonResponse(
+            {'session_id': f'{request.session.session_key}', 
+            'authorisation_level': f'{BaseUserModel.objects.get(email=email)}'})
         # print(request.session.session_key)
         # response.set_cookie("session_id", )
         json_response.status_code = 200
@@ -109,6 +114,9 @@ def android_login(request):
 # funkcija za izlogiravanje s android uređaja
 # vraća http odgovor
 def android_logout(request):
+    #session_id = json.loads(request.body)['session_id']
+    #del request.session[session_id]
+
     logging_out(request=request)
     response = HttpResponse()
     response.status_code = 200
@@ -159,6 +167,10 @@ def android_sign_up(request):
     json_response = JsonResponse({'err': 'User already exists'})
     json_response.status_code = 401
     return json_response
+
+
+def user_logged_in_handler(sender, request, user, **kwargs):
+    UserSession.objects.get_or_create(user = user, session_id = request.session.session_key)
 
 
 # ------------------------------------------------------------------------------------------
