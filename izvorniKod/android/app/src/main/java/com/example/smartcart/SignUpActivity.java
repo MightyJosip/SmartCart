@@ -38,8 +38,11 @@ public class SignUpActivity extends AppCompatActivity {
         EditText etEmail = (EditText) findViewById(R.id.edit_email);
         String email = etEmail.getText().toString();
 
+        EditText etSecret = (EditText) findViewById(R.id.edit_secret);
+        int secret = Integer.parseInt(etSecret.getText().toString());
+
         Connector conn = Connector.getInstance(this);
-        conn.signUp(email, password, 0, response -> {
+        conn.signUp(email, password, secret, response -> {
             // Display the first 20 characters of the response string.
             Toast t = Toast.makeText(this, "Response is: " + response.toString(), Toast.LENGTH_LONG);
             t.show();

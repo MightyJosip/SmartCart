@@ -14,10 +14,10 @@ import org.json.JSONObject;
 
 public class Connector {
 
-    private static final String HOST = "http://192.168.0.24:8080/";
+    private static final String HOST = "http://10.0.2.2:8000/";
 
     private static Connector singleInstance;
-    private RequestQueue requestQueue;
+    private static RequestQueue requestQueue;
     private static Context appContext;
 
     private Connector(Context c) {
@@ -25,7 +25,7 @@ public class Connector {
         requestQueue = getRequestQueue();
     }
 
-    public RequestQueue getRequestQueue() {
+    public static RequestQueue getRequestQueue() {
         if (requestQueue == null) {
             requestQueue = Volley.newRequestQueue(appContext);
         }
