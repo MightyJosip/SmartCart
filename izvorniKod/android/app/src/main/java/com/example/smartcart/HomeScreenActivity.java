@@ -31,6 +31,8 @@ public class HomeScreenActivity extends AppCompatActivity{
             intent.putExtra("isFirstLaunch", true);
             startActivity(intent);
         }
+
+
     }
 
     @Override

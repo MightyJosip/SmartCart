@@ -7,12 +7,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
 
     private boolean isFirstLaunch = false;
+    private static final String TAG = "LoginActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +31,10 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         TextView signup = findViewById(R.id.textView3);
-        CardView continueAsGuest = findViewById(R.id.CardView2);
+        Button continueAsGuest = findViewById(R.id.guestBtn);
+        TextView login = findViewById(R.id.loginBtn);
         // zašto ovo nisu gumbi?
+
 
         signup.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
@@ -50,6 +58,27 @@ public class LoginActivity extends AppCompatActivity {
         if (isFirstLaunch) {
             finishAffinity();
         }
+    }
+
+    public void sendData(View v) {
+        //Toast.makeText(this, "Hah", Toast.LENGTH_LONG).show();
+        EditText userNameField = findViewById(R.id.editTextTextPersonName);
+        String userName = userNameField.getText().toString();
+
+        EditText passwordField = findViewById(R.id.editTextTextPassword);
+        String pw = passwordField.getText().toString();
+
+        Connector conn = Connector.getInstance(this);
+
+        conn.logIn(userName, pw, response -> {
+            Toast t = Toast.makeText(this, "Uspjeh. Poruka: " + response.toString(), Toast.LENGTH_LONG);
+            t.show();
+
+            //napravi dalje nesto ako je uspjelo
+        }, err -> {
+            Toast t = Toast.makeText(this, "NEUSPJEH. Poruka: " + err.toString(), Toast.LENGTH_LONG);
+            t.show();
+        });
     }
 
 }
