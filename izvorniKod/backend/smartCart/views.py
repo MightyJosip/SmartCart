@@ -30,7 +30,7 @@ def kupac_login_required(user):
 # funkcija kojom se vraća json određenih artikala
 def android_artikli(request):
     try:
-        naziv_artikla = request.POST['naziv_artikla']
+        naziv_artikla = json.loads(request.body)['naziv_artikla']
     except:
         naziv_artikla = ''
 
@@ -59,15 +59,14 @@ def android_popis(request):
 
 
 # funkcija kojom se vraća json određenih trgovina
-# žao mi je što izgleda ružno :(
 def android_trgovine(request):
     try:
-        naz_trgovina = request.POST['naz_trgovina']
+        naz_trgovina = json.loads(request.body)['naz_trgovina']
     except:
         naz_trgovina = ''
 
     try:
-        sif_trgovina = request.POST['sif_trgovina']
+        sif_trgovina = json.loads(request.body)['sif_trgovina']
     except:
         sif_trgovina = None
 
