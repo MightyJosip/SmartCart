@@ -116,21 +116,19 @@ def android_logout(request):
 # funkcija za stvaranje računa s android uređaja
 # vraća http odgovor
 def android_sign_up(request):
-    email = request.POST['email']
-    password = request.POST['password']
-    try:
-        secret_code = request.POST['secret_code']
-    except:
-        secret_code = ''
+    email = json.loads(request.body)['email']
+    password = json.loads(request.body)['password']
+    secret_code = json.loads(request.body)['secret_code']
 
-    authorisation_level = request.POST['authorisation_level']
-    
+    if secret_code:
+        authorisation_level = 'trgovac'
+    else:
+        authorisation_level = 'kupac'
 
     if(email == "" or password == ""):
         json_response = JsonResponse({'err': 'Fill out all fields'})
         json_response.status_code = 401
         return json_response
-   
 
     if (authorisation_level == 'kupac'):
         if (User.objects.filter(email=email).exists()):
@@ -144,7 +142,6 @@ def android_sign_up(request):
         return response
 
     if (authorisation_level == 'trgovac'):
-        #secret_code = request.POST['secret_code']
         secret_code = SecretCode.objects.filter(value=secret_code)
         if not secret_code.exists():
             json_response = JsonResponse({'err': 'Wrong secret code'})
