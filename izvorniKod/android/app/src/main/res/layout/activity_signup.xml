@@ -74,12 +74,25 @@
             android:textColorLink="#fff" />
 
         <EditText
+            android:id="@+id/edit_password2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Enter password again"
+            android:inputType="textPassword"
+            android:shadowColor="#777"
+            android:textColor="#fff"
+            android:textColorHighlight="#fff"
+            android:textColorHint="#fff"
+            android:textColorLink="#fff" />
+
+        <EditText
             android:id="@+id/edit_secret"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Secret code ( za trgovca )"
-            android:inputType="textPersonName"
+            android:inputType="numberPassword"
             android:shadowColor="#777"
             android:textColor="#fff"
             android:textColorHighlight="#fff"
