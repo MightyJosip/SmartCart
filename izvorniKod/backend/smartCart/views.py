@@ -63,12 +63,12 @@ def android_popis(request):
 # žao mi je što izgleda ružno :(
 def android_trgovine(request):
     try:
-        naz_trgovina = request.POST['naz_trgovina']
+        naz_trgovina = request.GET['naz_trgovina']
     except:
         naz_trgovina = ''
 
     try:
-        sif_trgovina = request.POST['sif_trgovina']
+        sif_trgovina = request.GET['sif_trgovina']
     except:
         sif_trgovina = None
 
@@ -82,7 +82,6 @@ def android_trgovine(request):
     response = HttpResponse(trgovine_json, content_type='application/json')
     response.status_code = 200
     return response
-
 
 # funkcija za ulogiravanje s android uređaja
 # vraća http odgovor
