@@ -95,9 +95,11 @@ def android_login(request):
 
     if user is not None:
         logging_in(request=request, user=user)
-        response = HttpResponse()
-        response.status_code = 200
-        return response
+        json_response = JsonResponse({'session_id': f'{request.session.session_key}'})
+        # print(request.session.session_key)
+        # response.set_cookie("session_id", )
+        json_response.status_code = 200
+        return json_response
     else:
         json_response = JsonResponse({'err': 'Wrong email or password'})
         json_response.status_code = 401
@@ -137,9 +139,9 @@ def android_sign_up(request):
 
     if (authorisation_level == 'kupac'):
         User.objects.create_user(email, password, is_kupac=True)
-        response = HttpResponse()
-        response.status_code = 200
-        return response
+        json_response = JsonResponse({'success': 'done'})
+        json_response.status_code = 200
+        return json_response
 
     if (authorisation_level == 'trgovac'):
         secret_code = SecretCode.objects.filter(value=secret_code)
@@ -150,9 +152,9 @@ def android_sign_up(request):
         secret_code.delete()
         User.objects.create_user(email, password, is_trgovac=True)
 
-        response = HttpResponse()
-        response.status_code = 200
-        return response
+        json_response = JsonResponse({'success': 'done'})
+        json_response.status_code = 200
+        return json_response
 
     json_response = JsonResponse({'err': 'User already exists'})
     json_response.status_code = 401
