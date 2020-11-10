@@ -7,8 +7,8 @@ django.setup()
 
 from django.core.management import call_command
 
-SERVER_IP = ''
-SERVER_PORT = ''
+SERVER_IP = '192.168.1.3'
+SERVER_PORT = '8000'
 
 if not SERVER_IP:
     SERVER_IP = '127.0.0.1'

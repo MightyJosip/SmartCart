@@ -83,8 +83,8 @@ def android_trgovine(request):
 # funkcija za ulogiravanje s android uređaja
 # vraća http odgovor
 def android_login(request):
-    email = request.POST['email']
-    password = request.POST['password']
+    email = json.loads(request.body)['email']
+    password = json.loads(request.body)['password']
 
     if(email == "" or password == ""):
         json_response = JsonResponse({'err': 'Fill out all fields'})
@@ -130,12 +130,12 @@ def android_sign_up(request):
         json_response.status_code = 401
         return json_response
 
-    if (authorisation_level == 'kupac'):
-        if (User.objects.filter(email=email).exists()):
-            json_response = JsonResponse({'err': 'User already exists'})
-            json_response.status_code = 401
-            return json_response
+    if (User.objects.filter(email=email).exists()):
+        json_response = JsonResponse({'err': 'User already exists'})
+        json_response.status_code = 401
+        return json_response
 
+    if (authorisation_level == 'kupac'):
         User.objects.create_user(email, password, is_kupac=True)
         response = HttpResponse()
         response.status_code = 200
