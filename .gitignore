@@ -7,3 +7,4 @@ izvorniKod/__pycache__/*
 izvorniKod/backend/__pycache__/*
 izvorniKod/backend/konfiguracija/__pycache__/*
 izvorniKod/backend/smartCart/migrations/*
+izvorniKod/backend/smartCart/management/commands/__pycache__/*
