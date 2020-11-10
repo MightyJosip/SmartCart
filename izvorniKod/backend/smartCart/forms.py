@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import TimeInput
 
-from .models import Artikl, Trgovina, TrgovinaArtikli, Proizvođač
+from .models import Artikl, Trgovina, TrgovinaArtikli, Proizvodac
 
 
 class LoginForm(forms.Form):
@@ -26,17 +26,19 @@ class SignUpKupacForm(forms.Form):
     password = forms.CharField(max_length=32, widget=forms.PasswordInput)
     confirm_password = forms.CharField(max_length=32, widget=forms.PasswordInput)
 
+
 # TODO: proširiti formu za latitude i logitude
 class DodajTrgovinu(forms.ModelForm):
     class Meta:
         model = Trgovina
-        fields = ['naz_trgovina', 'adresa_trgovina', 'radno_vrijeme_početak', 'radno_vrijeme_kraj']
+        fields = ['naz_trgovina', 'adresa_trgovina', 'radno_vrijeme_pocetak', 'radno_vrijeme_kraj']
         labels = {
             'naz_trgovina': 'Naziv trgovine',
-            'adresa_trgovina': 'Adresa trgovine'
+            'adresa_trgovina': 'Adresa trgovine',
+            'radno_vrijeme_pocetak': 'Radno vrijeme početak'
         }
         widgets = {
-            'radno_vrijeme_početak': TimeInput(format='%H:%M'),
+            'radno_vrijeme_pocetak': TimeInput(format='%H:%M'),
             'radno_vrijeme_kraj': TimeInput(format='%H:%M')
         }
 
@@ -44,15 +46,16 @@ class DodajTrgovinu(forms.ModelForm):
 class DodajArtikl(forms.ModelForm):
     class Meta:
         model = Artikl
-        fields = ['barkod_artikla', 'naziv_artikla', 'opis_artikla', 'proizvođač', 'zemlja_porijekla', 'vegan']
+        fields = ['barkod_artikla', 'naziv_artikla', 'opis_artikla', 'proizvodac', 'zemlja_porijekla', 'vegan']
         labels = {
-            'vegan': 'Veganski proizvod',
+            'proizvodac': 'Proizvođač',
+            'vegan': 'Veganski proizvod'
         }
 
 
-class DodajProizvođača(forms.ModelForm):
+class DodajProizvodaca(forms.ModelForm):
     class Meta:
-        model = Proizvođač
+        model = Proizvodac
         fields = ['naziv']
 
 
@@ -71,4 +74,7 @@ class UrediArtiklUTrgovini(forms.ModelForm):
 class PromijeniRadnoVrijeme(forms.ModelForm):
     class Meta:
         model = Trgovina
-        fields = ['radno_vrijeme_početak', 'radno_vrijeme_kraj']
+        fields = ['radno_vrijeme_pocetak', 'radno_vrijeme_kraj']
+        labels = {
+            'radno_vrijeme_pocetak': 'Radno vrijeme početak',
+        }

@@ -6,8 +6,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login as logging_in, logout as logging_out
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import redirect
-from .models import Trgovina, Artikl, SecretCode, Proizvođač, Zemlja_porijekla, TrgovinaArtikli
-from .forms import LoginForm, DodajTrgovinu, DodajArtikl, SignUpTrgovacForm, SignUpKupacForm, DodajProizvođača, \
+from .models import Trgovina, Artikl, SecretCode, Proizvodac, Zemlja_porijekla, TrgovinaArtikli
+from .forms import LoginForm, DodajTrgovinu, DodajArtikl, SignUpTrgovacForm, SignUpKupacForm, DodajProizvodaca, \
     DodajArtiklUTrgovinu, UrediArtiklUTrgovini, PromijeniRadnoVrijeme, EditLogin
 from django.contrib.auth import get_user_model
 import os
@@ -278,10 +278,10 @@ def trgovac(request):
         artikli = list(Artikl.objects.all())
         nova_trgovina = DodajTrgovinu()
         novi_artikl = DodajArtikl()
-        novi_proizvođač = DodajProizvođača()
+        novi_proizvodac = DodajProizvodaca()
         return render(request, 'smartCart/trgovac.html', {'trgovine': trgovine, 'artikli': artikli,
                                                           'trg_form': nova_trgovina, 'art_form': novi_artikl,
-                                                          'pro_form': novi_proizvođač})
+                                                          'pro_form': novi_proizvodac})
 
     # ako metoda nije post ova grana se izvršava, trebalo bi baciti err
     # sljedeća funkcija vraća prethodnu stranicu, ostatak od prošlih kemijanja
@@ -306,12 +306,12 @@ def dodaj_trgovine(request):
         print("tu sam-----------------------------------------------------------------------------")
         naz_trgovina = request.POST['naz_trgovina']
         adr_trgovina = request.POST['adresa_trgovina']
-        rad_vri_početak = request.POST['radno_vrijeme_početak']
+        rad_vri_pocetak = request.POST['radno_vrijeme_pocetak']
         rad_vri_kraj = request.POST['radno_vrijeme_kraj']
         trgovina = Trgovina(naz_trgovina=naz_trgovina,
                             adresa_trgovina=adr_trgovina,
                             vlasnik=get_object_or_404(User, pk=request.user.id),
-                            radno_vrijeme_početak=rad_vri_početak,
+                            radno_vrijeme_pocetak=rad_vri_pocetak,
                             radno_vrijeme_kraj=rad_vri_kraj)
         print(trgovina)
         trgovina.save()
@@ -343,14 +343,14 @@ def dodaj_artikle(request):
         barkod_artikla = request.POST['barkod_artikla']
         naziv_artikla = request.POST['naziv_artikla']
         opis_artikla = request.POST['opis_artikla']
-        proizvođač = add_proizvođač(request.POST['proizvođač'])
+        proizvodac = add_proizvodac(request.POST['proizvodac'])
         zemlja_porijekla = add_zemlja_porijekla(request.POST['zemlja_porijekla'])
         vegan = True if 'vegan' in request.POST else False
         artikl_za_dodati = Artikl(
             barkod_artikla=barkod_artikla,
             naziv_artikla=naziv_artikla,
             opis_artikla=opis_artikla,
-            proizvođač=proizvođač,
+            proizvodac=proizvodac,
             zemlja_porijekla=zemlja_porijekla,
             vegan=vegan
         )
@@ -360,14 +360,14 @@ def dodaj_artikle(request):
 
 
 @user_passes_test(trgovac_login_required, login_url='login/')
-def dodaj_proizvođače(request):
+def dodaj_proizvodace(request):
     if request.method == 'GET':
         return redirect(request.META['HTTP_REFERER'])
-    form = DodajProizvođača(request.POST)
+    form = DodajProizvodaca(request.POST)
     if form.is_valid():
-        naziv_proizvođača = request.POST['naziv']
-        proizvođač_za_dodati = Proizvođač(naziv=naziv_proizvođača)
-        proizvođač_za_dodati.save()
+        naziv_proizvodaca = request.POST['naziv']
+        proizvodac_za_dodati = Proizvodac(naziv=naziv_proizvodaca)
+        proizvodac_za_dodati.save()
     return redirect(request.META['HTTP_REFERER'])
 
 
@@ -410,9 +410,9 @@ def trgovina(request, sif_trgovina):
                                       dostupan=dostupan)
             trg_art.save()
     if radno_vrijeme_form.is_valid():
-        pocetak = request.POST['radno_vrijeme_početak']
+        pocetak = request.POST['radno_vrijeme_pocetak']
         kraj = request.POST['radno_vrijeme_kraj']
-        t.radno_vrijeme_početak = pocetak
+        t.radno_vrijeme_pocetak = pocetak
         t.radno_vrijeme_kraj = kraj
         t.save()
 
@@ -504,10 +504,10 @@ def delete_trgovina(request, sif_trgovina):
     return redirect('trgovac')
 
 
-def add_proizvođač(name):
+def add_proizvodac(name):
     try:
-        return Proizvođač.objects.get(naziv=name)
-    except Proizvođač.DoesNotExist:
+        return Proizvodac.objects.get(naziv=name)
+    except Proizvodac.DoesNotExist:
         return None
 
 
