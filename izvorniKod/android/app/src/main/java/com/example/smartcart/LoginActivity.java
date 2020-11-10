@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+
 public class LoginActivity extends AppCompatActivity {
 
     private boolean isFirstLaunch = false;
@@ -71,10 +73,20 @@ public class LoginActivity extends AppCompatActivity {
         Connector conn = Connector.getInstance(this);
 
         conn.logIn(userName, pw, response -> {
-            Toast t = Toast.makeText(this, "Uspjeh. Poruka: " + response.toString(), Toast.LENGTH_LONG);
-            t.show();
+            //Toast t = Toast.makeText(this, "Uspjeh. Poruka: " + response.toString(), Toast.LENGTH_LONG);
+            //t.show();
 
-            //napravi dalje nesto ako je uspjelo
+            SharedPreferences sp = getSharedPreferences("user_info", Context.MODE_PRIVATE);
+            SharedPreferences.Editor spe = sp.edit();
+            try {
+                spe.putString("session", response.getString("session_id"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            spe.apply();
+
+
+            finish();
         }, err -> {
             Toast t = Toast.makeText(this, "NEUSPJEH. Poruka: " + err.toString(), Toast.LENGTH_LONG);
             t.show();

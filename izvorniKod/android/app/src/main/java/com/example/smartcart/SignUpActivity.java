@@ -3,6 +3,7 @@ package com.example.smartcart;
         import androidx.appcompat.app.AppCompatActivity;
 
         import android.os.Bundle;
+        import android.util.Log;
         import android.view.View;
         import android.view.Window;
         import android.widget.EditText;
@@ -33,21 +34,14 @@ public class SignUpActivity extends AppCompatActivity {
         // TODO: dodati provjeru jesu li lozinke iste
         // TODO: dodati mogućnost za trgovca, validaciju
 
-        int secret;
+       //int secret;
 
         EditText etEmail = (EditText) findViewById(R.id.edit_email);
         String email = etEmail.getText().toString();
 
         EditText etSecret = (EditText) findViewById(R.id.edit_secret);
-        if(etSecret.getText().toString().equals("")){
-            secret = 0;
-        }
 
-        else{
-            secret = Integer.parseInt(etSecret.getText().toString());
-        }
-
-
+        int secret = etSecret.getText().toString().equals("") ? 0 : Integer.parseInt(etSecret.getText().toString());
 
         EditText etPassword = findViewById(R.id.edit_password);
         String password = etPassword.getText().toString();
@@ -57,14 +51,18 @@ public class SignUpActivity extends AppCompatActivity {
 
 
         if (password.equals(password2)){
-            Toast t1 = Toast.makeText(this, "Passwords are matching", Toast.LENGTH_LONG);
-            t1.show();
+            //Toast t1 = Toast.makeText(this, "Passwords are matching", Toast.LENGTH_LONG);
+            //t1.show();
 
           Connector conn = Connector.getInstance(this);
             conn.signUp(email, password, secret, response -> {
                 // Display the first 20 characters of the response string.
-                Toast t2 = Toast.makeText(this, "Response is: " + response.toString(), Toast.LENGTH_LONG);
-                t2.show();
+                //Toast t2 = Toast.makeText(this, "Response is: " + response.toString(), Toast.LENGTH_LONG);
+                //t2.show();
+
+
+
+                finish();
             }, error -> Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show());
 
         }
