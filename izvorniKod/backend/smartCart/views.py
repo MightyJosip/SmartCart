@@ -89,6 +89,12 @@ def android_trgovine(request):
 def android_login(request):
     email = request.GET['email']
     password = request.GET['password']
+
+    if(email == "" or password == ""):
+        json_response = JsonResponse({'err': 'Fill out all fields'})
+        json_response.status_code = 401
+        return json_response
+
     user = authenticate(request, username=email, password=password)
 
     if user is not None:
@@ -106,7 +112,7 @@ def android_login(request):
 # vraća http odgovor
 def android_logout(request):
     logging_out(request=request)
-    response = HttpResponse(serializers.serialize('json', {'login_successful': 'Yes'}))
+    response = HttpResponse()
     response.status_code = 200
     return response
 
