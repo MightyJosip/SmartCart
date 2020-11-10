@@ -3,16 +3,45 @@ package com.example.smartcart;
 import android.content.Context;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+
+import com.android.volley.NetworkResponse;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+
 public class Connector {
+
+    private class JsonToStringRequest extends JsonRequest<String> {
+        public JsonToStringRequest(int method, String url,
+                                   JSONObject requestBody,
+                                   Response.Listener<String> listener,
+                                   @Nullable Response.ErrorListener errorListener
+        ) {
+            super(method, url, requestBody.toString(), listener, errorListener);
+        }
+
+        @Override
+        protected Response<String> parseNetworkResponse(NetworkResponse response) {
+            String s;
+            try {
+                s = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+            } catch (UnsupportedEncodingException e) {
+                return Response.error(new ParseError(e));
+            }
+            return Response.success(s, HttpHeaderParser.parseCacheHeaders(response));
+        }
+    }
 
     private static final String HOST = "http://10.0.2.2:8000/";
 
@@ -56,7 +85,7 @@ public class Connector {
     }
 
     public void signUp(String email, String password, int secretCode,
-                       Response.Listener<JSONObject> onSuccess, Response.ErrorListener onFail) {
+                       Response.Listener<String> onSuccess, Response.ErrorListener onFail) {
         JSONObject jo = new JSONObject();
         try {
             jo.put("email", email);
@@ -67,9 +96,9 @@ public class Connector {
             Log.e("Signup", e.toString());
         }
         String url = HOST + "android/signup";
-        JsonObjectRequest jor = new JsonObjectRequest(Request.Method.POST, url, jo, onSuccess, onFail);
+        JsonToStringRequest jtsr = new JsonToStringRequest(Request.Method.POST, url, jo, onSuccess, onFail);
 
-        getRequestQueue().add(jor);
+        getRequestQueue().add(jtsr);
 
     }
 }
