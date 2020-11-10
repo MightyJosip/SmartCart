@@ -22,7 +22,7 @@ import java.io.UnsupportedEncodingException;
 
 public class Connector {
 
-    private class JsonToStringRequest extends JsonRequest<String> {
+    private static class JsonToStringRequest extends JsonRequest<String> {
         public JsonToStringRequest(int method, String url,
                                    JSONObject requestBody,
                                    Response.Listener<String> listener,
