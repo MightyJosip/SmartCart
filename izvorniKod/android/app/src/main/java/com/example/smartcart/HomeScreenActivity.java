@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.ContextMenu;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,7 +27,7 @@ public class HomeScreenActivity extends AppCompatActivity{
         super.onResume();
         SharedPreferences sp = getSharedPreferences("user_info", Context.MODE_PRIVATE);
         if (!sp.contains("NacinPrijave")) {
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, LoginActivity.class);
             intent.putExtra("isFirstLaunch", true);
             startActivity(intent);
         }
@@ -59,7 +58,7 @@ public class HomeScreenActivity extends AppCompatActivity{
     }
 
     public void startLogInActivity(MenuItem mi) {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 

@@ -61,7 +61,7 @@ public class Connector {
         try {
             jo.put("email", email);
             jo.put("password", password);
-            jo.put("secretCode", secretCode);
+            jo.put("secret_code", secretCode);
         } catch (JSONException e) {
             // za printati stacktrace napraviti stringwriter/printwriter wrapper i upisati u string
             Log.e("Signup", e.toString());
