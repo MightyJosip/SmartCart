@@ -7,7 +7,7 @@ django.setup()
 from django.core.management import call_command
 
 call_command('makemigrations')
-migrations = [f for f in os.listdir(os.path.join(os.path.dirname(__file__), 'smartCart/migrations')) if
-              os.path.isfile(os.path.join(os.path.join(os.path.dirname(__file__), 'smartCart/migrations'), f))]
-call_command('sqlmigrate', 'smartCart', '0001')
+migrations = sorted([f for f in os.listdir(os.path.join(os.path.dirname(__file__), 'smartCart/migrations')) if
+              os.path.isfile(os.path.join(os.path.join(os.path.dirname(__file__), 'smartCart/migrations'), f)) and f.startswith('0')])
+call_command('sqlmigrate', 'smartCart', migrations[-1][:4])
 call_command('migrate')

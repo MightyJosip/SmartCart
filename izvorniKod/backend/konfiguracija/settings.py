@@ -123,7 +123,7 @@ AUTH_USER_MODEL = 'smartCart.BaseUserModel'
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'CET'
 
 USE_I18N = True
 

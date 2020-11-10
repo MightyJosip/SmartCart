@@ -17,6 +17,7 @@ from django.contrib.auth.signals import user_logged_in
 User = get_user_model()
 
 
+
 def trgovac_login_required(user):
     return user.is_trgovac if user.is_authenticated else False
 
@@ -81,13 +82,14 @@ def android_trgovine(request):
     response.status_code = 200
     return response
 
+
 # funkcija za ulogiravanje s android uređaja
 # vraća http odgovor
 def android_login(request):
     email = json.loads(request.body)['email']
     password = json.loads(request.body)['password']
 
-    if(email == "" or password == ""):
+    if (email == "" or password == ""):
         json_response = JsonResponse({'err': 'Fill out all fields'})
         json_response.status_code = 401
         return json_response
@@ -96,10 +98,10 @@ def android_login(request):
 
     if user is not None:
         logging_in(request=request, user=user)
-        #print(user_logged_in.connect(user_logged_in_handler(sender=android_login ,user=user, request=request)))  ### dodano
+        user_logged_in.connect(user_logged_in_handler)  ### dodano
         json_response = JsonResponse(
-            {'session_id': f'{request.session.session_key}', 
-            'authorisation_level': f'{BaseUserModel.objects.get(email=email)}'})
+            {'session_id': f'{request.session.session_key}',
+             'authorisation_level': f'{BaseUserModel.objects.get(email=email)}'})
         # print(request.session.session_key)
         # response.set_cookie("session_id", )
         json_response.status_code = 200
@@ -113,8 +115,8 @@ def android_login(request):
 # funkcija za izlogiravanje s android uređaja
 # vraća http odgovor
 def android_logout(request):
-    #session_id = json.loads(request.body)['session_id']
-    #del request.session[session_id]
+    # session_id = json.loads(request.body)['session_id']
+    # del request.session[session_id]
 
     logging_out(request=request)
     response = HttpResponse()
@@ -134,7 +136,7 @@ def android_sign_up(request):
     else:
         authorisation_level = 'kupac'
 
-    if(email == "" or password == ""):
+    if (email == "" or password == ""):
         json_response = JsonResponse({'err': 'Fill out all fields'})
         json_response.status_code = 401
         return json_response
@@ -169,7 +171,7 @@ def android_sign_up(request):
 
 
 def user_logged_in_handler(sender, request, user, **kwargs):
-    UserSession.objects.get_or_create(user = user, session_id = request.session.session_key)
+    UserSession.objects.get_or_create(user=user, session_id=request.session.session_key)
 
 
 # ------------------------------------------------------------------------------------------
