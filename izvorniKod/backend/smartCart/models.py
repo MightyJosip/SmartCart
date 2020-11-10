@@ -56,7 +56,7 @@ class MyUserAdmin(ModelAdmin):
 # predstavlja proizvođača u bazi podataka
 # trenutno ima samo jedan atribut - naziv
 # TODO: dodati još atributa
-class Proizvođač(models.Model):
+class Proizvodac(models.Model):
     naziv = models.CharField(primary_key=True, max_length=100)
 
     def __str__(self):
@@ -90,9 +90,9 @@ class Artikl(models.Model):
     autor_opisa = models.CharField(max_length=100, null=True)
     vote_count_opisa = models.IntegerField(null=True)
     
-    proizvođač = models.ForeignKey(Proizvođač, on_delete=models.SET_NULL, null=True)       #uh, može i set default ali brate ima tu posla
-    autor_proizvođača = models.CharField(max_length=100, null=True)
-    vote_count_proizvođača = models.IntegerField(null=True)
+    proizvodac = models.ForeignKey(Proizvodac, on_delete=models.SET_NULL, null=True)       #uh, može i set default ali brate ima tu posla
+    autor_proizvodaca = models.CharField(max_length=100, null=True)
+    vote_count_proizvodaca = models.IntegerField(null=True)
 
     zemlja_porijekla = models.ForeignKey(Zemlja_porijekla, on_delete=models.SET_NULL,
                                          null=True)  # krivo jer može biti točnije. Npr. uzmite bilo koji med i pisat će "Zemlja porijeka: 5% iz hrvatske, 99.9% iz kine"
@@ -119,7 +119,7 @@ class Trgovina(models.Model):
     sif_trgovina = models.AutoField(primary_key=True)
     naz_trgovina = models.CharField(max_length=100)
     adresa_trgovina = models.CharField(max_length=200)
-    radno_vrijeme_početak = models.TimeField()
+    radno_vrijeme_pocetak = models.TimeField()
     radno_vrijeme_kraj = models.TimeField()
     latitude = models.CharField(max_length=100, null=True)
     longitude = models.CharField(max_length=100, null=True)
