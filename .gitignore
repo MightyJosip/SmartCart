@@ -1,9 +1,9 @@
 # PyCharm config directory
-.idea/
+.idea/*
 
 # Python byte code files
-izvorniKod/backend/smartCart/__pycache__
-izvorniKod/__pycache__
-izvorniKod/backend/__pycache__
-izvorniKod/backend/konfiguracija/__pycache__
-izvorniKod/backend/smartCart/migrations
+izvorniKod/backend/smartCart/__pycache__/*
+izvorniKod/__pycache__/*
+izvorniKod/backend/__pycache__/*
+izvorniKod/backend/konfiguracija/__pycache__/*
+izvorniKod/backend/smartCart/migrations/*
