@@ -1,8 +1,6 @@
-from django import forms
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login as logging_in, logout as logging_out
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import redirect
@@ -10,9 +8,8 @@ from .models import Trgovina, Artikl, SecretCode, Proizvodac, Zemlja_porijekla, 
 from .forms import LoginForm, DodajTrgovinu, DodajArtikl, SignUpTrgovacForm, SignUpKupacForm, DodajProizvodaca, \
     DodajArtiklUTrgovinu, UrediArtiklUTrgovini, PromijeniRadnoVrijeme, EditLogin
 from django.contrib.auth import get_user_model
-import os
 from django.core import serializers
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 import json
 
 User = get_user_model()

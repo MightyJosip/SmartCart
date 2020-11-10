@@ -1,0 +1,8 @@
+Atributi redom: barkod, naziv, opis, proizvođač, zemlja porijekla, veganski proizvod
+3850104008597;Vegeta 250g;Dodatak jelima s povrćem;Podravka;Hrvatska;da
+3850139435757;Ćevapčići juneći 810g;Mesni pripravak;PIK Vrbovec;Hrvatska;da
+3850116106052;Quattro Sladoled dream 1650ml;Sladoled okusa čokolade,vanilije, lješnjaka i jagode;Ledo;Hrvatska;da
+3850102314126;Domaćica keks original 300g;Čajno pecivo preliveno čokoladom;Kraš;Hrvatska;da
+7622210194046;Milka čokolada oreo 100g;Mliječna čokolada s alpskim mlijekom punjena s mliječnom kremom okusa vanilije (42%) i komadićima keksa s kakaom (12%);Milka;Njemačka;da
+3850108058215;Gauda polutvrdi sir 150 g;Polutvrdi sir;Vindija;Hrvatska;da
+5000112618266;Coca-Cola 1,5L;Gazirano osvježavajuće bazalkoholno piće;The Coca-Cola Company;Hrvatska;da

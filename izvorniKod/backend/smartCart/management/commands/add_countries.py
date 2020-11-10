@@ -14,3 +14,4 @@ class Command(BaseCommand):
             for country in countries:
                 zp = Zemlja_porijekla(naziv=country)
                 zp.save()
+                print(f"Dodana država {country}")

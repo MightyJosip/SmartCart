@@ -11,4 +11,3 @@ migrations = [f for f in os.listdir(os.path.join(os.path.dirname(__file__), 'sma
               os.path.isfile(os.path.join(os.path.join(os.path.dirname(__file__), 'smartCart/migrations'), f))]
 call_command('sqlmigrate', 'smartCart', migrations[-2][:4])
 call_command('migrate')
-call_command('add_countries')
