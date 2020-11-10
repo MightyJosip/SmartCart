@@ -28,7 +28,7 @@ def kupac_login_required(user):
 # funkcija kojom se vraća json određenih artikala
 def android_artikli(request):
     try:
-        naziv_artikla = request.GET['naziv_artikla']
+        naziv_artikla = request.POST['naziv_artikla']
     except:
         naziv_artikla = ''
 
@@ -60,12 +60,12 @@ def android_popis(request):
 # žao mi je što izgleda ružno :(
 def android_trgovine(request):
     try:
-        naz_trgovina = request.GET['naz_trgovina']
+        naz_trgovina = request.POST['naz_trgovina']
     except:
         naz_trgovina = ''
 
     try:
-        sif_trgovina = request.GET['sif_trgovina']
+        sif_trgovina = request.POST['sif_trgovina']
     except:
         sif_trgovina = None
 
@@ -83,8 +83,8 @@ def android_trgovine(request):
 # funkcija za ulogiravanje s android uređaja
 # vraća http odgovor
 def android_login(request):
-    email = request.GET['email']
-    password = request.GET['password']
+    email = request.POST['email']
+    password = request.POST['password']
 
     if(email == "" or password == ""):
         json_response = JsonResponse({'err': 'Fill out all fields'})
@@ -116,9 +116,14 @@ def android_logout(request):
 # funkcija za stvaranje računa s android uređaja
 # vraća http odgovor
 def android_sign_up(request):
-    email = request.GET['email']
-    password = request.GET['password']
-    authorisation_level = request.GET['authorisation_level']
+    email = request.POST['email']
+    password = request.POST['password']
+    try:
+        secret_code = request.POST['secret_code']
+    except:
+        secret_code = ''
+
+    authorisation_level = request.POST['authorisation_level']
     
 
     if(email == "" or password == ""):
@@ -139,7 +144,7 @@ def android_sign_up(request):
         return response
 
     if (authorisation_level == 'trgovac'):
-        secret_code = request.GET['secret_code']
+        #secret_code = request.POST['secret_code']
         secret_code = SecretCode.objects.filter(value=secret_code)
         if not secret_code.exists():
             json_response = JsonResponse({'err': 'Wrong secret code'})
