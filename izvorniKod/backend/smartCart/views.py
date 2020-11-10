@@ -12,7 +12,7 @@ from .forms import LoginForm, DodajTrgovinu, DodajArtikl, SignUpTrgovacForm, Sig
 from django.contrib.auth import get_user_model
 import os
 from django.core import serializers
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 import json
 
 User = get_user_model()
@@ -93,15 +93,13 @@ def android_login(request):
 
     if user is not None:
         logging_in(request=request, user=user)
-        # response = HttpResponse(serializers.serialize('json', {'login_successful': 'Yes'}))
         response = HttpResponse()
         response.status_code = 200
         return response
     else:
-        # response = HttpResponse(serializers.serialize('json', {'login_successful': 'No', 'error': 'Krivi e-mail ili password'}))
-        response = HttpResponse()
-        response.status_code = 401
-        return response
+        json_response = JsonResponse({'err': 'Wrong email or password'})
+        json_response.status_code = 401
+        return json_response
 
 
 # funkcija za izlogiravanje s android uređaja
@@ -118,36 +116,43 @@ def android_logout(request):
 def android_sign_up(request):
     email = request.GET['email']
     password = request.GET['password']
-    # confirm_password = request.POST['confirm_password']
     authorisation_level = request.GET['authorisation_level']
+    
+
+    if(email == "" or password == ""):
+        json_response = JsonResponse({'err': 'Fill out all fields'})
+        json_response.status_code = 401
+        return json_response
+   
 
     if (authorisation_level == 'kupac'):
-        print(email + ' ' + password + ' ' + authorisation_level)
+        if (User.objects.filter(email=email).exists()):
+            json_response = JsonResponse({'err': 'User already exists'})
+            json_response.status_code = 401
+            return json_response
+
         User.objects.create_user(email, password, is_kupac=True)
-        # response = HttpResponse(serializers.serialize('json', {'login_successful': 'Yes'}))
         response = HttpResponse()
         response.status_code = 200
         return response
 
     if (authorisation_level == 'trgovac'):
-        secret_code = request.POST['secret_code']
+        secret_code = request.GET['secret_code']
         secret_code = SecretCode.objects.filter(value=secret_code)
         if not secret_code.exists():
-            response = HttpResponse(
-                serializers.serialize('json', {'sign_up_successful': 'No', 'error': 'Tajna lozinka nije valjana'}))
-            response = 401
-            return response
+            json_response = JsonResponse({'err': 'Wrong secret code'})
+            json_response.status_code = 401
+            return json_response
         secret_code.delete()
         User.objects.create_user(email, password, is_trgovac=True)
 
-        # response = HttpResponse(serializers.serialize('json', {'sign_up_successful': 'Yes'}))
         response = HttpResponse()
         response.status_code = 200
         return response
 
-    response = HttpResponse(serializers.serialize('json', {'sign_up_successful': 'No', 'error': 'Dogodila se greška'}))
-    response.status_code = 500
-    return response
+    json_response = JsonResponse({'err': 'User already exists'})
+    json_response.status_code = 401
+    return json_response
 
 
 # ------------------------------------------------------------------------------------------
