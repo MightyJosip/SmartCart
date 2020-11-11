@@ -65,6 +65,22 @@ public class Connector {
         getRequestQueue().add(jor);
     }
 
+    public void logOut(String sessionId, Response.Listener<JSONObject> onSuccess,
+                       Response.ErrorListener onFail){
+        JSONObject jo = new JSONObject();
+        try {
+            jo.put("sessionId", sessionId );
+        } catch (JSONException e) {
+            // za printati stacktrace napraviti stringwriter/printwriter wrapper i upisati u string
+            Log.e("Logout", e.toString());
+        }
+        String url = HOST + "android/logout";
+        JsonObjectRequest jor = new JsonObjectRequest(Request.Method.POST, url, jo, onSuccess, onFail);
+
+        getRequestQueue().add(jor);
+
+    }
+
     public void signUp(String email, String password, int secretCode,
                        Response.Listener<String> onSuccess, Response.ErrorListener onFail) {
         JSONObject jo = new JSONObject();

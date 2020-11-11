@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,6 +15,9 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonObjectRequest;
 
 public class HomeScreenActivity extends AppCompatActivity{
 
@@ -116,10 +120,21 @@ public class HomeScreenActivity extends AppCompatActivity{
             case MENU_LOGIN: startLogInActivity(); break;
             case MENU_SIGNUP: startSignUpActivity(); break;
             case MENU_MYLISTS:
-            case MENU_LOGOUT:
+
             case MENU_ACCOUNTSETTINGS:
                 Toast.makeText(this, "Nije implementirano :(", Toast.LENGTH_LONG).show();
                 break;
+
+            case MENU_LOGOUT:
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+                String sessionId = prefs.getString("session", "");
+                Connector conn = Connector.getInstance(this);
+
+                conn.logOut(sessionId, response -> {
+
+                    finish();
+                }, error -> Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show());
+
         }
         return super.onContextItemSelected(item);
     }
