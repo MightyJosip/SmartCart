@@ -8,8 +8,8 @@ izvorniKod/backend/smartCart/migration
 *.pot
 *.pyc
 *.out
-local_settings.py
-db.sqlite3
+izvorniKod/backend/local_settings.py
+izvorniKod/backend/db.sqlite3
 venv/
 
 # Documentation residues
