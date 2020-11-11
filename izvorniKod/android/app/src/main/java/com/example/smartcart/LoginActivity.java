@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
             SharedPreferences.Editor spe = sp.edit();
             // TODO: ovakve stvari kao "Gost" izvući u neku enum ili constants klasu da bude
             // TODO: na jednom mjestu
-            spe.putString("NacinPrijave", "Gost");
+            spe.putString("auth_level", AuthLevels.DEFAULT);
             spe.apply();
             finish();
         });
@@ -80,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
             SharedPreferences.Editor spe = sp.edit();
             try {
                 spe.putString("session", response.getString("session_id"));
+                spe.putString("auth_level", response.getString("authorisation_level"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
     <item
         android:title="@string/log_in"
         android:onClick="startLogInActivity"
@@ -8,4 +12,5 @@
         android:title="@string/sign_up"
         android:onClick="startSignUpActivity"
         />
+    -->
 </menu>

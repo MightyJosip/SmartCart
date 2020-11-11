@@ -7,13 +7,21 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class HomeScreenActivity extends AppCompatActivity{
+
+    private static final int MENU_LOGIN = 1;
+    private static final int MENU_SIGNUP = 2;
+    private static final int MENU_MYLISTS = 3;
+    private static final int MENU_LOGOUT = 4;
+    private static final int MENU_ACCOUNTSETTINGS = 5;
 
     /**
      * Provjerava je li korisnik odabrao hoće li se prijaviti. Ako nije, otvara se MainActivity kako
@@ -26,7 +34,7 @@ public class HomeScreenActivity extends AppCompatActivity{
     protected void onResume() {
         super.onResume();
         SharedPreferences sp = getSharedPreferences("user_info", Context.MODE_PRIVATE);
-        if (!sp.contains("NacinPrijave")) {
+        if (!sp.contains("auth_level")) {
             Intent intent = new Intent(this, LoginActivity.class);
             intent.putExtra("isFirstLaunch", true);
             startActivity(intent);
@@ -55,18 +63,83 @@ public class HomeScreenActivity extends AppCompatActivity{
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
+        /*
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
+        */
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        String authLevel = getAuthLevel();
+
+        // treba dodati još opcija
+        boolean enableLogin = false;
+        boolean enableSignup = false;
+        boolean enableMyLists = true;
+        boolean enableLogout = false;
+        boolean enableAccountSettings = true;
+
+        switch(authLevel) {
+            case AuthLevels.GOST:
+                enableLogin = true;
+                enableSignup = true;
+                enableAccountSettings = false;
+                break;
+
+            case AuthLevels.KUPAC:
+            case AuthLevels.TRGOVAC:
+            case AuthLevels.ADMIN:
+                enableLogout = true;
+                break;
+        }
+
+
+        if (enableLogin)
+            menu.add(Menu.NONE, MENU_LOGIN, Menu.NONE, R.string.log_in);
+        if (enableSignup)
+            menu.add(Menu.NONE, MENU_SIGNUP, Menu.NONE, R.string.sign_up);
+        if (enableMyLists)
+            menu.add(Menu.NONE, MENU_MYLISTS, Menu.NONE, "Moji popisi"); //treba dodati to u Strings konstante
+        if (enableLogout)
+            menu.add(Menu.NONE, MENU_LOGOUT, Menu.NONE, "Log out"); //treba dodati to u Strings konstante
+        if (enableAccountSettings)
+            menu.add(Menu.NONE, MENU_ACCOUNTSETTINGS, Menu.NONE, "Postavke računa"); //treba dodati to u Strings konstante
+
+
+
     }
 
-    public void startLogInActivity(MenuItem mi) {
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+
+        switch(itemId) {
+            case MENU_LOGIN: startLogInActivity(); break;
+            case MENU_SIGNUP: startSignUpActivity(); break;
+            case MENU_MYLISTS:
+            case MENU_LOGOUT:
+            case MENU_ACCOUNTSETTINGS:
+                Toast.makeText(this, "Nije implementirano :(", Toast.LENGTH_LONG).show();
+                break;
+        }
+        return super.onContextItemSelected(item);
+    }
+
+
+    public void startLogInActivity() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 
-    public void startSignUpActivity(MenuItem mi) {
+    public void startSignUpActivity() {
         Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
+    }
+
+    private String getAuthLevel() {
+        SharedPreferences sp = getSharedPreferences("user_info", Context.MODE_PRIVATE);
+        String authLevel = sp.getString("auth_level", AuthLevels.DEFAULT);
+
+        return authLevel;
     }
 
 
