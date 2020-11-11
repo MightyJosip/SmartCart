@@ -7,8 +7,16 @@ django.setup()
 
 from django.core.management import call_command
 
-SERVER_IP = ''
-SERVER_PORT = ''
+with open(os.path.join(os.path.dirname(__file__), "constants.txt"), 'r', encoding='utf-8') as file:
+    file = file.readlines()
+    CONST = {}
+    for line in file:
+        line = line.rstrip().split("=")
+        CONST[line[0]] = line[1]
+
+
+SERVER_IP = CONST['SERVER_IP']
+SERVER_PORT = CONST['SERVER_PORT']
 
 if not SERVER_IP:
     SERVER_IP = '127.0.0.1'

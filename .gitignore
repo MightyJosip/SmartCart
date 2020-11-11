@@ -4,6 +4,7 @@
 # Python byte code files
 __pycache__/
 izvorniKod/backend/smartCart/migration
+izvorniKod/backend/constants.txt
 *.log
 *.pot
 *.pyc

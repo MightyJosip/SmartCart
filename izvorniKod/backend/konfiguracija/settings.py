@@ -9,16 +9,24 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
-KEY = 'buxj)xs5pXDl4c4$b@a69&a5kp%vr0$rtx0#ubt(=eu1-=i)h3'  # Key for the smartcart
+with open(os.path.join(Path(os.path.dirname(__file__)).parent, "constants.txt"), 'r', encoding='utf-8') as file:
+    file = file.readlines()
+    CONST = {}
+    for line in file:
+        line = line.rstrip().split("=")
+        CONST[line[0]] = line[1]
+
+# KEY = 'buxj)xs5pXDl4c4$b@a69&a5kp%vr0$rtx0#ubt(=eu1-=i)h3'  # Key for the smartcart
+KEY = CONST['SECRET_CODE']
 
 DATABASE_NAME = 'smartcart'
-DATABASE_USERNAME = 'postgres'  # Usermane for PostgreSQL
-DATABASE_PASSWORD = 'bazepodataka'  # Password for PostgreSQL
-DATABASE_IP = '127.0.0.1'
-DATABASE_PORT = '5432'
+DATABASE_USERNAME = CONST['DATABASE_USERNAME']  # Usermane for PostgreSQL
+DATABASE_PASSWORD = CONST['DATABASE_PASSWORD']  # Password for PostgreSQL
+DATABASE_IP = CONST['DATABASE_IP']
+DATABASE_PORT = CONST['DATABASE_PORT']
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
