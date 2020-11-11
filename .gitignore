@@ -1,0 +1,25 @@
+# PyCharm config directory
+.idea/*
+
+# Python byte code files
+__pycache__/
+izvorniKod/backend/smartCart/migration
+izvorniKod/backend/constants.txt
+*.log
+*.pot
+*.pyc
+*.out
+izvorniKod/backend/local_settings.py
+izvorniKod/backend/db.sqlite3
+venv/
+
+# Documentation residues
+/dokumentacija/*.aux
+/dokumentacija/*.lof
+/dokumentacija/*.lot
+/dokumentacija/*.pdf
+/dokumentacija/*.synctex.gz
+/dokumentacija/*.toc
+.~lock.*
+*.bak
+
