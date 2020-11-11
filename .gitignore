@@ -2,9 +2,23 @@
 .idea/*
 
 # Python byte code files
-izvorniKod/backend/smartCart/__pycache__/*
-izvorniKod/__pycache__/*
-izvorniKod/backend/__pycache__/*
-izvorniKod/backend/konfiguracija/__pycache__/*
-izvorniKod/backend/smartCart/migrations/*
-izvorniKod/backend/smartCart/management/commands/__pycache__/*
+__pycache__/
+izvorniKod/backend/smartCart/migration
+*.log
+*.pot
+*.pyc
+*.out
+izvorniKod/backend/local_settings.py
+izvorniKod/backend/db.sqlite3
+venv/
+
+# Documentation residues
+/dokumentacija/*.aux
+/dokumentacija/*.lof
+/dokumentacija/*.lot
+/dokumentacija/*.pdf
+/dokumentacija/*.synctex.gz
+/dokumentacija/*.toc
+.~lock.*
+*.bak
+
