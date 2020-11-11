@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.contrib.sessions.models import Session
 
+
 class AccountManager(BaseUserManager):
     use_in_migrations = True
 
@@ -51,6 +52,11 @@ class MyUserAdmin(ModelAdmin):
     search_fields = ('email',)
     ordering = ('email', )
     filter_horizontal = ()
+
+
+class UserSession(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    session = models.OneToOneField(Session, on_delete=models.CASCADE)
 
 
 # predstavlja proizvođača u bazi podataka

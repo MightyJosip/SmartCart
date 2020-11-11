@@ -1,10 +1,13 @@
+from django.contrib.sessions.models import Session
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
+from django.dispatch import receiver
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import authenticate, login as logging_in, logout as logging_out
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import redirect
-from .models import Trgovina, Artikl, SecretCode, Proizvodac, Zemlja_porijekla, TrgovinaArtikli, BaseUserModel
+from .models import Trgovina, Artikl, SecretCode, Proizvodac, Zemlja_porijekla, TrgovinaArtikli, BaseUserModel, \
+    UserSession
 from .forms import LoginForm, DodajTrgovinu, DodajArtikl, SignUpTrgovacForm, SignUpKupacForm, DodajProizvodaca, \
     DodajArtiklUTrgovinu, UrediArtiklUTrgovini, PromijeniRadnoVrijeme, EditLogin
 from django.contrib.auth import get_user_model
@@ -14,7 +17,6 @@ import json
 from django.contrib.auth.signals import user_logged_in
 
 User = get_user_model()
-
 
 
 def trgovac_login_required(user):
@@ -50,7 +52,6 @@ def android_popis(request):
     artikli = {}
     for barkod in barkodovi:
         artikli += Artikl.objects.filter(barkod_artikla=barkod)
-    artikli_json = serializers.serialize('json', artikli)
     artikli_json = serializers.serialize('json', artikli)
 
     response = HttpResponse(artikli_json, content_type='application/json')
@@ -98,7 +99,7 @@ def android_login(request):
     if user is not None:
         logging_in(request=request, user=user)
         json_response = JsonResponse({'session_id': f'{request.session.session_key}',
-                                      'authorisation_level': f'{get_authorization_level(user)}'})
+                                      'authorisation_level': f'{get_authorization_level(get_user_from_session(request.session))}'})
         json_response.status_code = 200
         return json_response
     else:
@@ -162,6 +163,21 @@ def android_sign_up(request):
     return json_response
 
 
+@receiver(user_logged_in)
+def remove_other_sessions(sender, user, request, **kwargs):
+    # remove other sessions
+    Session.objects.filter(usersession__user=user).delete()
+
+    # save current session
+    request.session.save()
+
+    # create a link from the user to the current session (for later removal)
+    UserSession.objects.get_or_create(
+        user=user,
+        session=Session.objects.get(pk=request.session.session_key)
+    )
+
+
 def get_authorization_level(user):
     if user.is_superuser:
         return 'admin'
@@ -171,6 +187,10 @@ def get_authorization_level(user):
         return 'kupac'
     else:
         return 'gost'
+
+
+def get_user_from_session(session):
+    return UserSession.objects.get(session_id=session.session_key).user
 
 
 # ------------------------------------------------------------------------------------------
