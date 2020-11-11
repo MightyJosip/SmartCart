@@ -11,37 +11,18 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 
 public class Connector {
-
-    private static class JsonToStringRequest extends JsonRequest<String> {
-        public JsonToStringRequest(int method, String url,
-                                   JSONObject requestBody,
-                                   Response.Listener<String> listener,
-                                   @Nullable Response.ErrorListener errorListener
-        ) {
-            super(method, url, requestBody.toString(), listener, errorListener);
-        }
-
-        @Override
-        protected Response<String> parseNetworkResponse(NetworkResponse response) {
-            String s;
-            try {
-                s = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
-            } catch (UnsupportedEncodingException e) {
-                return Response.error(new ParseError(e));
-            }
-            return Response.success(s, HttpHeaderParser.parseCacheHeaders(response));
-        }
-    }
 
     private static final String HOST = "http://10.0.2.2:8000/";
 
@@ -97,8 +78,52 @@ public class Connector {
         }
         String url = HOST + "android/signup";
         JsonToStringRequest jtsr = new JsonToStringRequest(Request.Method.POST, url, jo, onSuccess, onFail);
-
         getRequestQueue().add(jtsr);
 
+    }
+
+    private static class JsonToStringRequest extends JsonRequest<String> {
+        public JsonToStringRequest(int method, String url,
+                                   JSONObject requestBody,
+                                   Response.Listener<String> listener,
+                                   @Nullable Response.ErrorListener errorListener
+        ) {
+            super(method, url, requestBody.toString(), listener, errorListener);
+        }
+
+        @Override
+        protected Response<String> parseNetworkResponse(NetworkResponse response) {
+            String s;
+            try {
+                s = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+            } catch (UnsupportedEncodingException e) {
+                return Response.error(new ParseError(e));
+            }
+            return Response.success(s, HttpHeaderParser.parseCacheHeaders(response));
+        }
+    }
+
+    private static class JsonToJsonArrayRequest extends JsonRequest<JSONArray> {
+        public JsonToJsonArrayRequest(int method, String url,
+                                   JSONObject requestBody,
+                                   Response.Listener<JSONArray> listener,
+                                   @Nullable Response.ErrorListener errorListener
+        ) {
+            super(method, url, requestBody.toString(), listener, errorListener);
+        }
+
+        @Override
+        protected Response<JSONArray> parseNetworkResponse(NetworkResponse response) {
+            try {
+                String s =
+                        new String(
+                                response.data,
+                                HttpHeaderParser.parseCharset(response.headers, PROTOCOL_CHARSET));
+                return Response.success(
+                        new JSONArray(s), HttpHeaderParser.parseCacheHeaders(response));
+            } catch (UnsupportedEncodingException | JSONException e) {
+                return Response.error(new ParseError(e));
+            }
+        }
     }
 }
