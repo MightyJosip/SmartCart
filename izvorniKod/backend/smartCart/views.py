@@ -14,7 +14,7 @@ from django.contrib.auth import get_user_model
 from django.core import serializers
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 import json
-from django.contrib.auth.signals import user_logged_in
+from django.contrib.auth.signals import user_logged_in, user_logged_out
 
 User = get_user_model()
 
@@ -99,7 +99,7 @@ def android_login(request):
     if user is not None:
         logging_in(request=request, user=user)
         json_response = JsonResponse({'session_id': f'{request.session.session_key}',
-                                      'auth_level': f'{get_authorization_level(get_user_from_session(request.session))}'})
+                                      'authorisation_level': f'{get_authorization_level(get_user_from_session(request.session))}'})
         json_response.status_code = 200
         return json_response
     else:
@@ -164,7 +164,7 @@ def android_sign_up(request):
 
 
 @receiver(user_logged_in)
-def remove_other_sessions(sender, user, request, **kwargs):
+def create_session(sender, user, request, **kwargs):
     # remove other sessions
     Session.objects.filter(usersession__user=user).delete()
 
@@ -178,15 +178,23 @@ def remove_other_sessions(sender, user, request, **kwargs):
     )
 
 
+@receiver(user_logged_out)
+def remove_session(sender, user, request, **kwargs):
+    s = Session.objects.get(pk=request.session.session_key)
+    UserSession.objects.filter(session=s).delete()
+    s.delete()
+
+
 def get_authorization_level(user):
-    if user.is_superuser:
-        return 'admin'
-    elif user.is_trgovac:
-        return 'trgovac'
+    if not user.is_authenticated:
+        return 'gost'
     elif user.is_kupac:
         return 'kupac'
+    elif user.is_trgovac:
+        return 'trgovac'
     else:
-        return 'gost'
+        return 'admin'
+
 
 
 def get_user_from_session(session):
