@@ -7,13 +7,17 @@ django.setup()
 
 from django.core.management import call_command
 
-with open(os.path.join(os.path.dirname(__file__), "constants.txt"), 'r', encoding='utf-8') as file:
-    file = file.readlines()
-    CONST = {}
-    for line in file:
-        line = line.rstrip().split("=")
-        CONST[line[0]] = line[1]
-
+CONST = {}
+CONST_PATH = os.path.join(os.path.dirname(__file__), "constants.txt")
+if os.path.exists(CONST_PATH):
+    with open(CONST_PATH, 'r', encoding='utf-8') as file:
+        file = file.readlines()
+        for line in file:
+            line = line.rstrip().split("=")
+            CONST[line[0]] = line[1]
+else:
+    CONST['SERVER_IP'] = os.environ['SERVER_IP']
+    CONST['SERVER_PORT'] = os.environ['SERVER_PORT']
 
 SERVER_IP = CONST['SERVER_IP']
 SERVER_PORT = CONST['SERVER_PORT']

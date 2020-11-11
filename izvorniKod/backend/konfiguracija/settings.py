@@ -12,14 +12,21 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 
-with open(os.path.join(Path(os.path.dirname(__file__)).parent, "constants.txt"), 'r', encoding='utf-8') as file:
-    file = file.readlines()
-    CONST = {}
-    for line in file:
-        line = line.rstrip().split("=")
-        CONST[line[0]] = line[1]
+CONST = {}
+CONST_PATH = os.path.join(os.path.join(Path(os.path.dirname(__file__)).parent, "constants.txt"))
+if os.path.exists(CONST_PATH):
+    with open(CONST_PATH, 'r', encoding='utf-8') as file:
+        file = file.readlines()
+        for line in file:
+            line = line.rstrip().split("=")
+            CONST[line[0]] = line[1]
+else:
+    CONST['SECRET_CODE'] = os.environ['SECRET_CODE']
+    CONST['DATABASE_USERNAME'] = os.environ['DATABASE_USERNAME']
+    CONST['DATABASE_PASSWORD'] = os.environ['DATABASE_PASSWORD']
+    CONST['DATABASE_IP'] = os.environ['DATABASE_IP']
+    CONST['DATABASE_PORT'] = os.environ['DATABASE_PORT']
 
-# KEY = 'buxj)xs5pXDl4c4$b@a69&a5kp%vr0$rtx0#ubt(=eu1-=i)h3'  # Key for the smartcart
 KEY = CONST['SECRET_CODE']
 
 DATABASE_NAME = 'smartcart'
