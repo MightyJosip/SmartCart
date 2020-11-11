@@ -46,10 +46,9 @@ def android_artikli(request):
 
 # funkcija koja vraća artikle
 # prima barkodove traženih artikala
-# TODO: provjeriti rad ove "loads" funkcije
 def android_popis(request):
-    barkodovi = json.loads(request.POST['barkodovi'])
-    artikli = {}
+    barkodovi = json.loads(request.body)['barkod']
+    artikli = []
     for barkod in barkodovi:
         artikli += Artikl.objects.filter(barkod_artikla=barkod)
     artikli_json = serializers.serialize('json', artikli)
