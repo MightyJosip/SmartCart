@@ -11,7 +11,6 @@ from django.contrib.auth import get_user_model
 from django.core import serializers
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 import json
-from .models import UserSession
 from django.contrib.auth.signals import user_logged_in
 
 User = get_user_model()
@@ -98,12 +97,7 @@ def android_login(request):
 
     if user is not None:
         logging_in(request=request, user=user)
-        user_logged_in.connect(user_logged_in_handler)  ### dodano
-        json_response = JsonResponse(
-            {'session_id': f'{request.session.session_key}',
-             'authorisation_level': f'{BaseUserModel.objects.get(email=email)}'})
-        # print(request.session.session_key)
-        # response.set_cookie("session_id", )
+        json_response = JsonResponse({'authorisation_level': f'{get_authorization_level(user)}'})
         json_response.status_code = 200
         return json_response
     else:
@@ -115,9 +109,6 @@ def android_login(request):
 # funkcija za izlogiravanje s android uređaja
 # vraća http odgovor
 def android_logout(request):
-    # session_id = json.loads(request.body)['session_id']
-    # del request.session[session_id]
-
     logging_out(request=request)
     response = HttpResponse()
     response.status_code = 200
@@ -170,8 +161,15 @@ def android_sign_up(request):
     return json_response
 
 
-def user_logged_in_handler(sender, request, user, **kwargs):
-    UserSession.objects.get_or_create(user=user, session_id=request.session.session_key)
+def get_authorization_level(user):
+    if user.is_superuser:
+        return 'admin'
+    elif user.is_trgovac:
+        return 'trgovac'
+    elif user.is_kupac:
+        return 'kupac'
+    else:
+        return 'gost'
 
 
 # ------------------------------------------------------------------------------------------
