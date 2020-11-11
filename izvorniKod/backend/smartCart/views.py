@@ -99,7 +99,7 @@ def android_login(request):
     if user is not None:
         logging_in(request=request, user=user)
         json_response = JsonResponse({'session_id': f'{request.session.session_key}',
-                                      'authorisation_level': f'{get_authorization_level(get_user_from_session(request.session))}'})
+                                      'auth_level': f'{get_authorization_level(get_user_from_session(request.session))}'})
         json_response.status_code = 200
         return json_response
     else:
