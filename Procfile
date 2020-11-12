@@ -1,1 +1,1 @@
-web: gunicorn izvorniKod/backend/konfiguracija.wsgi --log-file -
+web: gunicorn konfiguracija.wsgi --log-file -

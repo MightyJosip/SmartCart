@@ -56,7 +56,7 @@ DEBUG = True
 #10.0.2.2 služi za spajanje emulatora iz android studia.
 # Možete dodati lokalni ip s mobitela da možete s njega pokretati server, a pristupati s Windowsa
 ALLOWED_HOSTS = ['10.0.2.2', 'localhost', '192.168.1.3', '192.168.0.24', '192.168.1.15',
-    'preljevstoga-smartcart.herokuapp.com']
+    'preljevstoga-smartcart.herokuapp.com', '0.0.0.0']
 
 
 # Application definition
@@ -140,4 +140,5 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
+STATIC_ROOT = 'static/'

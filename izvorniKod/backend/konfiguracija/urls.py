@@ -16,6 +16,8 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import include, path
+from django.conf import settings
+from django.conf.urls.static import static
 from smartCart import views
 
 urlpatterns = [
@@ -44,4 +46,6 @@ urlpatterns = [
     path('android/artikli', views.android_artikli, name='android_artikli'),
     path('android/trgovine', views.android_trgovine, name='android_trgovine'),
     path('android/popis', views.android_popis, name='android_popis')
+
 ]
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
