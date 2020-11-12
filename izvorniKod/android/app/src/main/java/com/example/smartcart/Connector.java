@@ -98,6 +98,13 @@ public class Connector {
 
     }
 
+    public void fetchTrgovine( Response.Listener<String> onSuccess, Response.ErrorListener onFail) {
+        JSONObject jo = new JSONObject();
+        String url = HOST + "android/trgovine";
+        JsonToStringRequest jtsr = new JsonToStringRequest(Request.Method.POST, url, jo, onSuccess, onFail);
+        getRequestQueue().add(jtsr);
+    }
+
     private static class JsonToStringRequest extends JsonRequest<String> {
         public JsonToStringRequest(int method, String url,
                                    JSONObject requestBody,

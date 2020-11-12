@@ -13,7 +13,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -43,7 +45,10 @@ public class HomeScreenActivity extends AppCompatActivity{
             intent.putExtra("isFirstLaunch", true);
             startActivity(intent);
         }
-
+        Connector conn = Connector.getInstance(this);
+        conn.fetchTrgovine(response -> {
+            Toast.makeText(this, response.toString(), Toast.LENGTH_SHORT).show();
+        }, error -> Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show());
 
     }
 
