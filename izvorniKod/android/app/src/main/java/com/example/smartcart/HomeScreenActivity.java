@@ -126,13 +126,13 @@ public class HomeScreenActivity extends AppCompatActivity{
                 break;
 
             case MENU_LOGOUT:
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences prefs = getSharedPreferences("user_info", Context.MODE_PRIVATE);
                 String sessionId = prefs.getString("session", "");
                 Connector conn = Connector.getInstance(this);
 
                 conn.logOut(sessionId, response -> {
-
-                    finish();
+                    prefs.edit().remove("session").apply();
+                    prefs.edit().remove("auth_level").apply();
                 }, error -> Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show());
 
         }
@@ -152,9 +152,8 @@ public class HomeScreenActivity extends AppCompatActivity{
 
     private String getAuthLevel() {
         SharedPreferences sp = getSharedPreferences("user_info", Context.MODE_PRIVATE);
-        String authLevel = sp.getString("auth_level", AuthLevels.DEFAULT);
 
-        return authLevel;
+        return sp.getString("auth_level", AuthLevels.DEFAULT);
     }
 
 
