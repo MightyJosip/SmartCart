@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from pathlib import Path
+import dj_database_url
 
 CONST = {}
 CONST_PATH = os.path.join(os.path.join(Path(os.path.dirname(__file__)).parent, "constants.txt"))
@@ -20,20 +21,24 @@ if os.path.exists(CONST_PATH):
         for line in file:
             line = line.rstrip().split("=")
             CONST[line[0]] = line[1]
+    
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'smartcart',
+            'USER': CONST['DATABASE_USERNAME'],
+            'PASSWORD': CONST['DATABASE_PASSWORD'],
+            'HOST': CONST['DATABASE_IP'],
+            'PORT': CONST['DATABASE_PORT'],
+        }
+    }
 else:
     CONST['SECRET_CODE'] = os.environ['SECRET_CODE']
-    CONST['DATABASE_USERNAME'] = os.environ['DATABASE_USERNAME']
-    CONST['DATABASE_PASSWORD'] = os.environ['DATABASE_PASSWORD']
-    CONST['DATABASE_IP'] = os.environ['DATABASE_IP']
-    CONST['DATABASE_PORT'] = os.environ['DATABASE_PORT']
+    DATABASES = {}
+    DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+
 
 KEY = CONST['SECRET_CODE']
-
-DATABASE_NAME = 'smartcart'
-DATABASE_USERNAME = CONST['DATABASE_USERNAME']  # Usermane for PostgreSQL
-DATABASE_PASSWORD = CONST['DATABASE_PASSWORD']  # Password for PostgreSQL
-DATABASE_IP = CONST['DATABASE_IP']
-DATABASE_PORT = CONST['DATABASE_PORT']
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -50,7 +55,8 @@ DEBUG = True
 
 #10.0.2.2 služi za spajanje emulatora iz android studia.
 # Možete dodati lokalni ip s mobitela da možete s njega pokretati server, a pristupati s Windowsa
-ALLOWED_HOSTS = ['10.0.2.2', 'localhost', '192.168.1.3', '192.168.0.24', '192.168.1.15']
+ALLOWED_HOSTS = ['10.0.2.2', 'localhost', '192.168.1.3', '192.168.0.24', '192.168.1.15',
+    'preljevstoga-smartcart.herokuapp.com']
 
 
 # Application definition
@@ -96,22 +102,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'konfiguracija.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': DATABASE_NAME,
-        'USER': DATABASE_USERNAME,
-        'PASSWORD': DATABASE_PASSWORD,
-        'HOST': DATABASE_IP,
-        'PORT': DATABASE_PORT,
-    }
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
