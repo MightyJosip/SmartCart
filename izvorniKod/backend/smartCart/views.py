@@ -98,7 +98,7 @@ def android_login(request):
     if user is not None:
         logging_in(request=request, user=user)
         json_response = JsonResponse({'session_id': f'{request.session.session_key}',
-                                      'authorisation_level': f'{get_authorization_level(get_user_from_session(request.session))}'})
+                                      'authorisation_level': f'{get_authorization_level(get_user_from_session(request.session.session_key))}'})
         json_response.status_code = 200
         return json_response
     else:
@@ -108,12 +108,14 @@ def android_login(request):
 
 
 # funkcija za izlogiravanje s android uređaja
-# vraća http odgovor
+# vraća json odgovor
 def android_logout(request):
+    user = get_user_from_session(json.loads(request.body)['sessionId'])
+    Session.objects.filter(usersession__user=user).delete()
     logging_out(request=request)
-    response = HttpResponse()
-    response.status_code = 200
-    return response
+    json_response = JsonResponse({'success': 'done'})
+    json_response.status_code = 200
+    return json_response
 
 
 # funkcija za stvaranje računa s android uređaja
@@ -177,13 +179,6 @@ def create_session(sender, user, request, **kwargs):
     )
 
 
-@receiver(user_logged_out)
-def remove_session(sender, user, request, **kwargs):
-    s = Session.objects.get(pk=request.session.session_key)
-    UserSession.objects.filter(session=s).delete()
-    s.delete()
-
-
 def get_authorization_level(user):
     if not user.is_authenticated:
         return 'gost'
@@ -196,8 +191,8 @@ def get_authorization_level(user):
 
 
 
-def get_user_from_session(session):
-    return UserSession.objects.get(session_id=session.session_key).user
+def get_user_from_session(session_key):
+    return UserSession.objects.get(session_id=session_key).user
 
 
 # ------------------------------------------------------------------------------------------
