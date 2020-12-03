@@ -143,7 +143,7 @@ class TrgovinaArtikli(models.Model):
     dostupan = models.BooleanField(default=False)
 
 class Uloga(models.Model):
-    sif_uloga = models.IntegerField(primary_key=True, max_length=100)
+    sif_uloga = models.IntegerField(primary_key=True)
     naz_uloga = models.CharField(max_length=100)
 
     def __str__(self):
@@ -164,35 +164,45 @@ class Kategorija(models.Model):
 
 class Potkategorija(models.Model):
     sif_potkategorija = models.AutoField(primary_key=True)
-    kategorija = models.ForeignKey(Kategorija, on_delete=models.SET_NULL, null=True)
+    sif_kategorija = models.ForeignKey(Kategorija, on_delete=models.SET_NULL, null=True)
     naz_potkategorija = models.CharField(max_length=100)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['sif_kategorija', 'sif_potkategorija'], name="constraint_1")]
 
     def __str__(self):
         return f'{self.sif_potkategorija}, {self.naz_potkategorija}'
 
 class Vrsta(models.Model):
     sif_vrsta = models.AutoField(primary_key=True)
-    potkategorija = models.ForeignKey(Potkategorija, on_delete=models.SET_NULL, null=True)
+    sif_potkategorija = models.ForeignKey(Potkategorija, on_delete=models.SET_NULL, null=True)
     naz_vrsta = models.CharField(max_length=100)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['sif_potkategorija', 'sif_vrsta'], name="constraint_2")]
 
     def __str__(self):
         return f'{self.sif_vrsta}, {self.naz_vrsta}'
 
 class OpisArtikla(models.Model):
-    class Meta:
-        unique_together = (('vrsta', 'zemlja', 'trgovina'),)
-    
-    vrsta = models.ForeignKey(Vrsta, on_delete=models.CASCADE, null=True)
-    zemlja = models.ForeignKey(Zemlja_porijekla, on_delete=models.CASCADE, null=True)
-    trgovina = models.ForeignKey(Trgovina, on_delete=models.CASCADE, null=True)
-
-    barkod = models.ForeignKey(Artikl, on_delete=models.CASCADE, null=True)
     email = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=True)
-    
+    sif_barkod = models.ForeignKey(Artikl, on_delete=models.CASCADE, null=True)
+
+    sif_vrsta = models.ForeignKey(Vrsta, on_delete=models.CASCADE, null=True)
+    sif_zemlja = models.ForeignKey(Zemlja_porijekla, on_delete=models.CASCADE, null=True)
+    sif_trgovina = models.ForeignKey(Trgovina, on_delete=models.CASCADE, null=True)
+
     naziv_artikla = models.CharField(max_length=100, null=False)
     opis_artikla = models.CharField(max_length=5000, null=True)
     broj_glasova = models.IntegerField(null=True)
     masa = models.IntegerField(null=True)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['email', 'sif_barkod'], name='constraint_3')]
+
+    def __str__(self):
+        return f'{self.email}, {self.sif_barkod}'
+    
 
 class PrivremenaLozinka(models.Model):
     email = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=True)
