@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Uredi artikl</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+</head>
+<body>
+    <h1>Uredi artikl: "{{artikl}}" u trgovini: "{{trgovina}}"</h1>
+    <br><br>
+    <form action="" method="POST">
+        {%csrf_token%}
+        {% for field in form  %}
+            <b>{{ field.label_tag }}</b><br> {{ field }}<br><br>
+        {% endfor %}
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

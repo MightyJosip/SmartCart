@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+
+<head>
+    <head>
+        <meta charset="UTF-8">
+        <title>Trgovac {{request.user.email}}</title>
+        <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+    </head>
+</head>
+
+<body>
+    <h1>Welcome, {{request.user.email}}</h1>
+
+    <form action="logout" method="POST">
+        {%csrf_token%}
+        <input type="submit" value="Log out">
+    </form>
+
+    <hr />
+
+    <h2>Moje trgovine</h2>
+    
+    <ul>
+        {% for t in trgovine %}
+            {{ t }}
+            <a href="{% url 'trgovina' t.sif_trgovina %}">Detaljnije o trgovini</a>
+            <form action="trgovina/delete/{{t.sif_trgovina}}" method="POST">
+                {%csrf_token%}
+                <input type="submit" value="Obriši trgovinu" onclick="return confirm('Je si li siguran da želiš obrisati trgovinu?')">
+            </form>
+            <br>
+        {% endfor %}
+    </ul>
+    
+    <hr />
+
+    <h2>Pregled namirnica</h2>
+    <ul>
+        {% for t in artikli %}
+        <li>{{ t.naziv_artikla }} <a href="{% url 'artikl' t.barkod_artikla %}">Detaljnije o namirnici</a></li> <!--štoviše, zajebava-->
+        {% endfor %}
+    </ul>
+    <hr />
+
+    <h2>Dodavanje trgovina</h2>
+
+    <form action="/trgovac/dodaj-trgovine" method="POST">
+        {%csrf_token%}
+        {% for field in trg_form  %}
+            {{ field.label_tag }}<br> {{ field }}<br><br>
+        {% endfor %}
+        <input type="submit" value="Submit">
+    </form>
+
+    <hr />
+
+    <h2>Dodavanje namirnica</h2>
+
+    <form action="/trgovac/dodaj-artikle" method="POST">
+        {%csrf_token%}
+        {% for field in art_form  %}
+            {{ field.label_tag }}<br> {{ field }}<br><br>
+        {% endfor %}
+        <input type="submit" value="Submit">
+    </form>
+    <hr />
+    <h2>Dodavanje proizvođača</h2>
+    <form action="/trgovac/dodaj-proizvodace" method="POST">
+        {%csrf_token%}
+        {% for field in pro_form  %}
+            {{ field.label_tag }}<br> {{ field }}<br><br>
+        {% endfor %}
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

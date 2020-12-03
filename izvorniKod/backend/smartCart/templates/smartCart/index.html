@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Početna stranica</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+</head>
+
+<body>
+    <h1>Dobro došli na internetske stranice SmartCart</h1>
+    <hr />
+    {% if user.is_authenticated %}
+        Logged in as {{user}}
+        <br><br>
+        {% if user.is_trgovac %}
+            <form action="/trgovac" method="get">
+                {%csrf_token%}
+                <button type="submit">Stranica trgovca</button>
+            </form>
+            <br>
+        {% endif %}
+        <form action="/edit_profile" method="get">
+            {%csrf_token%}
+            <button type="submit">Edit profile</button>
+        </form>
+        <br>
+        <form action="/logout" method="get">
+            {%csrf_token%}
+            <button type="submit">Log out</button>
+        </form>
+        <br>
+        <hr />
+    {% else %}
+        <form action="/login" method="GET">
+            {%csrf_token%}
+            <button type="submit">Log in</button>
+        </form>
+    {% endif %}
+    <br>
+    <form action="/signup/trgovac" method="get">
+        {%csrf_token%}
+        <button type="submit">Sign up as trgovac</button>
+    </form>
+    <br>
+    <form action="/signup/kupac" method="get">
+        {%csrf_token%}
+        <button type="submit">Sign up as kupac</button>
+    </form>
+</body>
+
+</html>

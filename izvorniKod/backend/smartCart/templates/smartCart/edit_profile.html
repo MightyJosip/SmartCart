@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+{% load static %}
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Uređivanje profila</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'login.css' %}"/>
+        <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+    </head>
+<head>
+
+</head>
+
+<body>
+    <h1>Change password</h1>
+
+    <form action="" method="POST">
+        {%csrf_token%}
+        {% for field in form  %}
+            <b>{{ field.label_tag }}</b><br> {{ field }}<br><br>
+        {% endfor %}
+        <input type="submit" value="Submit">
+        <div class="fail-login">{{message}}</div>
+    </form>
+
+    <br>
+
+    <form action="delete_account" method="POST">
+        {%csrf_token%}
+        <input type="submit" value="Obriši svoj profil" onclick="return confirm('Je si li siguran da želiš obrisati korisnički račun?')">
+    </form>
+
+</body>
+
+</html>

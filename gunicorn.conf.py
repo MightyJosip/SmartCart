@@ -1,0 +1,1 @@
+pythonpath = "izvorniKod/backend"
