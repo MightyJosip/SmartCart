@@ -27,6 +27,14 @@ class AccountManager(BaseUserManager):
 
         return self.create_user(email, password, **extra_fields)
 
+###############
+class Uloga(models.Model):
+    sif_uloga = models.IntegerField(primary_key=True)
+    naz_uloga = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f'{self.sif_uloga}, {self.naz_uloga}'
+###############
 
 class BaseUserModel(AbstractUser):
     username = None
@@ -35,6 +43,8 @@ class BaseUserModel(AbstractUser):
     is_kupac = models.BooleanField(default=False)
     is_trgovac = models.BooleanField(default=False)
     email = models.EmailField(unique=True)
+
+    sif_uloga = models.ForeignKey(Uloga, on_delete=models.CASCADE, null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -87,7 +97,13 @@ class Zemlja_porijekla(models.Model):
 # TODO: srediti vote count atribude iz NULL prebaciti u DEFAULT = 0
 class Artikl(models.Model):
     barkod_artikla = models.CharField(max_length=13, primary_key=True)
+    
 
+    #########################################
+    #                                       #
+    #              LEGACY SUPPORT           #
+    #                                       #
+    #########################################
     naziv_artikla = models.CharField(max_length=100, null=False)
     autor_naziva = models.CharField(max_length=100, null=True)
     vote_count_naziva = models.IntegerField(null=True)
@@ -95,20 +111,19 @@ class Artikl(models.Model):
     opis_artikla = models.CharField(max_length=5000, null=True)
     autor_opisa = models.CharField(max_length=100, null=True)
     vote_count_opisa = models.IntegerField(null=True)
-    
-    proizvodac = models.ForeignKey(Proizvodac, on_delete=models.SET_NULL, null=True)       #uh, može i set default ali brate ima tu posla
+
+    proizvodac = models.ForeignKey(Proizvodac, on_delete=models.SET_NULL, null=True)
     autor_proizvodaca = models.CharField(max_length=100, null=True)
     vote_count_proizvodaca = models.IntegerField(null=True)
 
-    zemlja_porijekla = models.ForeignKey(Zemlja_porijekla, on_delete=models.SET_NULL,
-                                         null=True)  # krivo jer može biti točnije. Npr. uzmite bilo koji med i pisat će "Zemlja porijeka: 5% iz hrvatske, 99.9% iz kine"
+    zemlja_porijekla = models.ForeignKey(Zemlja_porijekla, on_delete=models.SET_NULL, null=True)  
     autor_zemlje_porijekla = models.CharField(max_length=100, null=True)
     vote_count_zemlje_porijekla = models.IntegerField(null=True)
 
     vegan = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.naziv_artikla}'
+        return f'{self.barkod_artikla}'
 
 
 # klasa trgovina
@@ -136,18 +151,14 @@ class Trgovina(models.Model):
 
 
 class TrgovinaArtikli(models.Model):
+    id_trgovina_artikl = models.AutoField(primary_key=True)
+    
     trgovina = models.ForeignKey(Trgovina, on_delete=models.CASCADE)
     artikl = models.ForeignKey(Artikl, on_delete=models.CASCADE)
     cijena = models.DecimalField(max_digits=8, decimal_places=2)
     akcija = models.BooleanField(default=False)
     dostupan = models.BooleanField(default=False)
 
-class Uloga(models.Model):
-    sif_uloga = models.IntegerField(primary_key=True)
-    naz_uloga = models.CharField(max_length=100)
-
-    def __str__(self):
-        return f'{self.sif_uloga}, {self.naz_uloga}'
 
 class SecretCode(models.Model):
     value = models.IntegerField(primary_key=True)
@@ -191,6 +202,7 @@ class OpisArtikla(models.Model):
     sif_vrsta = models.ForeignKey(Vrsta, on_delete=models.CASCADE, null=True)
     sif_zemlja = models.ForeignKey(Zemlja_porijekla, on_delete=models.CASCADE, null=True)
     sif_trgovina = models.ForeignKey(Trgovina, on_delete=models.CASCADE, null=True)
+    id_trgovina_artikl = models.ForeignKey(TrgovinaArtikli, on_delete=models.CASCADE, null=True)
 
     naziv_artikla = models.CharField(max_length=100, null=False)
     opis_artikla = models.CharField(max_length=5000, null=True)
