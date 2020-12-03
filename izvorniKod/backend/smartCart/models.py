@@ -142,9 +142,63 @@ class TrgovinaArtikli(models.Model):
     akcija = models.BooleanField(default=False)
     dostupan = models.BooleanField(default=False)
 
+class Uloga(models.Model):
+    sif_uloga = models.IntegerField(primary_key=True, max_length=100)
+    naz_uloga = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f'{self.sif_uloga}, {self.naz_uloga}'
 
 class SecretCode(models.Model):
     value = models.IntegerField(primary_key=True)
-
+    uloga = models.ForeignKey(Uloga, on_delete=models.CASCADE, null=True)
     def __str__(self):
         return f'{self.value}'
+
+class Kategorija(models.Model):
+    sif_kategorija = models.AutoField(primary_key=True)
+    naz_kategorija = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f'{self.sif_kategorija}, {self.naz_kategorija}'
+
+class Potkategorija(models.Model):
+    sif_potkategorija = models.AutoField(primary_key=True)
+    kategorija = models.ForeignKey(Kategorija, on_delete=models.SET_NULL, null=True)
+    naz_potkategorija = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f'{self.sif_potkategorija}, {self.naz_potkategorija}'
+
+class Vrsta(models.Model):
+    sif_vrsta = models.AutoField(primary_key=True)
+    potkategorija = models.ForeignKey(Potkategorija, on_delete=models.SET_NULL, null=True)
+    naz_vrsta = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f'{self.sif_vrsta}, {self.naz_vrsta}'
+
+class OpisArtikla(models.Model):
+    class Meta:
+        unique_together = (('vrsta', 'zemlja', 'trgovina'),)
+    
+    vrsta = models.ForeignKey(Vrsta, on_delete=models.CASCADE, null=True)
+    zemlja = models.ForeignKey(Zemlja_porijekla, on_delete=models.CASCADE, null=True)
+    trgovina = models.ForeignKey(Trgovina, on_delete=models.CASCADE, null=True)
+
+    barkod = models.ForeignKey(Artikl, on_delete=models.CASCADE, null=True)
+    email = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=True)
+    
+    naziv_artikla = models.CharField(max_length=100, null=False)
+    opis_artikla = models.CharField(max_length=5000, null=True)
+    broj_glasova = models.IntegerField(null=True)
+    masa = models.IntegerField(null=True)
+
+class PrivremenaLozinka(models.Model):
+    email = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=True)
+    lozinka = models.CharField(max_length=100, null=True) #placeholder
+    istice = models.CharField(max_length=100, null=True) #placeholder
+
+class OnemoguceniRacun(models.Model):
+    email = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=True)
+    datum = models.CharField(max_length=100, null=True) #placeholder
