@@ -30,21 +30,44 @@ class AccountManager(BaseUserManager):
 ###############
 class Uloga(models.Model):
     sif_uloga = models.IntegerField(primary_key=True)
-    naz_uloga = models.CharField(max_length=100)
+    #naz_uloga = models.CharField(max_length=100)
+
+    AUTH_LEVEL_CHOICES = (
+        ('G', 'Gost'),
+        ('K', 'Kupac'),
+        ('T', 'Trgovac'),
+        ('A', 'Administrator'),
+    )
+    auth_level = models.CharField(max_length=1, choices=AUTH_LEVEL_CHOICES)
 
     def __str__(self):
-        return f'{self.sif_uloga}, {self.naz_uloga}'
+        return f'{self.sif_uloga}, {self.auth_level}'
+
+
+class SecretCode(models.Model):
+    value = models.IntegerField(primary_key=True)
+    uloga = models.OneToOneField(Uloga, on_delete=models.CASCADE, null=True)
+
+    class Meta():
+        managed = True
+    
+    def __str__(self):
+        return f'{self.value}'
+
 ###############
 
 class BaseUserModel(AbstractUser):
     username = None
     first_name = None
     last_name = None
+
+    ########### LEGACY
     is_kupac = models.BooleanField(default=False)
     is_trgovac = models.BooleanField(default=False)
     email = models.EmailField(unique=True)
+    ###########
 
-    sif_uloga = models.ForeignKey(Uloga, on_delete=models.CASCADE, null=True)
+    uloga = models.OneToOneField(Uloga, on_delete=models.CASCADE, null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -159,11 +182,7 @@ class TrgovinaArtikli(models.Model):
     dostupan = models.BooleanField(default=False)
 
 
-class SecretCode(models.Model):
-    value = models.IntegerField(primary_key=True)
-    uloga = models.ForeignKey(Uloga, on_delete=models.CASCADE, null=True)
-    def __str__(self):
-        return f'{self.value}'
+
 
 class Kategorija(models.Model):
     sif_kategorija = models.AutoField(primary_key=True)
