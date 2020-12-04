@@ -45,7 +45,7 @@ class Uloga(models.Model):
 
 class SecretCode(models.Model):
     value = models.IntegerField(primary_key=True)
-    uloga = models.OneToOneField(Uloga, on_delete=models.CASCADE, null=True)
+    uloga = models.ForeignKey(Uloga, on_delete=models.CASCADE, null=True)
 
     class Meta():
         managed = True
