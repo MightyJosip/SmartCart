@@ -67,6 +67,7 @@ class BaseUserModel(AbstractUser):
     ###########
 
     uloga = models.OneToOneField(Uloga, on_delete=models.CASCADE, null=True)
+    onemogucio = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -75,6 +76,11 @@ class BaseUserModel(AbstractUser):
 
     def __str__(self):
         return self.email
+
+# nepotrebno
+class OnemoguceniRacun(models.Model):
+    emailAdmin = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=True)
+    datum = models.CharField(max_length=100, null=True) #placeholder
 
 
 class MyUserAdmin(ModelAdmin):
@@ -217,7 +223,3 @@ class PrivremenaLozinka(models.Model):
     lozinka = models.CharField(max_length=100, null=True) #placeholder
     istice = models.CharField(max_length=100, null=True) #placeholder
 
-
-class OnemoguceniRacun(models.Model):
-    email = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=True)
-    datum = models.CharField(max_length=100, null=True) #placeholder
