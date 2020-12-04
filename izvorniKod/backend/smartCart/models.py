@@ -30,7 +30,6 @@ class AccountManager(BaseUserManager):
 ###############
 class Uloga(models.Model):
     sif_uloga = models.IntegerField(primary_key=True)
-    #naz_uloga = models.CharField(max_length=100)
 
     AUTH_LEVEL_CHOICES = (
         ('G', 'Gost'),
@@ -92,9 +91,6 @@ class UserSession(models.Model):
     session = models.OneToOneField(Session, on_delete=models.CASCADE)
 
 
-# predstavlja proizvođača u bazi podataka
-# trenutno ima samo jedan atribut - naziv
-# TODO: dodati još atributa
 class Proizvodac(models.Model):
     naziv = models.CharField(primary_key=True, max_length=100)
 
@@ -102,10 +98,6 @@ class Proizvodac(models.Model):
         return f'{self.naziv}'
 
 
-# predstavlja zemlju porijekla
-# trenutno ima jedan atribut - naziv
-# TODO: dodaj više atributa
-# ovu bi tablicu mi trebali napuniti
 class Zemlja_porijekla(models.Model):
     naziv = models.CharField(primary_key=True, max_length=100)
 
@@ -113,11 +105,6 @@ class Zemlja_porijekla(models.Model):
         return f'{self.naziv}'
 
 
-# klasa artikl
-# atribute barkod_artikla, naziv_artikla, opis_artikla, proizvođač, zemlja_porijekla i vegan dodaje korisnik
-# autor atributa bi se trebao sam ispuniti
-# vote count bi trebao biti postavljen na nulu
-# TODO: srediti vote count atribude iz NULL prebaciti u DEFAULT = 0
 class Artikl(models.Model):
     barkod_artikla = models.CharField(max_length=13, primary_key=True)
     
@@ -149,16 +136,6 @@ class Artikl(models.Model):
         return f'{self.barkod_artikla}'
 
 
-# klasa trgovina
-# sve jasno
-# TODO: dodaj atribute tipa lokacija, adresa itd..
-# TODO: rastaviti ovaj "many to many fields" u zasebnu klasu, dodati "dostupnost" i "cijena" kao atribute
-# stvar je u tome da je N:N veza ne isparava pretvaranjem iz ER u Relacijski model
-# ovdje je pak stvar da N:N veza može biti dio neke druge veze sve dok....
-# nema svoje atribute.
-# E al mi znamo da svaka trgovina određuje svoju cijenu za artikle koji se razlikuju od trgovine do trgovine
-# Na istu foru dodaj "dostupnost"
-# udari u google py django many to many relationship i otvori službenu stranicu i šamaraj
 class Trgovina(models.Model):
     sif_trgovina = models.AutoField(primary_key=True)
     naz_trgovina = models.CharField(max_length=100)
@@ -182,14 +159,13 @@ class TrgovinaArtikli(models.Model):
     dostupan = models.BooleanField(default=False)
 
 
-
-
 class Kategorija(models.Model):
     sif_kategorija = models.AutoField(primary_key=True)
     naz_kategorija = models.CharField(max_length=100)
 
     def __str__(self):
         return f'{self.sif_kategorija}, {self.naz_kategorija}'
+
 
 class Potkategorija(models.Model):
     sif_potkategorija = models.AutoField(primary_key=True)
@@ -202,6 +178,7 @@ class Potkategorija(models.Model):
     def __str__(self):
         return f'{self.sif_potkategorija}, {self.naz_potkategorija}'
 
+
 class Vrsta(models.Model):
     sif_vrsta = models.AutoField(primary_key=True)
     sif_potkategorija = models.ForeignKey(Potkategorija, on_delete=models.SET_NULL, null=True)
@@ -212,6 +189,7 @@ class Vrsta(models.Model):
 
     def __str__(self):
         return f'{self.sif_vrsta}, {self.naz_vrsta}'
+
 
 class OpisArtikla(models.Model):
     email = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=True)
@@ -238,6 +216,7 @@ class PrivremenaLozinka(models.Model):
     email = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=True)
     lozinka = models.CharField(max_length=100, null=True) #placeholder
     istice = models.CharField(max_length=100, null=True) #placeholder
+
 
 class OnemoguceniRacun(models.Model):
     email = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=True)
