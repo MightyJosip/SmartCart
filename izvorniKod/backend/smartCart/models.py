@@ -151,7 +151,6 @@ class Trgovina(models.Model):
 
 
 class TrgovinaArtikli(models.Model):
-    id_trgovina_artikl = models.AutoField(primary_key=True)
     
     trgovina = models.ForeignKey(Trgovina, on_delete=models.CASCADE)
     artikl = models.ForeignKey(Artikl, on_delete=models.CASCADE)
