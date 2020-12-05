@@ -212,7 +212,7 @@ class OpisArtikla(models.Model):
     masa = models.IntegerField(null=True)
 
     class Meta:
-        constraints = [models.UniqueConstraint(fields=['email', 'sif_barkod'], name='constraint_3')]
+        constraints = [models.UniqueConstraint(fields=['autor_opisa', 'artikl'], name='constraint_3')]
 
     def __str__(self):
         return f'{self.autor_opisa}, {self.artikl}'
