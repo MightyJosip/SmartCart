@@ -31,13 +31,14 @@ class AccountManager(BaseUserManager):
 class Uloga(models.Model):
     sif_uloga = models.IntegerField(primary_key=True)
 
-    AUTH_LEVEL_CHOICES = (
+    AUTH_LEVEL_CHOICES = [
         ('G', 'Gost'),
         ('K', 'Kupac'),
         ('T', 'Trgovac'),
-        ('A', 'Administrator'),
-    )
-    auth_level = models.CharField(max_length=1, choices=AUTH_LEVEL_CHOICES)
+        ('A', 'Administrator')
+    ]
+    
+    auth_level = models.CharField(max_length=7, choices=AUTH_LEVEL_CHOICES, default='Gost', null=False)
 
     def __str__(self):
         return f'{self.sif_uloga}, {self.auth_level}'
@@ -157,7 +158,6 @@ class Trgovina(models.Model):
 
 
 class TrgovinaArtikli(models.Model):
-    
     trgovina = models.ForeignKey(Trgovina, on_delete=models.CASCADE)
     artikl = models.ForeignKey(Artikl, on_delete=models.CASCADE)
     cijena = models.DecimalField(max_digits=8, decimal_places=2)
@@ -198,13 +198,6 @@ class Vrsta(models.Model):
 
 
 class OpisArtikla(models.Model):
-    #email = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=True)
-    #sif_barkod = models.ForeignKey(Artikl, on_delete=models.CASCADE, null=True)
-    
-    #sif_vrsta = models.ForeignKey(Vrsta, on_delete=models.CASCADE, null=True)
-    #sif_zemlja = models.ForeignKey(Zemlja_porijekla, on_delete=models.CASCADE, null=True)
-    #sif_trgovina = models.ForeignKey(Trgovina, on_delete=models.CASCADE, null=True)
-    #id_trgovina_artikl = models.ForeignKey(TrgovinaArtikli, on_delete=models.CASCADE, null=True)
     autor_opisa = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=True)
     artikl = models.ForeignKey(Artikl, on_delete=models.CASCADE, null=True)
 
