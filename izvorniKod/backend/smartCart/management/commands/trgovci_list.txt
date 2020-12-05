@@ -1,0 +1,3 @@
+Atributi redom: email, password
+trgovac@fer.hr;pwd
+ante@fer.hr;pwd

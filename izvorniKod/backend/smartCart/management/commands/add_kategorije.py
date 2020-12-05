@@ -6,7 +6,7 @@ from smartCart.models import Kategorija
 
 
 class Command(BaseCommand):
-    help = 'Adds list of artikls to the database'
+    help = 'Adds list of kategorije to the database'
 
     def handle(self, *args, **kwargs):
         with open(os.path.join(os.path.dirname(__file__), "kategorije_list.txt"), 'r', encoding='utf-8') as file:
