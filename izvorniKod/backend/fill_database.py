@@ -10,5 +10,8 @@ from django.core.management import call_command
 call_command('add_countries')
 call_command('add_proizvodaci')
 call_command('add_products')
+call_command('add_kategorije')
+call_command('add_potkategorije')
+call_command('add_vrsta')
 
 print("Done")
