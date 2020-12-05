@@ -1,0 +1,2 @@
+atributi: email, sif_barkod, sif_vrst, sif_zemlj, sif_trg, id_trg_art, naziv_art, opis, broj_glasova, masa 
+ante@fer.hr;3850104008597;1;Hrvatska;1;1;Vegheta;Ovo je za posolit hranu;10;500
