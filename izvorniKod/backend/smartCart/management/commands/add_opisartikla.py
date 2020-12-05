@@ -17,13 +17,13 @@ class Command(BaseCommand):
                 podaci_o_opisu[-1] = podaci_o_opisu[-1].rstrip()
                 #print(podaci_o_opisu[0])
                 op = OpisArtikla(
-                    email=BaseUserModel.objects.get(email=podaci_o_opisu[0]),
-                    sif_barkod=Artikl.objects.get(barkod_artikla=podaci_o_opisu[1]),
+                    autor_opisa= BaseUserModel.objects.get(email=podaci_o_opisu[0]),
+                    artikl= Artikl.objects.get(barkod_artikla=podaci_o_opisu[1]),
 
-                    sif_vrsta=Vrsta.objects.get(sif_vrsta=podaci_o_opisu[2]),
-                    sif_zemlja=Zemlja_porijekla.objects.get(naziv=podaci_o_opisu[3]),
-                    sif_trgovina=Trgovina.objects.get(sif_trgovina=podaci_o_opisu[4]),
-                    id_trgovina_artikl=TrgovinaArtikli.objects.get(trgovina=podaci_o_opisu[4], artikl=podaci_o_opisu[1]),
+                    vrsta= Vrsta.objects.get(sif_vrsta=podaci_o_opisu[2]),
+                    zemlja_porijekla= Zemlja_porijekla.objects.get(naziv=podaci_o_opisu[3]),
+                    trgovina= Trgovina.objects.get(sif_trgovina=podaci_o_opisu[4]),
+                    trgovina_artikl= TrgovinaArtikli.objects.get(trgovina=podaci_o_opisu[4], artikl=podaci_o_opisu[1]),
 
                     naziv_artikla=podaci_o_opisu[6],
                     opis_artikla=podaci_o_opisu[7],

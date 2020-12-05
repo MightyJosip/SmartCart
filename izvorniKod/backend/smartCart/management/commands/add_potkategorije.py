@@ -17,7 +17,7 @@ class Command(BaseCommand):
                 podaci_o_potkategoriji[-1] = podaci_o_potkategoriji[-1].rstrip()
                 potkat = Potkategorija(
                     sif_potkategorija=podaci_o_potkategoriji[0],
-                    sif_kategorija=Kategorija.objects.get(sif_kategorija=podaci_o_potkategoriji[1]),
+                    kategorija=Kategorija.objects.get(sif_kategorija=podaci_o_potkategoriji[1]),
                     naz_potkategorija=podaci_o_potkategoriji[2]
                     )
                 potkat.save()

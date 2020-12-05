@@ -17,7 +17,7 @@ class Command(BaseCommand):
                 podaci_o_vrsti[-1] = podaci_o_vrsti[-1].rstrip()
                 vr = Vrsta(
                     sif_vrsta=podaci_o_vrsti[0],
-                    sif_potkategorija=Potkategorija.objects.get(sif_potkategorija=podaci_o_vrsti[1]),
+                    potkategorija=Potkategorija.objects.get(sif_potkategorija=podaci_o_vrsti[1]),
                     naz_vrsta=podaci_o_vrsti[2]
                     )
                 vr.save()

@@ -175,11 +175,11 @@ class Kategorija(models.Model):
 
 class Potkategorija(models.Model):
     sif_potkategorija = models.AutoField(primary_key=True)
-    sif_kategorija = models.ForeignKey(Kategorija, on_delete=models.SET_NULL, null=True)
+    kategorija = models.ForeignKey(Kategorija, on_delete=models.SET_NULL, null=True)
     naz_potkategorija = models.CharField(max_length=100)
 
     class Meta:
-        constraints = [models.UniqueConstraint(fields=['sif_kategorija', 'sif_potkategorija'], name="constraint_1")]
+        constraints = [models.UniqueConstraint(fields=['kategorija', 'sif_potkategorija'], name="constraint_1")]
 
     def __str__(self):
         return f'{self.sif_potkategorija}, {self.naz_potkategorija}'
@@ -187,24 +187,31 @@ class Potkategorija(models.Model):
 
 class Vrsta(models.Model):
     sif_vrsta = models.AutoField(primary_key=True)
-    sif_potkategorija = models.ForeignKey(Potkategorija, on_delete=models.SET_NULL, null=True)
+    potkategorija = models.ForeignKey(Potkategorija, on_delete=models.SET_NULL, null=True)
     naz_vrsta = models.CharField(max_length=100)
 
     class Meta:
-        constraints = [models.UniqueConstraint(fields=['sif_potkategorija', 'sif_vrsta'], name="constraint_2")]
+        constraints = [models.UniqueConstraint(fields=['potkategorija', 'sif_vrsta'], name="constraint_2")]
 
     def __str__(self):
         return f'{self.sif_vrsta}, {self.naz_vrsta}'
 
 
 class OpisArtikla(models.Model):
-    email = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=True)
-    sif_barkod = models.ForeignKey(Artikl, on_delete=models.CASCADE, null=True)
+    #email = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=True)
+    #sif_barkod = models.ForeignKey(Artikl, on_delete=models.CASCADE, null=True)
+    
+    #sif_vrsta = models.ForeignKey(Vrsta, on_delete=models.CASCADE, null=True)
+    #sif_zemlja = models.ForeignKey(Zemlja_porijekla, on_delete=models.CASCADE, null=True)
+    #sif_trgovina = models.ForeignKey(Trgovina, on_delete=models.CASCADE, null=True)
+    #id_trgovina_artikl = models.ForeignKey(TrgovinaArtikli, on_delete=models.CASCADE, null=True)
+    autor_opisa = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=True)
+    artikl = models.ForeignKey(Artikl, on_delete=models.CASCADE, null=True)
 
-    sif_vrsta = models.ForeignKey(Vrsta, on_delete=models.CASCADE, null=True)
-    sif_zemlja = models.ForeignKey(Zemlja_porijekla, on_delete=models.CASCADE, null=True)
-    sif_trgovina = models.ForeignKey(Trgovina, on_delete=models.CASCADE, null=True)
-    id_trgovina_artikl = models.ForeignKey(TrgovinaArtikli, on_delete=models.CASCADE, null=True)
+    vrsta = models.ForeignKey(Vrsta, on_delete=models.CASCADE, null=True)
+    zemlja_porijekla = models.ForeignKey(Zemlja_porijekla, on_delete=models.CASCADE, null=True)
+    trgovina = models.ForeignKey(Trgovina, on_delete=models.CASCADE, null=True)
+    trgovina_artikl = models.ForeignKey(TrgovinaArtikli, on_delete=models.CASCADE, null=True)
 
     naziv_artikla = models.CharField(max_length=100, null=False)
     opis_artikla = models.CharField(max_length=5000, null=True)
@@ -215,7 +222,7 @@ class OpisArtikla(models.Model):
         constraints = [models.UniqueConstraint(fields=['email', 'sif_barkod'], name='constraint_3')]
 
     def __str__(self):
-        return f'{self.email}, {self.sif_barkod}'
+        return f'{self.autor_opisa}, {self.artikl}'
     
 
 class PrivremenaLozinka(models.Model):
