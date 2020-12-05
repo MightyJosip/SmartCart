@@ -3,7 +3,7 @@ import os
 from django.core.management.base import BaseCommand
 
 
-from smartCart.models import BaseUserModel
+from smartCart.models import BaseUserModel, Uloga
 
 class Command(BaseCommand):
     help = 'Adds list of trgovci to the database'
@@ -16,8 +16,9 @@ class Command(BaseCommand):
                 podaci_o_trgovcu = trgovac.split(';')
                 podaci_o_trgovcu[-1] = podaci_o_trgovcu[-1].rstrip()
                 BaseUserModel.objects.create_user(
-                    podaci_o_trgovcu[0],
-                    podaci_o_trgovcu[1], 
+                    email= podaci_o_trgovcu[0],
+                    password= podaci_o_trgovcu[1],
+                    uloga= Uloga.objects.get(auth_level=podaci_o_trgovcu[2]),
                     is_trgovac=True
                     )
                 print(f"Dodan trgovac {podaci_o_trgovcu[0]}")

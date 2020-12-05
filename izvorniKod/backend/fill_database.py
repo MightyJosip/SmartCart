@@ -14,9 +14,11 @@ call_command('add_products')
 call_command('add_kategorije')
 call_command('add_potkategorije')
 call_command('add_vrsta')
+call_command('add_uloge')
 call_command('add_trgovci')
 call_command('add_trgovine')
 call_command('add_trgovinaartikli')
 call_command('add_opisartikla')
-call_command('add_uloge')
+
+
 print("Done")

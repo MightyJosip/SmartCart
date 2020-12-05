@@ -37,7 +37,7 @@ class Uloga(models.Model):
         ('T', 'Trgovac'),
         ('A', 'Administrator')
     ]
-    
+
     auth_level = models.CharField(max_length=7, choices=AUTH_LEVEL_CHOICES, default='Gost', null=False)
 
     def __str__(self):
@@ -67,7 +67,7 @@ class BaseUserModel(AbstractUser):
     email = models.EmailField(unique=True)
     ###########
 
-    uloga = models.OneToOneField(Uloga, on_delete=models.CASCADE, null=True)
+    uloga = models.ForeignKey(Uloga, on_delete=models.CASCADE, null=True)
     onemogucio = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
 
     USERNAME_FIELD = 'email'
