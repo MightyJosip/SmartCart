@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from pathlib import Path
-import dj_database_url
+#import dj_database_url
 
 CONST = {}
 CONST_PATH = os.path.join(os.path.join(Path(os.path.dirname(__file__)).parent, "constants.txt"))
