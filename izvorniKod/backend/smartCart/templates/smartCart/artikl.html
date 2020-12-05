@@ -3,12 +3,12 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Artikl br. {{ barkod_artikla }}</title>
+        <title>Artikl br. {{ artikl.barkod_artikla }}</title>
         <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
     </head>
 
     <body>
-        <h1>Ovdje su prikazani podaci za artikl br. {{ barkod_artikla }}</h1>
+        <h1>Ovdje su prikazani podaci za artikl br. {{ artikl.barkod_artikla }}</h1>
 
         <h1>{{artikl.naziv_artikla}}</h1>
         <h2>Autor naziva artikla</h2>

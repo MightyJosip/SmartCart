@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">SmartCart</string>
+    <string name="register_here">Register Here!</string>
+    <string name="continue_as_guest">Continue as guest</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="search">Search</string>
+    <string name="WelcomeInfo">Search local stores and items at best prices</string>
+    <string name="settingsButton">Settings</string>
+    <string name="cartButton">Cart</string>
+    <string name="smartcartlogo">smartcartLogo</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="termsAndCondition">By Signing up, you agree to our terms and condition</string>
+    <string name="enterEmail">Enter email</string>
+    <string name="enterPassword">Enter password</string>
+    <string name="signUp">Sign Up</string>
+    <string name="smartcartTextLogo">SmartCart</string>
+    <string name="string_smartcartlogo">SmartCart</string>
+    <string name="log_in">Log in</string>
+    <string name="title_activity_cart">LoginActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+</resources>

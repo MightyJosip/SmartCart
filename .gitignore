@@ -1,9 +1,6 @@
-# PyCharm config directory
-.idea/*
-
 # Python byte code files
 __pycache__/
-izvorniKod/backend/smartCart/migration
+izvorniKod/backend/smartCart/migrations
 izvorniKod/backend/constants.txt
 *.log
 *.pot
@@ -12,6 +9,7 @@ izvorniKod/backend/constants.txt
 izvorniKod/backend/local_settings.py
 izvorniKod/backend/db.sqlite3
 venv/
+static/
 
 # Documentation residues
 /dokumentacija/*.aux
@@ -23,3 +21,23 @@ venv/
 .~lock.*
 *.bak
 
+.idea/
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+#conflicts
+*.orig
+.gitignore_*
