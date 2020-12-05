@@ -7,7 +7,7 @@ from django.views import View
 from .functions import render_template, render_form, read_form, User, redirect_to_home_page, root_dispatch, \
     must_be_logged
 from ..forms import SignUpTrgovacForm, SignUpKupacForm, LoginForm, EditLogin
-from ..models import SecretCode
+from ..models import SecretCode, Uloga
 
 
 class IndexView(View):
@@ -50,7 +50,7 @@ class SignUpTrgovacView(View):
             return render_form(self, request, message='Wrong secret code\n')
         else:
             secret_code.delete()
-        User.objects.create_user(email, password, is_trgovac=True)
+        User.objects.create_user(email, password, is_trgovac=True, uloga = Uloga.objects.get(auth_level='Trgovac'))
         return render(request, 'smartCart/index.html', {})
 
 
@@ -82,7 +82,7 @@ class SignUpKupacView(View):
             return render_form(self, request, message='Passwords don\'t match\n')
         if User.objects.filter(email=email).exists():
             return render_form(self, request, message='Mail already exists\n')
-        User.objects.create_user(email, password, is_kupac=True)
+        User.objects.create_user(email, password, is_kupac=True, uloga = Uloga.objects.get(auth_level='Kupac'))
         return render(request, 'smartCart/index.html', {})
 
 

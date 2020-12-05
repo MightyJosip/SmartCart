@@ -6,4 +6,4 @@ django.setup()
 
 from django.core.management import call_command
 
-call_command('generate_secret_code')
+call_command('generate_secret_code_trgovac')
