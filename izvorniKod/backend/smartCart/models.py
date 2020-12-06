@@ -86,7 +86,7 @@ class OnemoguceniRacun(models.Model):
     emailAdmin = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=True)
     datum = models.CharField(max_length=100, null=True) #placeholder
 
-
+#TODO: ovo valja urediti tako da se prikazuje auth_level
 class MyUserAdmin(ModelAdmin):
     model = BaseUserModel
     list_display = ('email', 'is_staff', 'is_kupac', 'is_trgovac')
