@@ -100,8 +100,14 @@ class UrediArtiklView(View):
         #print(TrgovinaArtikli.objects.get(id = 1))
         
         opisi = OpisArtikla.objects.all().filter(trgovina_artikl=TrgovinaArtikli.objects.get(id = self.kwargs['artikl_trgovina']))
+        
+       
         if len(opisi) == 0:
             opisi = ''
+        else:
+            opisi = sorted(opisi, key = lambda a: a.broj_glasova, reverse=True)
+    
+    
         return render(request, 'smartCart/artikl_u_trgovini.html',
                       {'form': self.form, 
                       'trgovina': Trgovina.objects.get(sif_trgovina=self.t_id),

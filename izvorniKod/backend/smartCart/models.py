@@ -214,7 +214,7 @@ class OpisArtikla(models.Model):
 
     naziv_artikla = models.CharField(max_length=100, null=False)
     opis_artikla = models.CharField(max_length=5000, null=True)
-    broj_glasova = models.IntegerField(null=True)
+    broj_glasova = models.IntegerField(null=False, default=0)
     masa = models.IntegerField(null=True)
 
     class Meta:

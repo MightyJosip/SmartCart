@@ -100,3 +100,4 @@ def create_json_response(code, data=None, safe=True, **kwargs):
         json_response = JsonResponse(data=kwargs, safe=safe)
     json_response.status_code = code
     return json_response
+
