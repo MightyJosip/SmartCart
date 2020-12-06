@@ -14,7 +14,8 @@
 <body>
     <h1>Ovdje su prikazani podaci za trgovinu {{trgovina}} </h1>
     <h2>Radno vrijeme : {{trgovina.radno_vrijeme_pocetak|time:"H:i"}}-{{trgovina.radno_vrijeme_kraj|time:"H:i"}}</h2>
-
+    <br />
+    <h2>Pozicija trgovine: longitude {{trgovina.longitude}} latitude {{trgovina.latitude}}</h2>
     <hr>
 
     <h2>Artikli dostupni u ovoj trgovini</h2>
@@ -58,6 +59,16 @@
     <form action="/trgovina/{{trgovina.sif_trgovina}}" method="POST"> <!-- /0 because of parsing, stupid premanent temporary hack which works -->
         {%csrf_token%}
         {% for field in vrijeme_form %}
+            <b>{{ field.label_tag }}</b><br> {{ field }}<br><br>
+        {% endfor %}
+        <input type="submit" value="Submit">
+    </form>
+    <hr>
+
+    <h2>Promijeni lokaciju trgovine</h2>
+    <form action="/trgovina/{{trgovina.sif_trgovina}}" method="POST"> <!-- /0 because of parsing, stupid premanent temporary hack which works -->
+        {%csrf_token%}
+        {% for field in longlat_form %}
             <b>{{ field.label_tag }}</b><br> {{ field }}<br><br>
         {% endfor %}
         <input type="submit" value="Submit">

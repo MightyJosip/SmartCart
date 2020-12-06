@@ -31,11 +31,13 @@ class SignUpKupacForm(forms.Form):
 class DodajTrgovinu(forms.ModelForm):
     class Meta:
         model = Trgovina
-        fields = ['naz_trgovina', 'adresa_trgovina', 'radno_vrijeme_pocetak', 'radno_vrijeme_kraj']
+        fields = ['naz_trgovina', 'adresa_trgovina', 'radno_vrijeme_pocetak', 'radno_vrijeme_kraj', 'latitude', 'longitude']
         labels = {
             'naz_trgovina': 'Naziv trgovine',
             'adresa_trgovina': 'Adresa trgovine',
-            'radno_vrijeme_pocetak': 'Radno vrijeme početak'
+            'radno_vrijeme_pocetak': 'Radno vrijeme početak',
+            'latitude' : 'Latitude',
+            'longitude' : 'Longitude'
         }
         widgets = {
             'radno_vrijeme_pocetak': TimeInput(format='%H:%M'),
@@ -78,3 +80,8 @@ class PromijeniRadnoVrijeme(forms.ModelForm):
         labels = {
             'radno_vrijeme_pocetak': 'Radno vrijeme početak',
         }
+
+class PromijeniLongLat(forms.ModelForm):
+    class Meta:
+        model = Trgovina
+        fields = ['longitude', 'latitude']

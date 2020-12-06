@@ -4,7 +4,7 @@ from django.views.generic import View
 from .functions import render_form, must_be_trgovac, read_form, stay_on_page, get_artikli_from_trgovina, root_dispatch, \
     redirect_to_home_page, User, get_object_or_none, get_vlasnik_trgovine, render_template
 from ..forms import DodajTrgovinu, DodajArtikl, DodajProizvodaca, DodajArtiklUTrgovinu, PromijeniRadnoVrijeme, \
-    UrediArtiklUTrgovini
+    UrediArtiklUTrgovini, PromijeniLongLat
 from ..models import Trgovina, Artikl, TrgovinaArtikli, Proizvodac, Zemlja_porijekla
 
 
@@ -28,7 +28,11 @@ class TrgovinaView(View):
 
     def __init__(self):
         super(TrgovinaView, self).__init__()
-        self.form = {'artikl_form': DodajArtiklUTrgovinu(), 'vrijeme_form': PromijeniRadnoVrijeme()}
+        self.form = {
+            'artikl_form': DodajArtiklUTrgovinu(), 
+            'vrijeme_form': PromijeniRadnoVrijeme(),
+            'longlat_form': PromijeniLongLat()
+            }
 
     def dispatch(self, request, *args, **kwargs):
         t = Trgovina.objects.get(sif_trgovina=self.kwargs['sif_trgovina'])
@@ -64,6 +68,11 @@ class TrgovinaView(View):
         if read_form(self, request, 'vrijeme_form'):
             t.radno_vrijeme_pocetak = request.POST['radno_vrijeme_pocetak']
             t.radno_vrijeme_kraj = request.POST['radno_vrijeme_kraj']
+            t.save()
+
+        if read_form(self, request, 'longlat_form'):
+            t.longitude = request.POST['longitude']
+            t.latitude = request.POST['latitude']
             t.save()
         return stay_on_page(request)
 
@@ -132,7 +141,9 @@ class DodajTrgovineView(View):
                                 adresa_trgovina=request.POST['adresa_trgovina'],
                                 vlasnik=get_object_or_404(User, pk=request.user.id),
                                 radno_vrijeme_pocetak=request.POST['radno_vrijeme_pocetak'],
-                                radno_vrijeme_kraj=request.POST['radno_vrijeme_kraj'])
+                                radno_vrijeme_kraj=request.POST['radno_vrijeme_kraj'],
+                                latitude=request.POST['latitude'],
+                                longitude=request.POST['longitude'])
             trgovina.save()
         return stay_on_page(request)
 
