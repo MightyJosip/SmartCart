@@ -19,8 +19,20 @@
 
     <!--Ako nešto ne radi, onda je to sigurno ovo-->
     <h1>Opisi artikala</h1>
+    {% if opisi == '' %}
+        <h2>Ovdje nema opisa</h2>
+    {% endif %}
+
     {% for opis in opisi %}
+        {{opis.naziv_artikla}}
+        <br />
         {{opis.opis_artikla}}
+        <br />
+        {{opis.autor_opisa}}
+        <br />
+        {{opis.broj_glasova}}
+        <br />
+        <br />
     {% endfor %}
 </body>
 </html>
