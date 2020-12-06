@@ -16,7 +16,7 @@ class Command(BaseCommand):
                 podaci_o_trgovini = trgovina.split(';')
                 podaci_o_trgovini[-1] = podaci_o_trgovini[-1].rstrip()
                 tr = Trgovina(
-                    sif_trgovina=podaci_o_trgovini[0],
+                    #sif_trgovina=podaci_o_trgovini[0],
                     naz_trgovina=podaci_o_trgovini[1],
                     adresa_trgovina=podaci_o_trgovini[2],
                     radno_vrijeme_pocetak=podaci_o_trgovini[3],
