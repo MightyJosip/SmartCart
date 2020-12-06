@@ -5,7 +5,7 @@ from .functions import render_form, must_be_trgovac, read_form, stay_on_page, ge
     redirect_to_home_page, User, get_object_or_none, get_vlasnik_trgovine, render_template
 from ..forms import DodajTrgovinu, DodajArtikl, DodajProizvodaca, DodajArtiklUTrgovinu, PromijeniRadnoVrijeme, \
     UrediArtiklUTrgovini, PromijeniLongLat
-from ..models import Trgovina, Artikl, TrgovinaArtikli, Proizvodac, Zemlja_porijekla
+from ..models import Trgovina, Artikl, TrgovinaArtikli, Proizvodac, Zemlja_porijekla, OpisArtikla
 
 
 @must_be_trgovac
@@ -94,10 +94,19 @@ class UrediArtiklView(View):
             return redirect_to_home_page(request)
         return super(UrediArtiklView, self).dispatch(request, *args, **kwargs)
 
+    #TODO: dohvati opise i ispiši ih
     def get(self, request, *args, **kwargs):
+        #print(self.kwargs['artikl_trgovina'])
+        #print(TrgovinaArtikli.objects.get(id = 1))
+        
+        
+
         return render(request, 'smartCart/artikl_u_trgovini.html',
-                      {'form': self.form, 'trgovina': Trgovina.objects.get(sif_trgovina=self.t_id),
-                       'artikl': self.old_art.artikl.naziv_artikla})
+                      {'form': self.form, 
+                      'trgovina': Trgovina.objects.get(sif_trgovina=self.t_id),
+                       'artikl': self.old_art.artikl.naziv_artikla,
+                       'opisi' : OpisArtikla.objects.get(trgovina_artikl=TrgovinaArtikli.objects.get(id = self.kwargs['artikl_trgovina']))
+                       })
 
     def post(self, request, *args, **kwargs):
         if read_form(self, request):

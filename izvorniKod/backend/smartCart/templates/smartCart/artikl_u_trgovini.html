@@ -16,5 +16,11 @@
         {% endfor %}
         <input type="submit" value="Submit">
     </form>
+
+    <!--Ako nešto ne radi, onda je to sigurno ovo-->
+    <h1>Opisi artikala</h1>
+    {% for opis in opisi %}
+        {{opis.opis_artikla}}
+    {% endfor %}
 </body>
 </html>

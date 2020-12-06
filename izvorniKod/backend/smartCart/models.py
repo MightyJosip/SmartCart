@@ -167,6 +167,9 @@ class TrgovinaArtikli(models.Model):
     akcija = models.BooleanField(default=False)
     dostupan = models.BooleanField(default=False)
 
+    def __str__(self):
+        return f'{self.trgovina}, {self.artikl}' 
+
 
 class Kategorija(models.Model):
     sif_kategorija = models.AutoField(primary_key=True)
