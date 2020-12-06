@@ -5,13 +5,13 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 
-from ..models import TrgovinaArtikli, UserSession, Trgovina
+from ..models import TrgovinaArtikli, UserSession, Trgovina, Uloga
 
 User = get_user_model()
 
 
 def trgovac_login_required(user):
-    return user.is_trgovac if user.is_authenticated else False
+    return user.get_auth_level() == 'Trgovac' if user.is_authenticated else False
 
 
 must_be_trgovac = method_decorator(
@@ -33,7 +33,7 @@ def render_form(view, request, **kwargs):
 
 
 def redirect_to_home_page(request):
-    if request.user.is_trgovac:
+    if request.user.get_auth_level() == 'Trgovac':
         return redirect('trgovac')
     else:
         return redirect('index')
@@ -77,9 +77,9 @@ def get_user_from_session(session_key):
 def get_authorization_level(user):
     if not user.is_authenticated:
         return 'gost'
-    elif user.is_kupac:
+    elif user.get_auth_level() == 'Kupac':
         return 'kupac'
-    elif user.is_trgovac:
+    elif user.get_auth_level() == 'Trgovac':
         return 'trgovac'
     else:
         return 'admin'

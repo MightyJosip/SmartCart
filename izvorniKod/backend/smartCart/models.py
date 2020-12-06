@@ -75,6 +75,9 @@ class BaseUserModel(AbstractUser):
 
     objects = AccountManager()
 
+    def get_auth_level(self):
+        return self.uloga.auth_level
+
     def __str__(self):
         return self.email
 
