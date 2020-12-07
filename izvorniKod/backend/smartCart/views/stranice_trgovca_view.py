@@ -121,6 +121,7 @@ class UrediArtiklView(View):
                        })
 
     def post(self, request, *args, **kwargs):
+        
         if read_form(self, request, 'uredi_artikl_u_trgovini_form'):
             old_art = TrgovinaArtikli.objects.get(id=self.kwargs['artikl_trgovina'])
             old_art.cijena = request.POST['cijena']
@@ -128,7 +129,8 @@ class UrediArtiklView(View):
             old_art.dostupan = True if 'dostupan' in request.POST else False
             old_art.save()
         
-        if read_form(self, request, 'prioritet_form'):           
+        else:
+            read_form(self, request, 'prioritet_form')          
             old_opis = OpisArtikla.objects.get(id=request.POST['id'])
             if ('prioritiziran' in request.POST):
                 old_opis.prioritiziran = True
