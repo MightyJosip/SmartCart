@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import TimeInput
 
-from .models import Artikl, Trgovina, TrgovinaArtikli, Proizvodac
+from .models import Artikl, Trgovina, TrgovinaArtikli, Proizvodac, OpisArtikla
 
 
 class LoginForm(forms.Form):
@@ -85,3 +85,10 @@ class PromijeniLongLat(forms.ModelForm):
     class Meta:
         model = Trgovina
         fields = ['longitude', 'latitude']
+
+#dodaj id da se zna tko je tko
+class PromijeniPrioritet(forms.ModelForm):
+    class Meta:
+        model = OpisArtikla
+        fields = ['prioritiziran', 'id']
+

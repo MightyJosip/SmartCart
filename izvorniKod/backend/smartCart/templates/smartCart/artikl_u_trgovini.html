@@ -11,18 +11,19 @@
     <br><br>
     <form action="" method="POST">
         {%csrf_token%}
-        {% for field in form  %}
+        {% for field in uredi_artikl_u_trgovini_form  %}
             <b>{{ field.label_tag }}</b><br> {{ field }}<br><br>
         {% endfor %}
         <input type="submit" value="Submit">
     </form>
 
-    <!--Ako nešto ne radi, onda je to sigurno ovo-->
+
     <h1>Opisi artikala</h1>
     {% if opisi == '' %}
         <h2>Ovdje nema opisa</h2>
     {% endif %}
 
+    
     {% for opis in opisi %}
         {{opis.naziv_artikla}}
         <br />
@@ -32,7 +33,19 @@
         <br />
         {{opis.broj_glasova}}
         <br />
+        <form action="" method="POST">
+            {% for field in opis.f  %}
+            <b>{{ field.label_tag }}</b><br> {{ field }}<br><br>
+            {% endfor %}
+            
+            <input type="submit" value="Submit">  
+        </form>
+        <br />
         <br />
     {% endfor %}
+    
+
+
+
 </body>
 </html>

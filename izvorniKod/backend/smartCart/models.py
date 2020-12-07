@@ -203,6 +203,7 @@ class Vrsta(models.Model):
         return f'{self.sif_vrsta}, {self.naz_vrsta}'
 
 
+#TODO: dodaj prioritet boolean
 class OpisArtikla(models.Model):
     autor_opisa = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=True)
     artikl = models.ForeignKey(Artikl, on_delete=models.CASCADE, null=True)
@@ -216,6 +217,8 @@ class OpisArtikla(models.Model):
     opis_artikla = models.CharField(max_length=5000, null=True)
     broj_glasova = models.IntegerField(null=False, default=0)
     masa = models.IntegerField(null=True)
+
+    prioritiziran = models.BooleanField(default=False)
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=['autor_opisa', 'artikl'], name='constraint_3')]

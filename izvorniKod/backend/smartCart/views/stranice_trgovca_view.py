@@ -4,7 +4,7 @@ from django.views.generic import View
 from .functions import render_form, must_be_trgovac, read_form, stay_on_page, get_artikli_from_trgovina, root_dispatch, \
     redirect_to_home_page, User, get_object_or_none, get_vlasnik_trgovine, render_template
 from ..forms import DodajTrgovinu, DodajArtikl, DodajProizvodaca, DodajArtiklUTrgovinu, PromijeniRadnoVrijeme, \
-    UrediArtiklUTrgovini, PromijeniLongLat
+    UrediArtiklUTrgovini, PromijeniLongLat, PromijeniPrioritet
 from ..models import Trgovina, Artikl, TrgovinaArtikli, Proizvodac, Zemlja_porijekla, OpisArtikla
 
 
@@ -79,12 +79,20 @@ class TrgovinaView(View):
 
 @must_be_trgovac
 class UrediArtiklView(View):
-    form_class = UrediArtiklUTrgovini
+    template_name = 'smartCart/artikl_u_trgovini.html'
+    #form_class = UrediArtiklUTrgovini
+
+    def __init__(self):
+        super(UrediArtiklView, self).__init__()
+        self.form = {
+            'uredi_artikl_u_trgovini_form': UrediArtiklUTrgovini(),
+            'prioritet_form': PromijeniPrioritet()
+            }
 
     def dispatch(self, request, *args, **kwargs):
         self.t_id = TrgovinaArtikli.objects.get(id=self.kwargs['artikl_trgovina']).trgovina.sif_trgovina
         self.old_art = TrgovinaArtikli.objects.get(id=self.kwargs['artikl_trgovina'])
-        self.form = UrediArtiklUTrgovini(initial={
+        self.form['uredi_artikl_u_trgovini_form'] = UrediArtiklUTrgovini(initial={
             'cijena': self.old_art.cijena,
             'akcija': self.old_art.akcija,
             'dostupan': self.old_art.dostupan
@@ -94,34 +102,53 @@ class UrediArtiklView(View):
             return redirect_to_home_page(request)
         return super(UrediArtiklView, self).dispatch(request, *args, **kwargs)
 
-    #TODO: dohvati opise i ispiši ih
     def get(self, request, *args, **kwargs):
-        #print(self.kwargs['artikl_trgovina'])
-        #print(TrgovinaArtikli.objects.get(id = 1))
-        
         opisi = OpisArtikla.objects.all().filter(trgovina_artikl=TrgovinaArtikli.objects.get(id = self.kwargs['artikl_trgovina']))
         
-       
         if len(opisi) == 0:
             opisi = ''
         else:
             opisi = sorted(opisi, key = lambda a: a.broj_glasova, reverse=True)
-    
-    
+            #self.form['prioritet_form'] = []
+            for opis in opisi:
+                #self.form['prioritet_form'] += PromijeniPrioritet(initial={'prioritiziran': opis.prioritiziran})
+                opis.f = PromijeniPrioritet(initial={'prioritiziran': opis.prioritiziran, 'id': opis.id})
+                #print(opis.id)
+                #print(opis.f)
+                
         return render(request, 'smartCart/artikl_u_trgovini.html',
-                      {'form': self.form, 
+                      {'uredi_artikl_u_trgovini_form': self.form['uredi_artikl_u_trgovini_form'], 
+                      #'prioritet_form': self.form['prioritet_form'],
                       'trgovina': Trgovina.objects.get(sif_trgovina=self.t_id),
                        'artikl': self.old_art.artikl.naziv_artikla,
                        'opisi' : opisi
                        })
 
     def post(self, request, *args, **kwargs):
-        if read_form(self, request):
+        if read_form(self, request, 'uredi_artikl_u_trgovini_form'):
             old_art = TrgovinaArtikli.objects.get(id=self.kwargs['artikl_trgovina'])
             old_art.cijena = request.POST['cijena']
             old_art.akcija = True if 'akcija' in request.POST else False
             old_art.dostupan = True if 'dostupan' in request.POST else False
             old_art.save()
+        
+        if read_form(self, request, 'prioritet_form'):
+
+            print("-------------------------------------------")
+            print(request.POST)
+            print("-------------------------------------------")
+
+            """
+            old_opis = OpisArtikla.objects.get(id=request.POST['id'])
+            if ('prioritiziran' in request.POST):
+                old_opis.prioritiziran = True
+            else:
+                old_opis.prioritiziran = False
+            old_opis.save()
+            """
+            
+            
+
         return redirect(f'/trgovina/{self.t_id}')
 
 
