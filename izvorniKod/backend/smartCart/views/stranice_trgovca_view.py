@@ -109,13 +109,9 @@ class UrediArtiklView(View):
             opisi = ''
         else:
             opisi = sorted(opisi, key = lambda a: (a.prioritiziran, a.broj_glasova), reverse=True)
-            #self.form['prioritet_form'] = []
             for opis in opisi:
-                #self.form['prioritet_form'] += PromijeniPrioritet(initial={'prioritiziran': opis.prioritiziran})
                 opis.f = PromijeniPrioritet(initial={'prioritiziran': opis.prioritiziran, 'id': opis.id})
-                #print(opis.id)
-                #print(opis.f)
-                
+
         return render(request, 'smartCart/artikl_u_trgovini.html',
                       {'uredi_artikl_u_trgovini_form': self.form['uredi_artikl_u_trgovini_form'], 
                       #'prioritet_form': self.form['prioritet_form'],
@@ -132,13 +128,7 @@ class UrediArtiklView(View):
             old_art.dostupan = True if 'dostupan' in request.POST else False
             old_art.save()
         
-        if read_form(self, request, 'prioritet_form'):
-
-            print("-------------------------------------------")
-            print(request.POST)
-            print("-------------------------------------------")
-
-            
+        if read_form(self, request, 'prioritet_form'):           
             old_opis = OpisArtikla.objects.get(id=request.POST['id'])
             if ('prioritiziran' in request.POST):
                 old_opis.prioritiziran = True

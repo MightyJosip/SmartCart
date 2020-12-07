@@ -19,6 +19,7 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from smartCart.views import *
+from smartCart.views.android_views import *
 
 urlpatterns = [
     path('admin', admin.site.urls),
@@ -44,6 +45,11 @@ urlpatterns = [
     path('android/logout', AndroidLogoutView.as_view(), name='android_logout'),
     path('android/artikli', AndroidArtikliView.as_view(), name='android_artikli'),
     path('android/trgovine', AndroidTrgovineView.as_view(), name='android_trgovine'),
-    path('android/popis', AndroidPopisView.as_view(), name='android_popis')
+    path('android/popis', AndroidPopisView.as_view(), name='android_popis'),
+    path('android/artikltrgovina', AndroidArtiklTrgovina.as_view(), name='artikltrgovina'),
+    path('android/opisi', AndroidArtikliView.as_view(), name='opisi'),
+    path('android/downvote', AndroidDownvoteView.as_view(), name ='downvote'),
+    path('android/upvote', AndroidUpvoteView.as_view(), name='upvote'),
+    path('android/write_description', AndroidWriteProductDescription, name='write_description')
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
