@@ -33,13 +33,14 @@
         <br />
         {{opis.broj_glasova}}
         <br />
-        <form action="" method="POST">
-            {% for field in opis.f  %}
-            <b>{{ field.label_tag }}</b><br> {{ field }}<br><br>
-            {% endfor %}
+            <form action="" method="POST">
+                {% for field in opis.f  %}
+                    <b>{{ field.label_tag }}</b><br> {{ field }}<br><br>
+                {% endfor %}
+                <input type="hidden" id="id" name="id" value={{opis.id}}></input> <br><br>
+                <input type="submit" value="Submit"> 
+            </form>
             
-            <input type="submit" value="Submit">  
-        </form>
         <br />
         <br />
     {% endfor %}

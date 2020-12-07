@@ -108,7 +108,7 @@ class UrediArtiklView(View):
         if len(opisi) == 0:
             opisi = ''
         else:
-            opisi = sorted(opisi, key = lambda a: a.broj_glasova, reverse=True)
+            opisi = sorted(opisi, key = lambda a: (a.prioritiziran, a.broj_glasova), reverse=True)
             #self.form['prioritet_form'] = []
             for opis in opisi:
                 #self.form['prioritet_form'] += PromijeniPrioritet(initial={'prioritiziran': opis.prioritiziran})
@@ -138,14 +138,14 @@ class UrediArtiklView(View):
             print(request.POST)
             print("-------------------------------------------")
 
-            """
+            
             old_opis = OpisArtikla.objects.get(id=request.POST['id'])
             if ('prioritiziran' in request.POST):
                 old_opis.prioritiziran = True
             else:
                 old_opis.prioritiziran = False
             old_opis.save()
-            """
+            
             
             
 
