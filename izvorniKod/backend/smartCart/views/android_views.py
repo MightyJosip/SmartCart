@@ -8,7 +8,7 @@ from django.http import HttpResponse
 
 from .functions import create_json_response, get_authorization_level, android_login_function, get_user_from_session, \
     User
-from ..models import Artikl, SecretCode, Trgovina, TrgovinaArtikli, OpisArtikla, Vrsta, Zemlja_porijekla, 
+from ..models import Artikl, SecretCode, Trgovina, TrgovinaArtikli, OpisArtikla, Vrsta, Zemlja_porijekla 
 
 
 class AndroidArtikliView(View):
