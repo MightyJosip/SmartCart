@@ -203,7 +203,6 @@ class Vrsta(models.Model):
         return f'{self.sif_vrsta}, {self.naz_vrsta}'
 
 
-#TODO: dodaj prioritet boolean
 class OpisArtikla(models.Model):
     autor_opisa = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=True)
     artikl = models.ForeignKey(Artikl, on_delete=models.CASCADE, null=True)

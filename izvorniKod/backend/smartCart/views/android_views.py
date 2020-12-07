@@ -4,10 +4,11 @@ from django.contrib.auth import authenticate, logout
 from django.contrib.sessions.models import Session
 from django.core import serializers
 from django.views.generic.base import View
+from django.http import HttpResponse
 
 from .functions import create_json_response, get_authorization_level, android_login_function, get_user_from_session, \
     User
-from ..models import Artikl, SecretCode, Trgovina
+from ..models import Artikl, SecretCode, Trgovina, TrgovinaArtikli, OpisArtikla, Vrsta, Zemlja_porijekla, 
 
 
 class AndroidArtikliView(View):
@@ -18,6 +19,77 @@ class AndroidArtikliView(View):
             naziv_artikla = ''
         artikli = Artikl.objects.filter(naziv_artikla__contains='%s' % naziv_artikla)
         return create_json_response(200, data=serializers.serialize('json', artikli), safe=False)
+
+#TODO: neka vraća najbolji opis
+class AndroidArtiklTrgovina(View):
+    def post(self, request, *args, **kwargs):
+        sif_trgovina = json.loads(request.body)['sif_trgovina']
+        barkod = json.loads(request.body)['barkod']
+        artikl_trgovina = TrgovinaArtikli.objects.get(
+            trgovina=Trgovina.objects.get(sif_trgovina=sif_trgovina),
+            artikl=Artikl.objects.get(barkod_artikla=barkod)
+            )
+        return create_json_response(200, data=serializers.serialize('json', artikl_trgovina), safe=False)
+
+class AndroidOpisiView(View):
+    def post(self, request, *args, **kwargs):
+        sif_trgovina = json.loads(request.body)['sif_trgovina']
+        barkod = json.loads(request.body)['barkod']
+
+        artikl_trgovina = TrgovinaArtikli.objects.get(
+            trgovina=Trgovina.objects.get(sif_trgovina=sif_trgovina),
+            artikl=Artikl.objects.get(barkod_artikla=barkod)
+            )
+        opisi = OpisArtikla.objects.filter(trgovina_artikl=artikl_trgovina)
+
+        return create_json_response(200, data=serializers.serialize('json', opisi), safe=False)
+
+class AndroidDownvoteView(View):
+    def post(self, request, *args, **kwargs):
+        id = json.loads(request.body)['id']
+
+        opis = OpisArtikla.objects.get(id=id)
+        opis.broj_glasova -= 1
+        opis.save()
+
+        return HttpResponse()
+
+class AndroidUpvoteView(View):
+    def post(self, request, *args, **kwargs):
+        id = json.loads(request.body)['id']
+
+        opis = OpisArtikla.objects.get(id=id)
+        opis.broj_glasova += 1
+        opis.save()
+
+        return HttpResponse()
+
+#TODO: što ako je korisnik već napisao opis za ovu artiklTrgovinu?
+class AndroidWriteProductDescription(View):
+    def post(self, request, *args, **kwargs):
+        autor_opisa = json.loads(request.body)['email']
+        artikl = json.loads(request.body)['barkod']
+
+        vrsta = json.loads(request.body)['sif_vrsta']
+        zemlja_porijekla = json.loads(request.body)['zemlja_porijekla']
+        trgovina = json.loads(request.body)['sif_trgovina']
+        trgovina_artikl = json.loads(request.body)['sif_trgovina_artikl']
+
+        naziv_artikla = json.loads(request.body)['naziv_artikla']
+        opis_artikla = json.loads(request.body)['opis_artikla']
+
+        opis = OpisArtikla(autor_opisa=autor_opisa,
+                        artikl=artikl,
+                        vrsta=vrsta,
+                        zemlja_porijekla=zemlja_porijekla,
+                        trgovina=trgovina,
+                        trgovina_artikl=trgovina_artikl,
+                        naziv_artikla=naziv_artikla,
+                        opis_artikla=opis_artikla)
+        opis.save()
+
+        return HttpResponse()
+        
 
 
 class AndroidPopisView(View):
