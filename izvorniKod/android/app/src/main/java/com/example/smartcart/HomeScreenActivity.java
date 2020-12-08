@@ -1,6 +1,8 @@
 package com.example.smartcart;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.room.Room;
 
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +30,8 @@ public class HomeScreenActivity extends AppCompatActivity{
     private static final int MENU_MYLISTS = 3;
     private static final int MENU_LOGOUT = 4;
     private static final int MENU_ACCOUNTSETTINGS = 5;
+    public static FragmentManager fragmentManager;
+    public static MyAppDatabase myAppDatabase;
 
     /**
      * Provjerava je li korisnik odabrao hoće li se prijaviti. Ako nije, otvara se MainActivity kako
@@ -55,6 +59,10 @@ public class HomeScreenActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        fragmentManager = getSupportFragmentManager();
+        myAppDatabase = Room.databaseBuilder(getApplicationContext(), MyAppDatabase.class, "popisdb").allowMainThreadQueries().build();
+
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         getSupportActionBar().hide();
         setContentView(R.layout.home_screen);
@@ -67,6 +75,17 @@ public class HomeScreenActivity extends AppCompatActivity{
         registerForContextMenu(cartButton);
         cartButton.setOnClickListener(this::openContextMenu);
         cartButton.setOnLongClickListener(v -> true);
+
+
+
+        if(findViewById(R.id.fragment_container) != null ){
+
+            if( savedInstanceState!= null ){
+                return;
+            }
+
+            fragmentManager.beginTransaction().add(R.id.fragment_container, new AddPopisHomeFragment()).commit();
+        }
     }
 
     @Override
