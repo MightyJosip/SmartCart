@@ -21,18 +21,19 @@ class AndroidArtikliView(View):
         artikli = Artikl.objects.filter(naziv_artikla__contains='%s' % naziv_artikla)
         return create_json_response(200, data=serializers.serialize('json', artikli), safe=False)
 
-#vraća listu json-a
-#TODO: što ako korisnik traži određeni artikl u svim trgovinama?
+
 class AndroidArtiklTrgovina(View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body)
         sif_trgovina = data['sif_trgovina']
         barkod = data['barkod']
 
-        artikl_trgovina = TrgovinaArtikli.objects.get(
-            trgovina=Trgovina.objects.get(sif_trgovina=sif_trgovina),
-            artikl=Artikl.objects.get(barkod_artikla=barkod)
-            )
+        if (sif_trgovina != ''):
+            artikl_trgovina = TrgovinaArtikli.objects.get(
+                trgovina=Trgovina.objects.get(sif_trgovina=sif_trgovina),
+                artikl=Artikl.objects.get(barkod_artikla=barkod))
+        else:
+            artikl_trgovina = TrgovinaArtikli.objects.all().filter(artikl=Artikl.objects.get(barkod_artikla=barkod))
 
 
         najbolji_opis = OpisArtikla.objects.all().filter(artikl_id=barkod).order_by('broj_glasova').reverse()
