@@ -112,8 +112,11 @@ class LoginView(View):
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)
-            return redirect_to_home_page(request)
+            if (user.omogucen == True):
+                login(request, user)
+                return redirect_to_home_page(request)
+            else:
+                return render_form(self, request, message='You have been banned\n')
         else:
             return render_form(self, request, message='Invalid username or password\n')
 
