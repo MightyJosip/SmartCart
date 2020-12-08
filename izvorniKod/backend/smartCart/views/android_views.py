@@ -9,7 +9,7 @@ from django.db.models import Max
 
 from .functions import create_json_response, get_authorization_level, android_login_function, get_user_from_session, \
     User
-from ..models import Artikl, SecretCode, Trgovina, TrgovinaArtikli, OpisArtikla, Vrsta, Zemlja_porijekla 
+from ..models import Artikl, SecretCode, Trgovina, TrgovinaArtikli, OpisArtikla, Vrsta, Zemlja_porijekla, BaseUserModel 
 
 #TODO: u svim funkcijama porokati ove dekoratore koji provjeravaju login i lvl autorizacije
 class AndroidArtikliView(View):
@@ -69,29 +69,36 @@ class AndroidUpvoteView(View):
 
         return HttpResponse()
 
-#TODO: što ako je korisnik već napisao opis za ovu artiklTrgovinu?
+
 class AndroidWriteProductDescription(View):
     def post(self, request, *args, **kwargs):
-        autor_opisa = json.loads(request.body)['email']
-        artikl = json.loads(request.body)['barkod']
+        data = json.loads(request.body)
 
-        vrsta = json.loads(request.body)['sif_vrsta']
-        zemlja_porijekla = json.loads(request.body)['zemlja_porijekla']
-        trgovina = json.loads(request.body)['sif_trgovina']
-        trgovina_artikl = json.loads(request.body)['sif_trgovina_artikl']
+        email_autor_opisa = data['email']
+        barkod = data['barkod']
 
-        naziv_artikla = json.loads(request.body)['naziv_artikla']
-        opis_artikla = json.loads(request.body)['opis_artikla']
+        sif_vrsta = data['sif_vrsta']
+        zemlja_porijekla = data['zemlja_porijekla']
+        sif_trgovina = data['sif_trgovina']
+        sif_trgovina_artikl = data['sif_trgovina_artikl']
 
-        opis = OpisArtikla(autor_opisa=autor_opisa,
-                        artikl=artikl,
-                        vrsta=vrsta,
-                        zemlja_porijekla=zemlja_porijekla,
-                        trgovina=trgovina,
-                        trgovina_artikl=trgovina_artikl,
-                        naziv_artikla=naziv_artikla,
-                        opis_artikla=opis_artikla)
-        opis.save()
+        naziv_artikla = data['naziv_artikla']
+        opis_artikla = data['opis_artikla']
+
+        try:
+            opis = OpisArtikla(autor_opisa=BaseUserModel.objects.get(email=email_autor_opisa),
+                            artikl=Artikl.objects.get(barkod_artikla=barkod),
+                            vrsta=Vrsta.objects.get(sif_vrsta=sif_vrsta),
+                            zemlja_porijekla=Zemlja_porijekla.objects.get(naziv=zemlja_porijekla),
+                            trgovina=Trgovina.objects.get(sif_trgovina=sif_trgovina),
+                            trgovina_artikl=TrgovinaArtikli.objects.get(id=sif_trgovina_artikl),
+                            naziv_artikla=naziv_artikla,
+                            opis_artikla=opis_artikla)
+            opis.save()
+        except Exception as e:
+            data = json.dumps({'err': str(e)})
+            return create_json_response(403, data=data, safe=False)
+
 
         return HttpResponse()
         

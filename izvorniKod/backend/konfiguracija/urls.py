@@ -50,6 +50,6 @@ urlpatterns = [
     path('android/opisi', AndroidOpisiView.as_view(), name='opisi'),
     path('android/downvote', AndroidDownvoteView.as_view(), name ='downvote'),
     path('android/upvote', AndroidUpvoteView.as_view(), name='upvote'),
-    path('android/write_description', AndroidWriteProductDescription, name='write_description')
+    path('android/write_description', AndroidWriteProductDescription.as_view(), name='write_description')
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
