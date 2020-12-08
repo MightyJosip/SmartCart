@@ -11,6 +11,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.smartcart.database.Popis;
+import com.example.smartcart.database.PopisDao;
+import com.example.smartcart.database.SmartCartDatabase;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link AddPopisFragment#newInstance} factory method to
@@ -69,7 +73,6 @@ public class AddPopisFragment extends Fragment {
 
         idPopis = view.findViewById(R.id.editTextTextPersonName3);
         imePopis = view.findViewById(R.id.editTextTextPersonName4);
-        artikl = view.findViewById(R.id.editTextTextPersonName5);
         bnSave = view.findViewById(R.id.button4);
 
         bnSave.setOnClickListener(new View.OnClickListener() {
@@ -78,19 +81,15 @@ public class AddPopisFragment extends Fragment {
 
                 int popisId = Integer.parseInt(idPopis.getText().toString());
                 String ime = imePopis.getText().toString();
-                String artiklici = artikl.getText().toString();
 
-                Popis popis = new Popis();
-                popis.setId(popisId);
-                popis.setName(ime);
-                popis.setArtikli(artiklici);
+                Popis popis = new Popis(popisId, ime);
 
-                HomeScreenActivity.myAppDatabase.myDao().addPopis(popis);
+                SmartCartDatabase db = SmartCartDatabase.getInstance(AddPopisFragment.this.getContext());
+                PopisDao dao = db.popisDao();
+                dao.dodajPopise(popis);
                 Toast.makeText(getActivity(), "Popis uspjesno dodan", Toast.LENGTH_SHORT).show();
 
-                idPopis.setText("");
-                imePopis.setText("");
-                artikl.setText("");
+
             }
         });
         return view;

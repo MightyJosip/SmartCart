@@ -22,6 +22,11 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.smartcart.database.Popis;
+import com.example.smartcart.database.SmartCartDatabase;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class HomeScreenActivity extends AppCompatActivity{
 
@@ -31,7 +36,7 @@ public class HomeScreenActivity extends AppCompatActivity{
     private static final int MENU_LOGOUT = 4;
     private static final int MENU_ACCOUNTSETTINGS = 5;
     public static FragmentManager fragmentManager;
-    public static MyAppDatabase myAppDatabase;
+    //public static SmartCartDatabase myAppDatabase;
 
     /**
      * Provjerava je li korisnik odabrao hoće li se prijaviti. Ako nije, otvara se MainActivity kako
@@ -61,7 +66,7 @@ public class HomeScreenActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
 
         fragmentManager = getSupportFragmentManager();
-        myAppDatabase = Room.databaseBuilder(getApplicationContext(), MyAppDatabase.class, "popisdb").allowMainThreadQueries().build();
+        //myAppDatabase = SmartCartDatabase.getInstance(this);
 
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         getSupportActionBar().hide();
@@ -143,7 +148,16 @@ public class HomeScreenActivity extends AppCompatActivity{
         switch(itemId) {
             case MENU_LOGIN: startLogInActivity(); break;
             case MENU_SIGNUP: startSignUpActivity(); break;
-            case MENU_MYLISTS:
+            case MENU_MYLISTS: {
+                StringBuilder sb = new StringBuilder();
+                List<Popis> svi = SmartCartDatabase.getInstance(this)
+                            .popisDao().dohvatiSvePopise();
+                for (Popis p : svi)
+                    sb.append(p).append('\n');
+                String sviStr = sb.toString();
+                Toast.makeText(this, sviStr, Toast.LENGTH_LONG).show();
+                break;
+            }
 
             case MENU_ACCOUNTSETTINGS:
                 Toast.makeText(this, "Nije implementirano :(", Toast.LENGTH_LONG).show();
