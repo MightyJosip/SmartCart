@@ -73,17 +73,6 @@ def get_object_or_none(model, **kwargs):
 def get_user_from_session(session_key):
     return UserSession.objects.get(session_id=session_key).user
 
-#TODO: redundantno, već postoji get_auth_level
-def get_authorization_level(user):
-    if not user.is_authenticated:
-        return 'gost'
-    elif user.get_auth_level() == 'Kupac':
-        return 'kupac'
-    elif user.get_auth_level() == 'Trgovac':
-        return 'trgovac'
-    else:
-        return 'admin'
-
 
 def android_login_function(request, user):
     login(request=request, user=user)

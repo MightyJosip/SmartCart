@@ -53,7 +53,7 @@ class TrgovinaView(View):
             dostupan = True if 'dostupan' in request.POST else False
             a = Artikl.objects.get(barkod_artikla=bar_k)
             try:
-                old_trg_art = TrgovinaArtikli.objects.get(artikl__barkod_artikla=bar_k)
+                old_trg_art = TrgovinaArtikli.objects.get(artikl__barkod_artikla=bar_k, trgovina=t)
                 old_trg_art.cijena = cijena
                 old_trg_art.akcija = akcija
                 old_trg_art.dostupan = dostupan
