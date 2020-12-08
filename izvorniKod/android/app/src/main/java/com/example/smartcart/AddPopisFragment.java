@@ -71,7 +71,7 @@ public class AddPopisFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_add_popis, container, false);
 
-        idPopis = view.findViewById(R.id.editTextTextPersonName3);
+
         imePopis = view.findViewById(R.id.editTextTextPersonName4);
         bnSave = view.findViewById(R.id.button4);
 
@@ -79,10 +79,10 @@ public class AddPopisFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                int popisId = Integer.parseInt(idPopis.getText().toString());
+
                 String ime = imePopis.getText().toString();
 
-                Popis popis = new Popis(popisId, ime);
+                Popis popis = new Popis(ime);
 
                 SmartCartDatabase db = SmartCartDatabase.getInstance(AddPopisFragment.this.getContext());
                 PopisDao dao = db.popisDao();

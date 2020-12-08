@@ -18,4 +18,6 @@ public interface PopisDao {
     @Query("SELECT * FROM popis WHERE :ime = nazivPopis")
     List<Popis> dohvatiPoNazivu(String ime);
 
+    // i jos mnoge druge
+
 }

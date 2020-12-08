@@ -11,28 +11,28 @@ import com.example.smartcart.IzracuniCijene;
 @Entity(tableName = "popis")
 public class Popis {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int sifPopis;
 
     @ColumnInfo(name = "nazivPopis")
     private String nazivPopis;
 
     @ColumnInfo(name = "izrCijene")
-    private int nacinIzracuna;
+    private int nacinIzracuna = IzracuniCijene.DEFAULT;
 
     @ColumnInfo(name = "sifTrgovina")
-    private int sifTrgovina;
+    private int sifTrgovina = 69420;
 
     public Popis(int sifPopis, String nazivPopis, int nacinIzracuna, int sifTrgovina) {
-        this.sifPopis = sifPopis;
-        this.nazivPopis = nazivPopis;
-        this.nacinIzracuna = nacinIzracuna;
-        this.sifTrgovina = sifTrgovina;
+        this.setSifPopis(sifPopis);
+        this.setNazivPopis(nazivPopis);
+        this.setNacinIzracuna(nacinIzracuna);
+        this.setSifTrgovina(sifTrgovina);
     }
 
     @Ignore
-    public Popis(int sifPopis, String nazivPopis) {
-        this(sifPopis, nazivPopis, IzracuniCijene.DEFAULT, 69420);
+    public Popis(String nazivPopis) {
+        this.setNazivPopis(nazivPopis);
     }
 
 
@@ -56,10 +56,26 @@ public class Popis {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         char space = ' ';
-        sb.append(sifPopis).append(space)
-                .append(nazivPopis).append(space)
-                .append(nacinIzracuna).append(space)
-                .append(sifTrgovina);
+        sb.append(getSifPopis()).append(space)
+                .append(getNazivPopis()).append(space)
+                .append(getNacinIzracuna()).append(space)
+                .append(getSifTrgovina());
         return sb.toString();
+    }
+
+    public void setSifPopis(int sifPopis) {
+        this.sifPopis = sifPopis;
+    }
+
+    public void setNazivPopis(String nazivPopis) {
+        this.nazivPopis = nazivPopis;
+    }
+
+    public void setNacinIzracuna(int nacinIzracuna) {
+        this.nacinIzracuna = nacinIzracuna;
+    }
+
+    public void setSifTrgovina(int sifTrgovina) {
+        this.sifTrgovina = sifTrgovina;
     }
 }
