@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.contrib.sessions.models import Session
+from django.db.models import ManyToManyField
 
 
 class AccountManager(BaseUserManager):
@@ -26,6 +27,7 @@ class AccountManager(BaseUserManager):
         extra_fields.setdefault('is_trgovac', True)
 
         return self.create_user(email, password, **extra_fields)
+
 
 ###############
 class Uloga(models.Model):
@@ -50,9 +52,10 @@ class SecretCode(models.Model):
 
     class Meta():
         managed = True
-    
+
     def __str__(self):
         return f'{self.value}'
+
 
 ###############
 
@@ -81,18 +84,20 @@ class BaseUserModel(AbstractUser):
     def __str__(self):
         return self.email
 
+
 # nepotrebno
 class OnemoguceniRacun(models.Model):
     emailAdmin = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=True)
-    datum = models.CharField(max_length=100, null=True) #placeholder
+    datum = models.CharField(max_length=100, null=True)  # placeholder
 
-#TODO: ovo valja urediti tako da se prikazuje auth_level
+
+# TODO: ovo valja urediti tako da se prikazuje auth_level
 class MyUserAdmin(ModelAdmin):
     model = BaseUserModel
     list_display = ('email', 'is_staff', 'is_kupac', 'is_trgovac')
     list_filter = ()
     search_fields = ('email',)
-    ordering = ('email', )
+    ordering = ('email',)
     filter_horizontal = ()
 
 
@@ -117,7 +122,6 @@ class Zemlja_porijekla(models.Model):
 
 class Artikl(models.Model):
     barkod_artikla = models.CharField(max_length=13, primary_key=True)
-    
 
     #########################################
     #                                       #
@@ -136,7 +140,7 @@ class Artikl(models.Model):
     autor_proizvodaca = models.CharField(max_length=100, null=True)
     vote_count_proizvodaca = models.IntegerField(null=True)
 
-    zemlja_porijekla = models.ForeignKey(Zemlja_porijekla, on_delete=models.SET_NULL, null=True)  
+    zemlja_porijekla = models.ForeignKey(Zemlja_porijekla, on_delete=models.SET_NULL, null=True)
     autor_zemlje_porijekla = models.CharField(max_length=100, null=True)
     vote_count_zemlje_porijekla = models.IntegerField(null=True)
 
@@ -168,7 +172,7 @@ class TrgovinaArtikli(models.Model):
     dostupan = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.trgovina}, {self.artikl}' 
+        return f'{self.trgovina}, {self.artikl}'
 
 
 class Kategorija(models.Model):
@@ -214,6 +218,7 @@ class OpisArtikla(models.Model):
 
     naziv_artikla = models.CharField(max_length=100, null=False)
     opis_artikla = models.CharField(max_length=5000, null=True)
+    popis_glasova = ManyToManyField(BaseUserModel, through='Glasovi', related_name='glasaci')
     broj_glasova = models.IntegerField(null=False, default=0)
     masa = models.IntegerField(null=True)
 
@@ -224,10 +229,20 @@ class OpisArtikla(models.Model):
 
     def __str__(self):
         return f'{self.autor_opisa}, {self.artikl}'
-    
+
+
+class Glasovi(models.Model):
+    VRSTE_GLASOVA = [
+        ('N', 'Nije glasao'),
+        ('G', 'Goreglas'),
+        ('D', 'Doljeglas'),
+    ]
+    user = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE)
+    sif_opis = models.ForeignKey(OpisArtikla, on_delete=models.CASCADE)
+    vrijednost_glasa = models.CharField(max_length=11, choices=VRSTE_GLASOVA, default='Nije glasao', null=False)
+
 
 class PrivremenaLozinka(models.Model):
     email = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=True)
-    lozinka = models.CharField(max_length=100, null=True) #placeholder
-    istice = models.CharField(max_length=100, null=True) #placeholder
-
+    lozinka = models.CharField(max_length=100, null=True)  # placeholder
+    istice = models.CharField(max_length=100, null=True)  # placeholder
