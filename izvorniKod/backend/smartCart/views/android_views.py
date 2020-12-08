@@ -23,9 +23,11 @@ class AndroidArtikliView(View):
 #TODO: neka vraća najbolji opis
 class AndroidArtiklTrgovina(View):
     def post(self, request, *args, **kwargs):
-        sif_trgovina = json.loads(request.body)['sif_trgovina']
-        barkod = json.loads(request.body)['barkod']
-        artikl_trgovina = TrgovinaArtikli.objects.get(
+        data = json.loads(request.body)
+        sif_trgovina = data['sif_trgovina']
+        barkod = data['barkod']
+
+        artikl_trgovina = TrgovinaArtikli.objects.filter(
             trgovina=Trgovina.objects.get(sif_trgovina=sif_trgovina),
             artikl=Artikl.objects.get(barkod_artikla=barkod)
             )
@@ -33,15 +35,10 @@ class AndroidArtiklTrgovina(View):
 
 class AndroidOpisiView(View):
     def post(self, request, *args, **kwargs):
-        sif_trgovina = json.loads(request.body)['sif_trgovina']
-        barkod = json.loads(request.body)['barkod']
+        data = json.loads(request.body)
+        id_artikltrgovina = data['id']
 
-        artikl_trgovina = TrgovinaArtikli.objects.get(
-            trgovina=Trgovina.objects.get(sif_trgovina=sif_trgovina),
-            artikl=Artikl.objects.get(barkod_artikla=barkod)
-            )
-        opisi = OpisArtikla.objects.filter(trgovina_artikl=artikl_trgovina)
-
+        opisi = OpisArtikla.objects.filter(trgovina_artikl_id=id_artikltrgovina)
         return create_json_response(200, data=serializers.serialize('json', opisi), safe=False)
 
 class AndroidDownvoteView(View):
