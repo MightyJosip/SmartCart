@@ -5,6 +5,7 @@ from django.contrib.sessions.models import Session
 from django.core import serializers
 from django.views.generic.base import View
 from django.http import HttpResponse
+from django.db.models import Max
 
 from .functions import create_json_response, get_authorization_level, android_login_function, get_user_from_session, \
     User
@@ -20,18 +21,23 @@ class AndroidArtikliView(View):
         artikli = Artikl.objects.filter(naziv_artikla__contains='%s' % naziv_artikla)
         return create_json_response(200, data=serializers.serialize('json', artikli), safe=False)
 
-#TODO: neka vraća najbolji opis
+#TODO: malo bolje riješiti ovo što vraća?
 class AndroidArtiklTrgovina(View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body)
         sif_trgovina = data['sif_trgovina']
         barkod = data['barkod']
 
-        artikl_trgovina = TrgovinaArtikli.objects.filter(
+        artikl_trgovina = TrgovinaArtikli.objects.get(
             trgovina=Trgovina.objects.get(sif_trgovina=sif_trgovina),
             artikl=Artikl.objects.get(barkod_artikla=barkod)
             )
-        return create_json_response(200, data=serializers.serialize('json', artikl_trgovina), safe=False)
+
+        najbolji_opis = OpisArtikla.objects.all().filter(artikl_id=barkod).order_by('broj_glasova').reverse()[0]
+        
+        data = serializers.serialize('json', [artikl_trgovina] + [najbolji_opis])
+
+        return create_json_response(200, data=data, safe=False)
 
 class AndroidOpisiView(View):
     def post(self, request, *args, **kwargs):
