@@ -11,7 +11,7 @@ from .functions import create_json_response, get_authorization_level, android_lo
     User
 from ..models import Artikl, SecretCode, Trgovina, TrgovinaArtikli, OpisArtikla, Vrsta, Zemlja_porijekla 
 
-
+#TODO: u svim funkcijama porokati ove dekoratore koji provjeravaju login i lvl autorizacije
 class AndroidArtikliView(View):
     def post(self, request, *args, **kwargs):
         try:
@@ -21,7 +21,8 @@ class AndroidArtikliView(View):
         artikli = Artikl.objects.filter(naziv_artikla__contains='%s' % naziv_artikla)
         return create_json_response(200, data=serializers.serialize('json', artikli), safe=False)
 
-#TODO: malo bolje riješiti ovo što vraća?
+#vraća listu json-a
+#TODO: što ako korisnik traži određeni artikl u svim trgovinama?
 class AndroidArtiklTrgovina(View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body)
@@ -47,6 +48,7 @@ class AndroidOpisiView(View):
         opisi = OpisArtikla.objects.filter(trgovina_artikl_id=id_artikltrgovina)
         return create_json_response(200, data=serializers.serialize('json', opisi), safe=False)
 
+#TODO: što ako je korisnik već dao doljeglas?
 class AndroidDownvoteView(View):
     def post(self, request, *args, **kwargs):
         id = json.loads(request.body)['id']
@@ -56,7 +58,7 @@ class AndroidDownvoteView(View):
         opis.save()
 
         return HttpResponse()
-
+#TODO: što ako je korisnik već dao goreglas?
 class AndroidUpvoteView(View):
     def post(self, request, *args, **kwargs):
         id = json.loads(request.body)['id']
