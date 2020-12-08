@@ -34,9 +34,13 @@ class AndroidArtiklTrgovina(View):
             artikl=Artikl.objects.get(barkod_artikla=barkod)
             )
 
-        najbolji_opis = OpisArtikla.objects.all().filter(artikl_id=barkod).order_by('broj_glasova').reverse()[0]
-        
-        data = serializers.serialize('json', [artikl_trgovina] + [najbolji_opis])
+
+        najbolji_opis = OpisArtikla.objects.all().filter(artikl_id=barkod).order_by('broj_glasova').reverse()
+        if len(najbolji_opis) > 0:
+            najbolji_opis = najbolji_opis[0]
+            data = serializers.serialize('json', [artikl_trgovina] + [najbolji_opis])
+        else:
+            data = serializers.serialize('json', [artikl_trgovina])
 
         return create_json_response(200, data=data, safe=False)
 
