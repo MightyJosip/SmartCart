@@ -4,11 +4,25 @@ from django.contrib.sessions.models import Session
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
+from django.contrib.auth import logout
 
 from ..models import TrgovinaArtikli, UserSession, Trgovina, Uloga
 
 User = get_user_model()
+###########AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+def user_enabled_required(user, **kwargs):
+    print('--------------------------------------------------------------------------------')
+    print(user)
+    print('--------------------------------------------------------------------------------')
+    print(kwargs)
+    print('--------------------------------------------------------------------------------')
+    if (user.omogucen):
+        return True
+    else:
+        logout(Session.objects.get(user=user))
+        return False
 
+must_be_enabled = method_decorator(user_passes_test(user_enabled_required, login_url='login', redirect_field_name='index'), name='dispatch')
 
 def trgovac_login_required(user):
     return user.get_auth_level() == 'Trgovac' if user.is_authenticated else False
@@ -17,6 +31,7 @@ def trgovac_login_required(user):
 must_be_trgovac = method_decorator(
     user_passes_test(trgovac_login_required, login_url='login', redirect_field_name='index'),
     name='dispatch')
+
 must_be_logged = method_decorator(login_required(login_url='login'), name='dispatch')
 
 

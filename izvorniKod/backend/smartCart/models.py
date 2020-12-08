@@ -69,6 +69,7 @@ class BaseUserModel(AbstractUser):
 
     uloga = models.ForeignKey(Uloga, on_delete=models.CASCADE, null=True)
     onemogucio = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
+    omogucen = models.BooleanField(default=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import View
 
 from .functions import render_form, must_be_trgovac, read_form, stay_on_page, get_artikli_from_trgovina, root_dispatch, \
-    redirect_to_home_page, User, get_object_or_none, get_vlasnik_trgovine, render_template
+    redirect_to_home_page, User, get_object_or_none, get_vlasnik_trgovine, render_template, must_be_enabled
 from ..forms import DodajTrgovinu, DodajArtikl, DodajProizvodaca, DodajArtiklUTrgovinu, PromijeniRadnoVrijeme, \
     UrediArtiklUTrgovini, PromijeniLongLat, PromijeniPrioritet
 from ..models import Trgovina, Artikl, TrgovinaArtikli, Proizvodac, Zemlja_porijekla, OpisArtikla

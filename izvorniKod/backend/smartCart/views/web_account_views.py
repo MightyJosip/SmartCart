@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 
 from .functions import render_template, render_form, read_form, User, redirect_to_home_page, root_dispatch, \
-    must_be_logged
+    must_be_logged, must_be_enabled
 from ..forms import SignUpTrgovacForm, SignUpKupacForm, LoginForm, EditLogin
 from ..models import SecretCode, Uloga
 
@@ -69,7 +69,7 @@ class SignUpKupacView(View):
         read_form(self, request)
         if self.form.is_valid():
             return self.check_user(request)
-
+    
     def check_user(self, request, *args, **kwargs):
         email = request.POST['email']
         password = request.POST['password']
