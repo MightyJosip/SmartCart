@@ -27,17 +27,17 @@ class SignUpKupacForm(forms.Form):
     confirm_password = forms.CharField(max_length=32, widget=forms.PasswordInput)
 
 
-# TODO: proširiti formu za latitude i logitude
 class DodajTrgovinu(forms.ModelForm):
     class Meta:
         model = Trgovina
-        fields = ['naz_trgovina', 'adresa_trgovina', 'radno_vrijeme_pocetak', 'radno_vrijeme_kraj', 'latitude', 'longitude']
+        fields = ['naz_trgovina', 'adresa_trgovina', 'radno_vrijeme_pocetak', 'radno_vrijeme_kraj', 'latitude',
+                  'longitude']
         labels = {
             'naz_trgovina': 'Naziv trgovine',
             'adresa_trgovina': 'Adresa trgovine',
             'radno_vrijeme_pocetak': 'Radno vrijeme početak',
-            'latitude' : 'Latitude',
-            'longitude' : 'Longitude'
+            'latitude': 'Latitude',
+            'longitude': 'Longitude'
         }
         widgets = {
             'radno_vrijeme_pocetak': TimeInput(format='%H:%M'),
@@ -61,10 +61,16 @@ class DodajProizvodaca(forms.ModelForm):
         fields = ['naziv']
 
 
-class DodajArtiklUTrgovinu(forms.ModelForm):
-    class Meta:
-        model = TrgovinaArtikli
-        fields = ['artikl', 'cijena', 'akcija', 'dostupan']
+class ArtiklField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.naziv_artikla
+
+
+class DodajArtiklUTrgovinu(forms.Form):
+    artikl = ArtiklField(queryset=Artikl.objects.all())
+    cijena = forms.DecimalField(max_digits=8, decimal_places=2)
+    akcija = forms.BooleanField(required=False)
+    dostupan = forms.BooleanField(required=False)
 
 
 class UrediArtiklUTrgovini(forms.ModelForm):
@@ -81,14 +87,15 @@ class PromijeniRadnoVrijeme(forms.ModelForm):
             'radno_vrijeme_pocetak': 'Radno vrijeme početak',
         }
 
+
 class PromijeniLongLat(forms.ModelForm):
     class Meta:
         model = Trgovina
         fields = ['longitude', 'latitude']
 
-#dodaj id da se zna tko je tko
+
+# dodaj id da se zna tko je tko
 class PromijeniPrioritet(forms.ModelForm):
     class Meta:
         model = OpisArtikla
         fields = ['prioritiziran', 'id']
-
