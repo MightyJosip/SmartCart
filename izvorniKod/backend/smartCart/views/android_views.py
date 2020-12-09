@@ -5,13 +5,13 @@ from django.contrib.sessions.models import Session
 from django.core import serializers
 from django.views.generic.base import View
 from django.http import HttpResponse
-from django.db.models import Max
 
-from .functions import create_json_response, get_authorization_level, android_login_function, get_user_from_session, \
-    User
-from ..models import Artikl, SecretCode, Trgovina, TrgovinaArtikli, OpisArtikla, Vrsta, Zemlja_porijekla, BaseUserModel 
+from .functions import create_json_response, android_login_function, get_user_from_session, User, get_object_or_none
+from ..models import Artikl, SecretCode, Trgovina, TrgovinaArtikli, OpisArtikla, Vrsta, Zemlja_porijekla, \
+    BaseUserModel, Glasovi
 
-#TODO: u svim funkcijama porokati ove dekoratore koji provjeravaju login i lvl autorizacije
+
+# TODO: u svim funkcijama porokati ove dekoratore koji provjeravaju login i lvl autorizacije
 class AndroidArtikliView(View):
     def post(self, request, *args, **kwargs):
         try:
@@ -45,6 +45,7 @@ class AndroidArtiklTrgovina(View):
 
         return create_json_response(200, data=data, safe=False)
 
+
 class AndroidOpisiView(View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body)
@@ -53,26 +54,53 @@ class AndroidOpisiView(View):
         opisi = OpisArtikla.objects.filter(trgovina_artikl_id=id_artikltrgovina)
         return create_json_response(200, data=serializers.serialize('json', opisi), safe=False)
 
-#TODO: što ako je korisnik već dao doljeglas?
+
+# TODO: što ako je korisnik već dao doljeglas?
 class AndroidDownvoteView(View):
     def post(self, request, *args, **kwargs):
         id = json.loads(request.body)['id']
-
+        session_key = json.loads(request.body)['session_id']
         opis = OpisArtikla.objects.get(id=id)
-        opis.broj_glasova -= 1
-        opis.save()
+        korisnik = BaseUserModel.objects.get(pk=get_user_from_session(session_key).id)
+        old_vote = get_object_or_none(Glasovi, user_id=korisnik, sif_opis=opis)
+        if old_vote is None:
+            Glasovi.objects.create(user=korisnik, sif_opis=opis, vrijednost_glasa='G')
+            opis.broj_glasova -= 1
+            opis.save()
+            return create_json_response(200, msg='Successfully voted')
+        else:
+            if old_vote.vrijednost_glasa == 'D':
+                return create_json_response(200, msg='Already voted')
+            else:
+                old_vote.vrijednost_glasa = 'D'
+                opis.broj_glasova -= 2
+                old_vote.save()
+                opis.save()
+                return create_json_response(200, msg='Changed vote from downvote to upvote')
 
-        return HttpResponse()
-#TODO: što ako je korisnik već dao goreglas?
+
+# TODO: što ako je korisnik već dao goreglas?
 class AndroidUpvoteView(View):
     def post(self, request, *args, **kwargs):
         id = json.loads(request.body)['id']
-
+        session_key = json.loads(request.body)['session_id']
         opis = OpisArtikla.objects.get(id=id)
-        opis.broj_glasova += 1
-        opis.save()
-
-        return HttpResponse()
+        korisnik = BaseUserModel.objects.get(pk=get_user_from_session(session_key).id)
+        old_vote = get_object_or_none(Glasovi, user_id=korisnik, sif_opis=opis)
+        if old_vote is None:
+            Glasovi.objects.create(user=korisnik, sif_opis=opis, vrijednost_glasa='G')
+            opis.broj_glasova += 1
+            opis.save()
+            return create_json_response(200, msg='Successfully voted')
+        else:
+            if old_vote.vrijednost_glasa == 'G':
+                return create_json_response(200, msg='Already voted')
+            else:
+                old_vote.vrijednost_glasa = 'G'
+                opis.broj_glasova += 2
+                old_vote.save()
+                opis.save()
+                return create_json_response(200, msg='Changed vote from downvote to upvote')
 
 
 class AndroidWriteProductDescription(View):
@@ -92,21 +120,19 @@ class AndroidWriteProductDescription(View):
 
         try:
             opis = OpisArtikla(autor_opisa=BaseUserModel.objects.get(email=email_autor_opisa),
-                            artikl=Artikl.objects.get(barkod_artikla=barkod),
-                            vrsta=Vrsta.objects.get(sif_vrsta=sif_vrsta),
-                            zemlja_porijekla=Zemlja_porijekla.objects.get(naziv=zemlja_porijekla),
-                            trgovina=Trgovina.objects.get(sif_trgovina=sif_trgovina),
-                            trgovina_artikl=TrgovinaArtikli.objects.get(id=sif_trgovina_artikl),
-                            naziv_artikla=naziv_artikla,
-                            opis_artikla=opis_artikla)
+                               artikl=Artikl.objects.get(barkod_artikla=barkod),
+                               vrsta=Vrsta.objects.get(sif_vrsta=sif_vrsta),
+                               zemlja_porijekla=Zemlja_porijekla.objects.get(naziv=zemlja_porijekla),
+                               trgovina=Trgovina.objects.get(sif_trgovina=sif_trgovina),
+                               trgovina_artikl=TrgovinaArtikli.objects.get(id=sif_trgovina_artikl),
+                               naziv_artikla=naziv_artikla,
+                               opis_artikla=opis_artikla)
             opis.save()
         except Exception as e:
             data = json.dumps({'err': str(e)})
             return create_json_response(403, data=data, safe=False)
 
-
         return HttpResponse()
-        
 
 
 class AndroidPopisView(View):
@@ -129,7 +155,8 @@ class AndroidLogInView(View):
         if user is not None:
             android_login_function(request, user)
             return create_json_response(200, session_id=request.session.session_key,
-                                        authorisation_level=get_authorization_level(get_user_from_session(request.session.session_key)))
+                                        authorisation_level=get_user_from_session(
+                                            request.session.session_key).get_auth_level())
         else:
             return create_json_response(401, err='Wrong email or password')
 
