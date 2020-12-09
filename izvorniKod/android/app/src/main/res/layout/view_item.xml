@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="0"
+        android:id="@+id/item_checkbox"/>
+    <EditText
+        android:layout_width="80sp"
+        android:layout_weight="0"
+        android:layout_height="match_parent"
+        android:maxLength="7"
+        android:inputType="numberDecimal"
+        android:id="@+id/item_quantity"/>
+    <View
+        android:layout_width="1dp"
+        android:layout_weight="0"
+        android:layout_height="match_parent"
+        android:background="@color/light_grey" />
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:id="@+id/item_name"/>
+    <View
+        android:layout_width="1dp"
+        android:layout_weight="0"
+        android:layout_height="match_parent"
+        android:background="@color/light_grey" />
+    <TextView
+        android:layout_width="80sp"
+        android:layout_weight="0"
+        android:layout_height="match_parent"
+        android:id="@+id/item_price"/>
+
+
+
+</LinearLayout>

@@ -1,25 +1,26 @@
 package com.example.smartcart;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.SearchView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.smartcart.util.IDao;
+import com.example.smartcart.util.Item;
+import com.example.smartcart.util.ItemList;
+import com.example.smartcart.util.MockDao;
 
 public class HomeScreenActivity extends AppCompatActivity{
 
@@ -55,18 +56,21 @@ public class HomeScreenActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getSupportActionBar().hide();
+        // getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        // getSupportActionBar().hide();
         setContentView(R.layout.home_screen);
 
-
-
+        ListManager lm = new ListManager(getApplicationContext());
+        RecyclerView recyclerView = findViewById(R.id.list_recyclerview);
+        recyclerView.setAdapter(lm);
+        /*
         // TODO: sve na što korisnik kika bi trebalo biti "button" po PS-u, ali ako vas ne smeta,
         // TODO: neka ostane
         ImageView cartButton = (ImageView) findViewById(R.id.imageView7);
         registerForContextMenu(cartButton);
         cartButton.setOnClickListener(this::openContextMenu);
         cartButton.setOnLongClickListener(v -> true);
+        */
     }
 
     @Override
@@ -144,7 +148,6 @@ public class HomeScreenActivity extends AppCompatActivity{
         return super.onContextItemSelected(item);
     }
 
-
     public void startLogInActivity() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
@@ -161,5 +164,7 @@ public class HomeScreenActivity extends AppCompatActivity{
         return sp.getString("auth_level", AuthLevels.DEFAULT);
     }
 
+    public void addItemWithBarcode(View v) {
 
+    }
 }
