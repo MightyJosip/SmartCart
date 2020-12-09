@@ -4,7 +4,7 @@ from django.views.generic import View
 from .functions import render_form, must_be_trgovac, read_form, stay_on_page, get_artikli_from_trgovina, root_dispatch, \
     redirect_to_home_page, User, get_object_or_none, get_vlasnik_trgovine, render_template, must_be_enabled
 from ..forms import DodajTrgovinu, DodajArtikl, DodajProizvodaca, DodajArtiklUTrgovinu, PromijeniRadnoVrijeme, \
-    UrediArtiklUTrgovini, PromijeniLongLat, PromijeniPrioritet
+    UrediArtiklUTrgovini, PromijeniLongLat, PromijeniPrioritet, UploadFileForm
 from ..models import Trgovina, Artikl, TrgovinaArtikli, Proizvodac, Zemlja_porijekla, OpisArtikla
 
 
@@ -86,7 +86,8 @@ class UrediArtiklView(View):
         super(UrediArtiklView, self).__init__()
         self.form = {
             'uredi_artikl_u_trgovini_form': UrediArtiklUTrgovini(),
-            'prioritet_form': PromijeniPrioritet()
+            'prioritet_form': PromijeniPrioritet(),
+            'upload_file_form' : UploadFileForm()
             }
 
     def dispatch(self, request, *args, **kwargs):
@@ -117,11 +118,17 @@ class UrediArtiklView(View):
                       #'prioritet_form': self.form['prioritet_form'],
                       'trgovina': Trgovina.objects.get(sif_trgovina=self.t_id),
                        'artikl': self.old_art.artikl.naziv_artikla,
-                       'opisi' : opisi
+                       'opisi' : opisi,
+                       'upload_file_form': self.form['upload_file_form']
                        })
 
     def post(self, request, *args, **kwargs):
         
+        #TODO: ovdje baca err, tj. na liniji 140, ovo sve valja urediti
+        if read_form(self, request, 'upload_file_form'):
+            print("tu sam -----------------------")
+            return redirect(f'/trgovina/{self.t_id}')
+
         if read_form(self, request, 'uredi_artikl_u_trgovini_form'):
             old_art = TrgovinaArtikli.objects.get(id=self.kwargs['artikl_trgovina'])
             old_art.cijena = request.POST['cijena']

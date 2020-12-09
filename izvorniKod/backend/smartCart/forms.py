@@ -1,5 +1,6 @@
 from django import forms
 from django.forms import TimeInput
+from django import forms
 
 from .models import Artikl, Trgovina, TrgovinaArtikli, Proizvodac, OpisArtikla
 
@@ -99,3 +100,7 @@ class PromijeniPrioritet(forms.ModelForm):
     class Meta:
         model = OpisArtikla
         fields = ['prioritiziran', 'id']
+
+class UploadFileForm(forms.Form):
+    title = forms.CharField(max_length=100)
+    file = forms.FileField()
