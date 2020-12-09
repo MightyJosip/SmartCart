@@ -239,7 +239,7 @@ class Glasovi(models.Model):
         ('D', 'Doljeglas'),
     ]
     user = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE)
-    sif_opis = models.ForeignKey(OpisArtikla, on_delete=models.CASCADE)
+    opis_artikla = models.ForeignKey(OpisArtikla, on_delete=models.CASCADE)
     vrijednost_glasa = models.CharField(max_length=11, choices=VRSTE_GLASOVA, default='Nije glasao', null=False)
 
 
