@@ -8,7 +8,7 @@ from django.http import HttpResponse
 
 from .functions import create_json_response, android_login_function, get_user_from_session, User, get_object_or_none
 from ..models import Artikl, SecretCode, Trgovina, TrgovinaArtikli, OpisArtikla, Vrsta, Zemlja_porijekla, \
-    BaseUserModel, Glasovi
+    BaseUserModel, Glasovi, Uloga
 
 
 # TODO: u svim funkcijama porokati ove dekoratore koji provjeravaju login i lvl autorizacije
@@ -55,7 +55,6 @@ class AndroidOpisiView(View):
         return create_json_response(200, data=serializers.serialize('json', opisi), safe=False)
 
 
-# TODO: što ako je korisnik već dao doljeglas?
 class AndroidDownvoteView(View):
     def post(self, request, *args, **kwargs):
         id = json.loads(request.body)['id']
@@ -79,7 +78,6 @@ class AndroidDownvoteView(View):
                 return create_json_response(200, msg='Changed vote from downvote to upvote')
 
 
-# TODO: što ako je korisnik već dao goreglas?
 class AndroidUpvoteView(View):
     def post(self, request, *args, **kwargs):
         id = json.loads(request.body)['id']
@@ -195,7 +193,7 @@ class AndroidSignUpView(View):
             if not secret_code.exists():
                 return create_json_response(401, err='Wrong secret code')
             secret_code.delete()
-            User.objects.create_user(email, password, is_trgovac=True)
+            User.objects.create_user(email, password, is_trgovac=True, authorisation_level=Uloga.objects.get(auth_level='Trgovac'))
             return create_json_response(200, success='done')
         return create_json_response(401, err='Weird error :(')
 
