@@ -113,6 +113,12 @@ class UrediArtiklView(View):
             for opis in opisi:
                 opis.f = PromijeniPrioritet(initial={'prioritiziran': opis.prioritiziran, 'id': opis.id})
 
+        return render_form(self, request,
+                            trgovina = Trgovina.objects.get(sif_trgovina=self.t_id),
+                            artikl = self.old_art.artikl.naziv_artikla,
+                            opisi = opisi)
+
+        """
         return render(request, 'smartCart/artikl_u_trgovini.html',
                       {'uredi_artikl_u_trgovini_form': self.form['uredi_artikl_u_trgovini_form'], 
                       #'prioritet_form': self.form['prioritet_form'],
@@ -121,29 +127,32 @@ class UrediArtiklView(View):
                        'opisi' : opisi,
                        'upload_file_form': self.form['upload_file_form']
                        })
+        """
 
     def post(self, request, *args, **kwargs):
         
-        #TODO: ovdje baca err, tj. na liniji 140, ovo sve valja urediti
+        #TODO: ovdje baca err, nikako ne želi označiti forme kao ispravnima, is_valid() baca false kad ne bi trebala
         if read_form(self, request, 'upload_file_form'):
             print("tu sam -----------------------")
             return redirect(f'/trgovina/{self.t_id}')
 
-        if read_form(self, request, 'uredi_artikl_u_trgovini_form'):
+        elif read_form(self, request, 'uredi_artikl_u_trgovini_form'):
             old_art = TrgovinaArtikli.objects.get(id=self.kwargs['artikl_trgovina'])
             old_art.cijena = request.POST['cijena']
             old_art.akcija = True if 'akcija' in request.POST else False
             old_art.dostupan = True if 'dostupan' in request.POST else False
             old_art.save()
         
-        else:
-            read_form(self, request, 'prioritet_form')          
-            old_opis = OpisArtikla.objects.get(id=request.POST['id'])
-            if ('prioritiziran' in request.POST):
-                old_opis.prioritiziran = True
-            else:
-                old_opis.prioritiziran = False
-            old_opis.save()
+        elif read_form(self, request, 'prioritet_form'):
+            try:          
+                old_opis = OpisArtikla.objects.get(id=request.POST['id'])
+                if ('prioritiziran' in request.POST):
+                    old_opis.prioritiziran = True
+                else:
+                    old_opis.prioritiziran = False
+                old_opis.save()
+            except:
+                pass
             
             
             
