@@ -50,12 +50,19 @@ def root_dispatch(view, request, *args, **kwargs):
     return super(type(view), view).dispatch(request, *args, **kwargs)
 
 
-def read_form(view, request, name=None):
+def read_form(view, request, name=None, files=False):
     if isinstance(view.form, dict):
-        view.form[name] = view.form[name].__class__(request.POST)
+        view.form[name] = create_form(view.form[name].__class__, request, files)
         return view.form[name].is_valid()
-    view.form = view.form_class(request.POST)
+    view.form = create_form(view.form_class, request, files)
     return view.form.is_valid()
+
+
+def create_form(cls, request, files):
+    # Helper method, shouldn't be used outside of this file
+    if files:
+        return cls(request.POST, request.FILES)
+    return cls(request.POST)
 
 
 def get_artikli_from_trgovina(sifTrgovina):
