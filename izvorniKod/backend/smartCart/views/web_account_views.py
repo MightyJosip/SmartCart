@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.shortcuts import render, redirect
 from django.views import View
+from django.core.mail import send_mail
 
 from .functions import render_template, render_form, read_form, User, redirect_to_home_page, root_dispatch, \
     must_be_logged, must_be_enabled
@@ -192,5 +193,15 @@ class NovaLozinkaView(View):
             #TODO: create tmp password in db
 
             #TODO: send email
+
+            """
+            s = send_mail(
+                'Probna poruka',
+                'Here is the message.',
+                None,
+                ['antonio.lakos1@gmail.com'],
+                fail_silently=False
+            )
+            """
 
         return redirect('index')
