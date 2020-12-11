@@ -247,3 +247,9 @@ class PrivremenaLozinka(models.Model):
     email = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=True)
     lozinka = models.CharField(max_length=100, null=True)  # placeholder
     istice = models.CharField(max_length=100, null=True)  # placeholder
+
+class DBFile(models.Model):
+    name = models.CharField(max_length=500, null=False)
+    data = models.BinaryField()
+    uploaded_by = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=False)
+    date = models.DateTimeField()

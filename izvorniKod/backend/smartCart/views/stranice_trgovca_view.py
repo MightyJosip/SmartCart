@@ -2,12 +2,12 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import View
 
 from .functions import render_form, must_be_trgovac, read_form, stay_on_page, get_artikli_from_trgovina, root_dispatch, \
-    redirect_to_home_page, User, get_object_or_none, get_vlasnik_trgovine, render_template, must_be_enabled
+    redirect_to_home_page, User, get_object_or_none, get_vlasnik_trgovine, render_template, must_be_enabled, get_user_from_session
 from ..forms import DodajTrgovinu, DodajArtikl, DodajProizvodaca, DodajArtiklUTrgovinu, PromijeniRadnoVrijeme, \
     UrediArtiklUTrgovini, PromijeniLongLat, PromijeniPrioritet, UploadFileForm
 from ..models import *
 
-import json
+import json, datetime
 
 @must_be_trgovac
 class TrgovacView(View):
@@ -146,6 +146,17 @@ class UrediArtiklView(View):
 
                     )
             opis.save()
+
+            
+            dbfile = DBFile(
+                name=request.FILES['file'],
+                data=request.FILES['file'].read(),
+                uploaded_by=BaseUserModel.objects.get(email=values[0]),
+        	    date=datetime.datetime.now()
+            )
+
+            dbfile.save()
+            
             
             return redirect(f'/trgovina/{self.t_id}')
 
