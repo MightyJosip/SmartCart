@@ -7,7 +7,7 @@ from django.views import View
 from .functions import render_template, render_form, read_form, User, redirect_to_home_page, root_dispatch, \
     must_be_logged, must_be_enabled
 from ..forms import SignUpTrgovacForm, SignUpKupacForm, LoginForm, EditLogin, NovaLozinkaForm
-from ..models import SecretCode, Uloga
+from ..models import SecretCode, Uloga, BaseUserModel
 
 
 class IndexView(View):
@@ -169,6 +169,28 @@ class NovaLozinkaView(View):
         return render_form(self, request)
 
     def post(self, request, *args, **kwargs):
+        if(self, read_form):
+            email = request.POST['email']
+            password = request.POST['password']
+            confirm_password = request.POST['confirm_password']
+            try:
+                validate_email(email)
+            except ValidationError:
+                return render_form(self, request, message='Wrong mail format\n')
+            
+            if len(BaseUserModel.objects.all().filter(email=email)) == 0:
+                return render_form(self, request, message='User does not exist\n') 
 
-        
+            if password != confirm_password:
+                return render_form(self, request, message='Passwords don\'t match\n')
+
+            user = BaseUserModel.objects.get(email=email)
+
+            if user.check_password(password) == True:
+                return render_form(self, request, message='New password must be different than the old\n')
+
+            #TODO: create tmp password in db
+
+            #TODO: send email
+
         return redirect('index')
