@@ -46,13 +46,19 @@
     {% endfor %}
 
     <!--TODO: ovo uredi! -->
-    <form action="" method="POST">
+    <!--<form action="" method="POST">
         {%csrf_token%}
         {% for field in upload_file_form  %}
             <b>{{ field.label_tag }}</b><br> {{ field }}<br><br>
         {% endfor %}
         <input type="submit" value="Submit">
+    </form>-->
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ upload_file_form.as_p }}
+        <input type="submit" value="Submit">
     </form>
+
     
 
 

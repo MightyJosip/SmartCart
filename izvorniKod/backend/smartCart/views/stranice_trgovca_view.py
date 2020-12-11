@@ -131,9 +131,8 @@ class UrediArtiklView(View):
 
     def post(self, request, *args, **kwargs):
         
-        #TODO: ovdje baca err, nikako ne želi označiti forme kao ispravnima, is_valid() baca false kad ne bi trebala
-        if read_form(self, request, 'upload_file_form'):
-            print("tu sam -----------------------")
+        #TODO: ovdje baca err, tj. na liniji 140, ovo sve valja urediti
+        if read_form(self, request, 'upload_file_form', files=True):
             return redirect(f'/trgovina/{self.t_id}')
 
         elif read_form(self, request, 'uredi_artikl_u_trgovini_form'):
