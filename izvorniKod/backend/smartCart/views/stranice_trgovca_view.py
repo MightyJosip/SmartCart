@@ -5,8 +5,9 @@ from .functions import render_form, must_be_trgovac, read_form, stay_on_page, ge
     redirect_to_home_page, User, get_object_or_none, get_vlasnik_trgovine, render_template, must_be_enabled
 from ..forms import DodajTrgovinu, DodajArtikl, DodajProizvodaca, DodajArtiklUTrgovinu, PromijeniRadnoVrijeme, \
     UrediArtiklUTrgovini, PromijeniLongLat, PromijeniPrioritet, UploadFileForm
-from ..models import Trgovina, Artikl, TrgovinaArtikli, Proizvodac, Zemlja_porijekla, OpisArtikla
+from ..models import *
 
+import json
 
 @must_be_trgovac
 class TrgovacView(View):
@@ -118,21 +119,34 @@ class UrediArtiklView(View):
                             artikl = self.old_art.artikl.naziv_artikla,
                             opisi = opisi)
 
-        """
-        return render(request, 'smartCart/artikl_u_trgovini.html',
-                      {'uredi_artikl_u_trgovini_form': self.form['uredi_artikl_u_trgovini_form'], 
-                      #'prioritet_form': self.form['prioritet_form'],
-                      'trgovina': Trgovina.objects.get(sif_trgovina=self.t_id),
-                       'artikl': self.old_art.artikl.naziv_artikla,
-                       'opisi' : opisi,
-                       'upload_file_form': self.form['upload_file_form']
-                       })
-        """
 
     def post(self, request, *args, **kwargs):
-        
-        #TODO: ovdje baca err, tj. na liniji 140, ovo sve valja urediti
         if read_form(self, request, 'upload_file_form', files=True):
+            #programmers be like
+            #how to do x in one line
+            #the line:
+            file = request.FILES['file'].read().decode("utf-8").replace('\r', '').split('\n')
+            
+            attributes = file[0].split(',')
+            values = file[1].split(',')
+
+            opis = OpisArtikla(
+                    autor_opisa= BaseUserModel.objects.get(email=values[0]),
+                    artikl= Artikl.objects.get(barkod_artikla=values[1]),
+
+                    vrsta= Vrsta.objects.get(sif_vrsta=values[2]),
+                    zemlja_porijekla= Zemlja_porijekla.objects.get(naziv=values[3]),
+                    trgovina= Trgovina.objects.get(sif_trgovina=values[4]),
+                    trgovina_artikl= TrgovinaArtikli.objects.get(trgovina=values[4], artikl=values[1]),
+
+                    naziv_artikla=values[6],
+                    opis_artikla=values[7],
+                    broj_glasova=values[8],
+                    masa=values[9]
+
+                    )
+            opis.save()
+            
             return redirect(f'/trgovina/{self.t_id}')
 
         elif read_form(self, request, 'uredi_artikl_u_trgovini_form'):
@@ -142,20 +156,14 @@ class UrediArtiklView(View):
             old_art.dostupan = True if 'dostupan' in request.POST else False
             old_art.save()
         
-        elif read_form(self, request, 'prioritet_form'):
-            try:          
-                old_opis = OpisArtikla.objects.get(id=request.POST['id'])
-                if ('prioritiziran' in request.POST):
-                    old_opis.prioritiziran = True
-                else:
-                    old_opis.prioritiziran = False
-                old_opis.save()
-            except:
-                pass
-            
-            
-            
-
+        elif read_form(self, request, 'prioritet_form'):        
+            old_opis = OpisArtikla.objects.get(id=request.POST['id'])
+            if ('prioritiziran' in request.POST):
+                old_opis.prioritiziran = True
+            else:
+                old_opis.prioritiziran = False
+            old_opis.save()
+ 
         return redirect(f'/trgovina/{self.t_id}')
 
 
