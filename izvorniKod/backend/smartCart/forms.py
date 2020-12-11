@@ -104,3 +104,8 @@ class PromijeniPrioritet(forms.ModelForm):
 class UploadFileForm(forms.Form):
     title = forms.CharField(max_length=100)
     file = forms.FileField()
+
+class NovaLozinkaForm(forms.Form):
+    email = forms.CharField(label='E-mail', max_length=100)
+    password = forms.CharField(max_length=32, widget=forms.PasswordInput)
+    confirm_password = forms.CharField(max_length=32, widget=forms.PasswordInput)

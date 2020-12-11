@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Nova lozinka</title>
+    </head>
+    
+    <body>
+        <h3>Upiši svoju email adresu</h3>
+        <form action="" method="POST">
+            {%csrf_token%}
+            {% for field in form  %}
+                <b>{{ field.label_tag }}</b><br> {{ field }}<br><br>
+            {% endfor %}
+            <input type="submit" value="Submit">
+        </form>
+    </body>
+</html>

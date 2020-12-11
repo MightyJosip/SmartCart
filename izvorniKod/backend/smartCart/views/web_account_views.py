@@ -6,7 +6,7 @@ from django.views import View
 
 from .functions import render_template, render_form, read_form, User, redirect_to_home_page, root_dispatch, \
     must_be_logged, must_be_enabled
-from ..forms import SignUpTrgovacForm, SignUpKupacForm, LoginForm, EditLogin
+from ..forms import SignUpTrgovacForm, SignUpKupacForm, LoginForm, EditLogin, NovaLozinkaForm
 from ..models import SecretCode, Uloga
 
 
@@ -155,4 +155,20 @@ class EditProfileView(View):
 class DeleteAccountView(View):
     def post(self, request, *args, **kwargs):
         request.user.delete()
+        return redirect('index')
+
+class NovaLozinkaView(View):
+    template_name = 'smartCart/nova_lozinka.html'
+    form_class = NovaLozinkaForm
+
+    def __init__(self):
+        super(NovaLozinkaView, self).__init__()
+        self.form = NovaLozinkaForm()
+
+    def get(self, request, *args, **kwargs):
+        return render_form(self, request)
+
+    def post(self, request, *args, **kwargs):
+
+        
         return redirect('index')

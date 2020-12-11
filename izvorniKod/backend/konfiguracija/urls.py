@@ -20,6 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from smartCart.views import *
 from smartCart.views.android_views import *
+from smartCart.views.web_account_views import *
 
 urlpatterns = [
     path('admin', admin.site.urls),
@@ -39,6 +40,7 @@ urlpatterns = [
     path('artikl/<int:barkod_artikla>', ArtiklView.as_view(), name='artikl'),
     path('uredi_artikl/<int:artikl_trgovina>', UrediArtiklView.as_view(), name='uredi_artikl_u_trgovini'),
     path('obrisi_artikl/<int:artikl_trgovina>', ObrisiArtiklView.as_view(), name='obrisi_artikl_u_trgovini'),
+    path('nova_lozinka', NovaLozinkaView.as_view(), name='nova_lozinka'),
     # android dio
     path('android/signup', AndroidSignUpView.as_view(), name='android_sign_up'),
     path('android/login', AndroidLogInView.as_view(), name='android_login'),
