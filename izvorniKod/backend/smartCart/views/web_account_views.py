@@ -194,14 +194,12 @@ class NovaLozinkaView(View):
 
             #TODO: send email
 
-            """
-            s = send_mail(
-                'Probna poruka',
-                'Here is the message.',
-                None,
-                ['antonio.lakos1@gmail.com'],
+            send_mail(
+                'Reset email-a',
+                'Resetirali ste password. Ako niste, bježite.',
+                'smartestcart@gmail.com',
+                [email],
                 fail_silently=False
             )
-            """
-
+            
         return redirect('index')
