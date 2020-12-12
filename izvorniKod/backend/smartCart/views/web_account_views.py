@@ -176,46 +176,6 @@ class NovaLozinkaView(View):
         self.form = NovaLozinkaForm()
 
     def get(self, request, *args, **kwargs):
-        """
-        subject = 'Subject'
-        html_message = render_to_string('smartCart/login.html', {'token': temporary_password.token, 'email': temporary_password.user.email})
-        plain_message = strip_tags(html_message)
-        from_email = 'From <from@example.com>'
-        to = 'antonio.lakos1@gmail.com'
-
-        mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)
-        """
-        """
-        subject, from_email, to = 'hello', 'from@example.com', 'antonio.lakos1@gmail.com'
-        text_content = 'This is an important message.'
-        #html_content = '<p>This is an <strong>important</strong> message.</p>'
-        html_content = render_to_string(render(request, 'smartCart/login.html'))
-        msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-        msg.attach_alternative(html_content, "text/html")
-        msg.content_subtype = "html"
-        msg.send()
-        """
-        """
-        temporary_password = PrivremenaLozinka(
-                user=BaseUserModel.objects.get(email='ante@fer.hr'),
-                password= make_password(password='password', hasher='default'),
-                token= random.randint(100000, 999999)
-        )
-    	
-        temporary_password.save()
-        """
-
-        """
-        user = BaseUserModel.objects.get(email='bla@fer.hr')
-        user.password = make_password('pwd', hasher='default')
-        user.save()
-        """
-        #print(check_password('password', PrivremenaLozinka.objects.get(user=User.objects.get(email='ante@fer.hr')).password))
-        
-        
-
-        #print(check_password('pwd', BaseUserModel.objects.get(email='ante@fer.hr').password))
-
         return render_form(self, request)
 
     def post(self, request, *args, **kwargs):
@@ -251,8 +211,6 @@ class NovaLozinkaView(View):
 
             temporary_password.save()
 
-            #TODO: send email
-
             subject = 'Subject'
             html_message = render_to_string('smartCart/login.html', {'token': temporary_password.token, 'email': temporary_password.user.email})
             plain_message = strip_tags(html_message)
@@ -264,10 +222,9 @@ class NovaLozinkaView(View):
             
         return redirect('index')
 
-
+#TODO: google ne da POST zahtjeve iz mail poslužitelja. Možda se ovo može složiti preko GET-a?
 class PotvrdiLozinkuView(View):
     def post(self, request, *args, **kwargs):
-        print(request.POST)
         token = request.POST['token']
         email = request.POST['email']
         privremena = PrivremenaLozinka.objects.get(token=token)
