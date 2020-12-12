@@ -10,6 +10,11 @@ from .functions import render_template, render_form, read_form, User, redirect_t
 from ..forms import SignUpTrgovacForm, SignUpKupacForm, LoginForm, EditLogin, NovaLozinkaForm
 from ..models import SecretCode, Uloga, BaseUserModel, PrivremenaLozinka, AbstractUser
 from django.contrib.auth.hashers import *
+from django.core.mail import EmailMultiAlternatives
+from django.core import mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from ..templates.smartCart import *
 
 import random
 
@@ -169,7 +174,25 @@ class NovaLozinkaView(View):
         self.form = NovaLozinkaForm()
 
     def get(self, request, *args, **kwargs):
+        """
+        subject = 'Subject'
+        html_message = render_to_string('smartCart/login.html')
+        plain_message = strip_tags(html_message)
+        from_email = 'From <from@example.com>'
+        to = 'antonio.lakos1@gmail.com'
 
+        mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)
+        """
+        """
+        subject, from_email, to = 'hello', 'from@example.com', 'antonio.lakos1@gmail.com'
+        text_content = 'This is an important message.'
+        #html_content = '<p>This is an <strong>important</strong> message.</p>'
+        html_content = render_to_string(render(request, 'smartCart/login.html'))
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+        msg.attach_alternative(html_content, "text/html")
+        msg.content_subtype = "html"
+        msg.send()
+        """
         """
         temporary_password = PrivremenaLozinka(
                 user=BaseUserModel.objects.get(email='ante@fer.hr'),
@@ -185,7 +208,6 @@ class NovaLozinkaView(View):
         user.password = make_password('pwd', hasher='default')
         user.save()
         """
-        
         #print(check_password('password', PrivremenaLozinka.objects.get(user=User.objects.get(email='ante@fer.hr')).password))
         
         
@@ -216,7 +238,8 @@ class NovaLozinkaView(View):
                 return render_form(self, request, message='New password must be different than the old\n')
 
             #TODO: create tmp password in db
-            
+            #TODO: jedan na jedan veza? ovako nema smisla i neće raditi s tokenima
+            #TODO: popravi i tokene...
             temporary_password = PrivremenaLozinka(
                 user=user,
                 password= make_password(password=password, hasher='default'),
@@ -228,13 +251,13 @@ class NovaLozinkaView(View):
 
             #TODO: send email
 
-            send_mail(
-                'Reset email-a',
-                'Resetirali ste password. Ako niste, bježite.',
-                'smartestcart@gmail.com',
-                [email],
-                fail_silently=False
-            )
+            subject = 'Subject'
+            html_message = render_to_string('smartCart/login.html')
+            plain_message = strip_tags(html_message)
+            from_email = 'From <from@example.com>'
+            to = 'antonio.lakos1@gmail.com'
+
+            mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)
             
             
         return redirect('index')
