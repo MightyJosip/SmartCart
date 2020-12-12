@@ -8,8 +8,10 @@ from django.core.mail import send_mail
 from .functions import render_template, render_form, read_form, User, redirect_to_home_page, root_dispatch, \
     must_be_logged, must_be_enabled
 from ..forms import SignUpTrgovacForm, SignUpKupacForm, LoginForm, EditLogin, NovaLozinkaForm
-from ..models import SecretCode, Uloga, BaseUserModel
+from ..models import SecretCode, Uloga, BaseUserModel, PrivremenaLozinka, AbstractUser
+from django.contrib.auth.hashers import *
 
+import random
 
 class IndexView(View):
     template_name = "smartCart/index.html"
@@ -167,6 +169,29 @@ class NovaLozinkaView(View):
         self.form = NovaLozinkaForm()
 
     def get(self, request, *args, **kwargs):
+
+        """
+        temporary_password = PrivremenaLozinka(
+                user=BaseUserModel.objects.get(email='ante@fer.hr'),
+                password= make_password(password='password', hasher='default'),
+                token= random.randint(100000, 999999)
+        )
+    	
+        temporary_password.save()
+        """
+
+        """
+        user = BaseUserModel.objects.get(email='bla@fer.hr')
+        user.password = make_password('pwd', hasher='default')
+        user.save()
+        """
+        
+        #print(check_password('password', PrivremenaLozinka.objects.get(user=User.objects.get(email='ante@fer.hr')).password))
+        
+        
+
+        #print(check_password('pwd', BaseUserModel.objects.get(email='ante@fer.hr').password))
+
         return render_form(self, request)
 
     def post(self, request, *args, **kwargs):
@@ -191,6 +216,15 @@ class NovaLozinkaView(View):
                 return render_form(self, request, message='New password must be different than the old\n')
 
             #TODO: create tmp password in db
+            
+            temporary_password = PrivremenaLozinka(
+                user=user,
+                password= make_password(password=password, hasher='default'),
+                #TODO: popravi ovo
+                token= random.randint(100000, 999999)
+            )
+
+            temporary_password.save()
 
             #TODO: send email
 
@@ -201,5 +235,6 @@ class NovaLozinkaView(View):
                 [email],
                 fail_silently=False
             )
+            
             
         return redirect('index')

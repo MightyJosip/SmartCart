@@ -244,8 +244,9 @@ class Glasovi(models.Model):
 
 
 class PrivremenaLozinka(models.Model):
-    email = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=True)
-    lozinka = models.CharField(max_length=100, null=True)  # placeholder
+    user = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=True)
+    password = models.CharField(max_length=128, null=True) 
+    token = models.CharField(max_length=50 ,null=True)
     istice = models.CharField(max_length=100, null=True)  # placeholder
 
 class DBFile(models.Model):
