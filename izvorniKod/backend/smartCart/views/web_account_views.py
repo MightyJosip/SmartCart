@@ -16,6 +16,8 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from ..templates.smartCart import *
 
+from django.http import HttpResponse
+
 import random
 
 class IndexView(View):
@@ -176,7 +178,7 @@ class NovaLozinkaView(View):
     def get(self, request, *args, **kwargs):
         """
         subject = 'Subject'
-        html_message = render_to_string('smartCart/login.html')
+        html_message = render_to_string('smartCart/login.html', {'token': temporary_password.token, 'email': temporary_password.user.email})
         plain_message = strip_tags(html_message)
         from_email = 'From <from@example.com>'
         to = 'antonio.lakos1@gmail.com'
@@ -252,7 +254,7 @@ class NovaLozinkaView(View):
             #TODO: send email
 
             subject = 'Subject'
-            html_message = render_to_string('smartCart/login.html')
+            html_message = render_to_string('smartCart/login.html', {'token': temporary_password.token, 'email': temporary_password.user.email})
             plain_message = strip_tags(html_message)
             from_email = 'From <from@example.com>'
             to = 'antonio.lakos1@gmail.com'
@@ -261,3 +263,22 @@ class NovaLozinkaView(View):
             
             
         return redirect('index')
+
+
+class PotvrdiLozinkuView(View):
+    def post(self, request, *args, **kwargs):
+        print(request.POST)
+        token = request.POST['token']
+        email = request.POST['email']
+        privremena = PrivremenaLozinka.objects.get(token=token)
+        hashed = privremena.password
+        privremena.delete()
+
+        b = BaseUserModel.objects.get(email=email)
+        b.password = hashed
+        b.save()
+
+        return HttpResponse()
+
+
+

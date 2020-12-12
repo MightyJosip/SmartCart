@@ -41,6 +41,7 @@ urlpatterns = [
     path('uredi_artikl/<int:artikl_trgovina>', UrediArtiklView.as_view(), name='uredi_artikl_u_trgovini'),
     path('obrisi_artikl/<int:artikl_trgovina>', ObrisiArtiklView.as_view(), name='obrisi_artikl_u_trgovini'),
     path('nova_lozinka', NovaLozinkaView.as_view(), name='nova_lozinka'),
+    path('potvrdi_lozinku', PotvrdiLozinkuView.as_view(), name='potvrdi_lozinku'),
     # android dio
     path('android/signup', AndroidSignUpView.as_view(), name='android_sign_up'),
     path('android/login', AndroidLogInView.as_view(), name='android_login'),

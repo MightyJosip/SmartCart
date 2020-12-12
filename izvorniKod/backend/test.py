@@ -1,9 +1,9 @@
 import requests
 
-url = 'http://localhost:8000/android/artikltrgovina'
-myobj = {'somekey': 'somevalue'}
+url = 'http://localhost:8000/potvrdi_lozinku'
 
-x = requests.post(url, json={'sif_trgovina': 2, 'barkod': 3850116106052}, timeout=2.5)
+
+x = requests.post(url, data={'token': 200245, 'email': 'ante@fer.hr'}, timeout=2.5)
 
 
 try:
