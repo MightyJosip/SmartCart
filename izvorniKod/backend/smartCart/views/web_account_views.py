@@ -20,6 +20,8 @@ from django.http import HttpResponse
 
 import random
 
+from allauth.account.views import *
+
 class IndexView(View):
     template_name = "smartCart/index.html"
 
