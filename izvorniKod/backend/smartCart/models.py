@@ -20,13 +20,16 @@ class AccountManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, password, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_active', True)
-        extra_fields.setdefault('is_kupac', True)
-        extra_fields.setdefault('is_trgovac', True)
-
-        return self.create_user(email, password, **extra_fields)
+        user = self.model(email=email)
+        user.is_kupac = False
+        user.is_trgovac = False
+        user.is_superuser = True
+        user.is_staff = True
+        user.uloga = Uloga(sif_uloga=4)
+        user.omogucen = True
+        user.set_password(password)
+        user.save()
+        return user
 
 
 ###############
@@ -95,11 +98,18 @@ class OnemoguceniRacun(models.Model):
 # TODO: ovo valja urediti tako da se prikazuje auth_level
 class MyUserAdmin(ModelAdmin):
     model = BaseUserModel
-    list_display = ('email', 'is_staff', 'is_kupac', 'is_trgovac')
+    list_display = ('email', 'is_staff', 'is_kupac', 'is_trgovac', 'omogucen')
     list_filter = ()
     search_fields = ('email',)
     ordering = ('email',)
     filter_horizontal = ()
+    actions = ['onemoguci_racune']
+
+    def onemoguci_racune(self, request, queryset):
+        queryset.update(omogucen=False)
+        queryset.update(onemogucio=request.user)
+
+    onemoguci_racune.short_description = "Onemoguci oznacene racune"
 
 
 class UserSession(models.Model):

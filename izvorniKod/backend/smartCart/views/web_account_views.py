@@ -120,7 +120,7 @@ class LoginView(View):
         return root_dispatch(self, request, *args, **kwargs)
 
     def check_user(self, request):
-        username = request.POST['username']
+        username = request.POST['login']
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
         if user is not None:
