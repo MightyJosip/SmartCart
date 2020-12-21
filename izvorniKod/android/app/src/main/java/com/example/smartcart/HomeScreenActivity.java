@@ -76,10 +76,10 @@ public class HomeScreenActivity extends AppCompatActivity{
 
         // TODO: sve na što korisnik kika bi trebalo biti "button" po PS-u, ali ako vas ne smeta,
         // TODO: neka ostane
-        ImageView cartButton = (ImageView) findViewById(R.id.imageView7);
-        registerForContextMenu(cartButton);
-        cartButton.setOnClickListener(this::openContextMenu);
-        cartButton.setOnLongClickListener(v -> true);
+        ImageView settingsButton = (ImageView) findViewById(R.id.imageView7);
+        registerForContextMenu(settingsButton);
+        settingsButton.setOnClickListener(this::openContextMenu);
+        settingsButton.setOnLongClickListener(v -> true);
 
 
 
