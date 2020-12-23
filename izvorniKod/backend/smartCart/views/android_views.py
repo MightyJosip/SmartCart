@@ -188,7 +188,7 @@ class AndroidSignUpView(View):
             return create_json_response(401, err='User already exists')
 
         if authorisation_level == 'kupac':
-            User.objects.create_user(email, password, is_kupac=True)
+            User.objects.create_user(email, password, is_kupac=True, authorisation_level=Uloga.objects.get(auth_level='Kupac'))
             return create_json_response(200, success='done')
 
         if authorisation_level == 'trgovac':
