@@ -21,6 +21,8 @@ from django.conf.urls.static import static
 from smartCart.views import *
 from smartCart.views.android_views import *
 from smartCart.views.web_account_views import *
+from django.views.generic import TemplateView
+from django.urls import path, include
 
 urlpatterns = [
     path('admin', admin.site.urls),
@@ -53,6 +55,9 @@ urlpatterns = [
     path('android/opisi', AndroidOpisiView.as_view(), name='opisi'),
     path('android/downvote', AndroidDownvoteView.as_view(), name ='downvote'),
     path('android/upvote', AndroidUpvoteView.as_view(), name='upvote'),
-    path('android/write_description', AndroidWriteProductDescription.as_view(), name='write_description')
+    path('android/write_description', AndroidWriteProductDescription.as_view(), name='write_description'),
+
+    path('accounts/', include('allauth.urls')),
+    path('', TemplateView.as_view(template_name='social_app/index.html'))
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -10,6 +10,9 @@ from .functions import create_json_response, android_login_function, get_user_fr
 from ..models import Artikl, SecretCode, Trgovina, TrgovinaArtikli, OpisArtikla, Vrsta, Zemlja_porijekla, \
     BaseUserModel, Glasovi, Uloga
 
+from allauth.account.views import *
+
+
 
 # TODO: u svim funkcijama porokati ove dekoratore koji provjeravaju login i lvl autorizacije
 class AndroidArtikliView(View):

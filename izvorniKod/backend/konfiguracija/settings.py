@@ -188,9 +188,13 @@ SOCIALACCOUNT_PROVIDERS = {
         # (``socialaccount`` app) containing the required client
         # credentials, or list them here:
         'APP': {
-            'client_id': '123',
-            'secret': '456',
+            'client_id': '197701493351-l5j9llbv8r93kce4ajgf1kque7bcqqhr.apps.googleusercontent.com',
+            'secret': 'zK8Si-9hcPJlQD8z3cisPE5m',
             'key': ''
         }
     }
 }
+
+LOGIN_REDIRECT_URL = 'index'
+
+ACCOUNT_LOGOUT_ON_GET = True

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 {% load static %}
+{% load socialaccount %}
 <html>
     <head>
         <meta charset="UTF-8">
@@ -25,7 +26,7 @@
     </form>
 
     <a href="nova_lozinka">Zaboravio sam lozinku</a> <br />
-    <a href="accounts_login">Login with google</a>
+    <a href="{% provider_login_url 'google' %}">Login with Google</a>
 
 </body>
 
