@@ -98,10 +98,28 @@ public class Connector {
 
     }
 
-    public void fetchTrgovine( Response.Listener<String> onSuccess, Response.ErrorListener onFail) {
+    public void fetchTrgovine(Response.Listener<String> onSuccess, Response.ErrorListener onFail) {
         JSONObject jo = new JSONObject();
         String url = HOST + "android/trgovine";
         JsonToStringRequest jtsr = new JsonToStringRequest(Request.Method.POST, url, jo, onSuccess, onFail);
+        getRequestQueue().add(jtsr);
+    }
+
+    public void fetchItemByBarcode(
+            String barkod, int izracunCijene, int sifTrgovina,
+            Response.Listener<JSONObject> onSuccess, Response.ErrorListener onFail
+    ) {
+        JSONObject jo = new JSONObject();
+        try {
+            jo.put("barkod", barkod);
+            jo.put("izracun_cijene", izracunCijene);
+            jo.put("sif_trgovina", sifTrgovina);
+        } catch (JSONException e) {
+            // za printati stacktrace napraviti stringwriter/printwriter wrapper i upisati u string
+            Log.e("Fetching item", e.toString());
+        }
+        String url = HOST + "android/artikltrgovina";
+        JsonObjectRequest jtsr = new JsonObjectRequest(Request.Method.POST, url, jo, onSuccess, onFail);
         getRequestQueue().add(jtsr);
     }
 

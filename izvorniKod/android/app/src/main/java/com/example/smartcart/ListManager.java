@@ -8,23 +8,29 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
+import com.example.smartcart.database.Popis;
+import com.example.smartcart.database.PopisDao;
 import com.example.smartcart.database.SmartCartDatabase;
 import com.example.smartcart.database.Stavka;
 import com.example.smartcart.database.StavkaDao;
+
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.List;
 
 public class ListManager extends RecyclerView.Adapter<ViewHolder> {
     private List<Stavka> stavke;
+    private Popis popis;
     private static final int ADD_ITEM_VIEW = 1;
     private static final int REGULAR_ITEM_VIEW = 0;
-    private Context context;
+    private final Context context;
 
 
     public ListManager(Context context) {
@@ -36,10 +42,23 @@ public class ListManager extends RecyclerView.Adapter<ViewHolder> {
         SmartCartDatabase db = SmartCartDatabase.getInstance(context);
         StavkaDao dao = db.stavkaDao();
         stavke = dao.dohvatiStavkeZaPopis(sifPopis);
+
+        PopisDao popisDao = db.popisDao();
+        popis = popisDao.dohvatiPoSifri(sifPopis).get(0);
     }
 
-    public void addItemBarcode() {
-
+    public void addUsingBarcode(String barcode) {
+        Connector.getInstance(context).fetchItemByBarcode(
+                barcode, popis.getNacinIzracuna(), popis.getSifTrgovina(),
+                response -> {
+                    // TODO: staviti ovdje da se response pretvori u Stavku, spremi u db i stavke te
+                    // pozvati notifyDataSetChanged()
+                    Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT);
+                },
+                error -> {
+                    Toast.makeText(context, error.toString(), Toast.LENGTH_SHORT);
+                }
+        );
     }
 
     public void refreshPriceSum() {

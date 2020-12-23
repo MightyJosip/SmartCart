@@ -3,6 +3,8 @@
     package="com.example.smartcart">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-feature android:name="android.hardware.camera.any" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -11,9 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartCart"
         android:usesCleartextTraffic="true">
+        <activity android:name=".BarcodeScannerActivity" />
         <activity
             android:name=".Cart"
-            android:label="@string/title_activity_cart"></activity>
+            android:label="@string/title_activity_cart" />
         <activity android:name=".HomeScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

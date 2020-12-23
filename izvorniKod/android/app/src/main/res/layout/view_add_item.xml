@@ -7,7 +7,7 @@
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:text="@string/scan_barcode"
-        android:onClick="addItemWithBarcode"/>
+        android:onClick="obtainBarcode"/>
     <Button
         android:layout_width="0dp"
         android:layout_weight="1"

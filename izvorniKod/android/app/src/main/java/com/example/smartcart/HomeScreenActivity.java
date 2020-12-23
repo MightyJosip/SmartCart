@@ -1,5 +1,6 @@
 package com.example.smartcart;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -8,19 +9,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.ContextMenu;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.smartcart.util.IDao;
-import com.example.smartcart.util.Item;
-import com.example.smartcart.util.ItemList;
-import com.example.smartcart.util.MockDao;
 
 public class HomeScreenActivity extends AppCompatActivity{
 
@@ -29,6 +21,9 @@ public class HomeScreenActivity extends AppCompatActivity{
     private static final int MENU_MYLISTS = 3;
     private static final int MENU_LOGOUT = 4;
     private static final int MENU_ACCOUNTSETTINGS = 5;
+    private static final int REQUEST_BARCODE = 1;
+
+    private ListManager lm;
 
     /**
      * Provjerava je li korisnik odabrao hoće li se prijaviti. Ako nije, otvara se MainActivity kako
@@ -60,7 +55,7 @@ public class HomeScreenActivity extends AppCompatActivity{
         // getSupportActionBar().hide();
         setContentView(R.layout.home_screen);
 
-        ListManager lm = new ListManager(getApplicationContext());
+        lm = new ListManager(getApplicationContext());
         RecyclerView recyclerView = findViewById(R.id.list_recyclerview);
         recyclerView.setAdapter(lm);
         /*
@@ -164,7 +159,17 @@ public class HomeScreenActivity extends AppCompatActivity{
         return sp.getString("auth_level", AuthLevels.DEFAULT);
     }
 
-    public void addItemWithBarcode(View v) {
+    public void obtainNewBarcode(View v) {
+        Intent i = new Intent(this, BarcodeScannerActivity.class);
+        startActivityForResult(i, REQUEST_BARCODE);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_BARCODE && resultCode == RESULT_OK) {
+            assert data != null;
+            lm.addUsingBarcode(data.getStringExtra("barcode"));
+        }
     }
 }
