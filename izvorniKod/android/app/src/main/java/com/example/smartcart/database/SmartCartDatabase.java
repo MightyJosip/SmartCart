@@ -7,13 +7,15 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {Popis.class, Stavka.class}, version = 2)
+@Database(entities = {Popis.class, Stavka.class}, version = 2, exportSchema = false)
 public abstract class SmartCartDatabase extends RoomDatabase {
 
     private static SmartCartDatabase db;
     private static final String DB_NAME = "smartcart";
 
     public abstract PopisDao popisDao();
+
+    public abstract StavkaDao stavkaDao();
 
     //public abstract StavkaDao stavkaDao();
 
