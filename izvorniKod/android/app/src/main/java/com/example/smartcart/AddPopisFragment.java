@@ -14,6 +14,9 @@ import android.widget.Toast;
 import com.example.smartcart.database.Popis;
 import com.example.smartcart.database.PopisDao;
 import com.example.smartcart.database.SmartCartDatabase;
+import com.example.smartcart.database.Stavka;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,7 +75,7 @@ public class AddPopisFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_popis, container, false);
 
 
-        imePopis = view.findViewById(R.id.editTextTextPersonName4);
+        imePopis = view.findViewById(R.id.ime_stavke);
         bnSave = view.findViewById(R.id.button4);
 
         bnSave.setOnClickListener(new View.OnClickListener() {
@@ -87,6 +90,10 @@ public class AddPopisFragment extends Fragment {
                 SmartCartDatabase db = SmartCartDatabase.getInstance(AddPopisFragment.this.getContext());
                 PopisDao dao = db.popisDao();
                 dao.dodajPopise(popis);
+                //dao.dohvatiPoNazivu(ime);
+                List<Popis> lista = dao.dohvatiPoNazivu(ime);
+                Popis popis1 = lista.get(0);
+                Stavka stavka = new Stavka(0, popis1.getSifPopis(), "35263452", 3.99, "dragankovacevic", false, );
                 Toast.makeText(getActivity(), "Popis uspjesno dodan", Toast.LENGTH_SHORT).show();
 
 

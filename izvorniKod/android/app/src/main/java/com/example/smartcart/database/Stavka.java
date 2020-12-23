@@ -16,6 +16,7 @@ public class Stavka {
 
 
     // treba dodati anotaciju @ForeignKey
+    @ForeignKey(entity = Popis.class , parentColumns = "sifPopis" , childColumns = "sifPopis")  // mozda prebacit u entity
     @ColumnInfo(name = "sifPopis")
     private int sifPopis;
 
@@ -37,13 +38,21 @@ public class Stavka {
     @ColumnInfo(name = "naziv")
     private String naziv;
 
+    @ColumnInfo(name = "omiljeni")
+    private boolean omiljeni;
+
+    @ColumnInfo(name = "sifTrgovina")
+    private int sifTrgovina;
+
+
+
     @Ignore
     public Stavka() {
 
     }
 
     public Stavka(int sifStavka, int sifPopis, String barkod, double cijena, String filtarFunkcija, boolean uKosarici,
-                  int kolicina, String naziv) {
+                  int kolicina, String naziv, boolean omiljeni, int sifTrgovina) {
         setSifStavka(sifStavka);
         setSifPopis(sifPopis);
         setBarkod(barkod);
@@ -52,6 +61,8 @@ public class Stavka {
         setUKosarici(uKosarici);
         setKolicina(kolicina);
         setNaziv(naziv);
+        setOmiljeni(omiljeni);
+        setSifTrgovina(sifTrgovina);
     }
 
     public int getSifPopis() {
@@ -116,6 +127,22 @@ public class Stavka {
 
     public void setNaziv(String naziv) {
         this.naziv = naziv;
+    }
+
+    public boolean getOmiljeni() {
+        return omiljeni;
+    }
+
+    public void setOmiljeni(boolean omiljeni) {
+        this.omiljeni = omiljeni;
+    }
+
+    public int getSifTrgovina() {
+        return sifTrgovina;
+    }
+
+    public void setSifTrgovina(int sifTrgovina) {
+        this.sifTrgovina = sifTrgovina;
     }
 
 

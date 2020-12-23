@@ -12,8 +12,16 @@
         android:theme="@style/Theme.SmartCart"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".PrikazStavkiActivity"
+            android:label="@string/title_activity_prikaz_stavki"
+            android:theme="@style/Theme.SmartCart.NoActionBar"></activity>
+        <activity
+            android:name=".PrikazPopisaActivity"
+            android:label="@string/title_activity_prikaz_popisa"
+            android:theme="@style/Theme.SmartCart.NoActionBar" />
+        <activity
             android:name=".Cart"
-            android:label="@string/title_activity_cart"></activity>
+            android:label="@string/title_activity_cart" />
         <activity android:name=".HomeScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

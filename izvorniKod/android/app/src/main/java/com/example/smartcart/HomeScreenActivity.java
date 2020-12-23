@@ -149,13 +149,16 @@ public class HomeScreenActivity extends AppCompatActivity{
             case MENU_LOGIN: startLogInActivity(); break;
             case MENU_SIGNUP: startSignUpActivity(); break;
             case MENU_MYLISTS: {
-                StringBuilder sb = new StringBuilder();
+                /*StringBuilder sb = new StringBuilder();
                 List<Popis> svi = SmartCartDatabase.getInstance(this)
                             .popisDao().dohvatiSvePopise();
                 for (Popis p : svi)
                     sb.append(p).append('\n');
                 String sviStr = sb.toString();
                 Toast.makeText(this, sviStr, Toast.LENGTH_LONG).show();
+                break;*/
+                Intent intent = new Intent(HomeScreenActivity.this, PrikazPopisaActivity.class);
+                startActivity(intent);
                 break;
             }
 
