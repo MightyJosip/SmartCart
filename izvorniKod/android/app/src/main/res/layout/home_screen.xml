@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient">
 
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="253dp"
-        android:layout_height="117dp"
-        app:srcCompat="@drawable/logo_smartcart"
-        tools:layout_editor_absoluteX="-5dp"
-        tools:layout_editor_absoluteY="-10dp"
+        android:layout_width="241dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="24dp"
+        android:contentDescription="@string/smartcartTextLogo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/smartcartTextLogo" />
+        app:srcCompat="@drawable/logo_smartcart" />
 
     <ImageView
         android:id="@+id/imageView6"
@@ -32,23 +31,36 @@
         android:id="@+id/imageView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="24dp"
+        android:contentDescription="@string/settingsButton"
         app:layout_constraintBottom_toBottomOf="@+id/imageView4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageView4"
-        app:srcCompat="@drawable/ic_account_settings"
-        android:contentDescription="@string/settingsButton" />
+        app:srcCompat="@drawable/ic_account_settings" />
+
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/addButton"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView6"
+        app:layout_constraintDimensionRatio="w,1:1"
+        app:layout_constraintEnd_toStartOf="@+id/imageView6"
+        app:layout_constraintTop_toTopOf="@+id/imageView4"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/ic_action_add" />
 
     <TextView
         android:id="@+id/textView9"
         android:layout_width="303dp"
         android:layout_height="25dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="20dp"
         android:text="@string/WelcomeInfo"
         android:textAlignment="center"
         android:textColor="@android:color/white"
         android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
@@ -72,7 +84,8 @@
         android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+        app:layout_constraintTop_toBottomOf="@+id/textView9"
+        android:autofillHints="Enter something" />
 
     <FrameLayout
         android:id="@+id/fragment_container"
