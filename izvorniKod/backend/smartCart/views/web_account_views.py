@@ -62,7 +62,7 @@ class SignUpTrgovacView(View):
             return render_form(self, request, message='Wrong secret code\n')
         else:
             secret_code.delete()
-        User.objects.create_user(email, password, is_trgovac=True, uloga = Uloga.objects.get(auth_level='Trgovac'))
+        User.objects.create_user(email, password, uloga = Uloga.objects.get(auth_level='Trgovac'))
         return render(request, 'smartCart/index.html', {})
 
 
@@ -94,7 +94,7 @@ class SignUpKupacView(View):
             return render_form(self, request, message='Passwords don\'t match\n')
         if User.objects.filter(email=email).exists():
             return render_form(self, request, message='Mail already exists\n')
-        User.objects.create_user(email, password, is_kupac=True, uloga = Uloga.objects.get(auth_level='Kupac'))
+        User.objects.create_user(email, password, uloga = Uloga.objects.get(auth_level='Kupac'))
         return render(request, 'smartCart/index.html', {})
 
 
@@ -121,9 +121,9 @@ class LoginView(View):
         return root_dispatch(self, request, *args, **kwargs)
 
     def check_user(self, request):
-        username = request.POST['username']
+        email = request.POST['username']
         password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=email, password=password)
         if user is not None:
             if (user.omogucen == True):
                 login(request, user)

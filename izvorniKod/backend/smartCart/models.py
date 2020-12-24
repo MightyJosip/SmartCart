@@ -21,8 +21,6 @@ class AccountManager(BaseUserManager):
 
     def create_superuser(self, email, password, **extra_fields):
         user = self.model(email=email)
-        user.is_kupac = False
-        user.is_trgovac = False
         user.is_superuser = True
         user.is_staff = True
         user.uloga = Uloga(sif_uloga=4)
@@ -61,16 +59,13 @@ class SecretCode(models.Model):
 
 
 class BaseUserModel(AbstractUser):
+
+    # TODO: implementiraj da korisnik može odabrati username i prikazuj username (ili izbaci)
     username = None
     first_name = None
     last_name = None
 
-    ########### LEGACY SUPPORT
-    is_kupac = models.BooleanField(default=False)
-    is_trgovac = models.BooleanField(default=False)
     email = models.EmailField(unique=True)
-    ###########
-
     uloga = models.ForeignKey(Uloga, on_delete=models.CASCADE, null=True)
     onemogucio = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
     omogucen = models.BooleanField(default=True)
@@ -96,7 +91,7 @@ class OnemoguceniRacun(models.Model):
 # TODO: ovo valja urediti tako da se prikazuje auth_level
 class MyUserAdmin(ModelAdmin):
     model = BaseUserModel
-    list_display = ('email', 'is_staff', 'is_kupac', 'is_trgovac', 'omogucen')
+    list_display = ('email', 'is_staff', 'omogucen')
     list_filter = ()
     search_fields = ('email',)
     ordering = ('email',)

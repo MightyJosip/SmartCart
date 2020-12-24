@@ -18,7 +18,6 @@ class Command(BaseCommand):
                 BaseUserModel.objects.create_user(
                     email= podaci_o_trgovcu[0],
                     password= podaci_o_trgovcu[1],
-                    uloga= Uloga.objects.get(auth_level=podaci_o_trgovcu[2]),
-                    is_trgovac=True
+                    uloga= Uloga.objects.get(auth_level=podaci_o_trgovcu[2])
                     )
                 print(f"Dodan trgovac {podaci_o_trgovcu[0]}")
