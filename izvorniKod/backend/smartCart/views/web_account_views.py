@@ -213,20 +213,17 @@ class NovaLozinkaView(View):
 
             temporary_password.save()
 
-            #return render(request, 'smartCart/confirm_password.html', {'token': temporary_password.token, 'email': temporary_password.user.email})
-
             subject = 'Subject'
             html_message = render_to_string('smartCart/confirm_password.html', {'token': temporary_password.token, 'email': temporary_password.user.email})
             plain_message = strip_tags(html_message)
-            from_email = 'From <from@example.com>'
+            from_email = 'smartCart app'
             to = 'smartestcart@gmail.com'
 
             mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)
             
-            
+        #TODO: dodati neku poruku greške, uspjeha o slanju maila?            
         return redirect('index')
 
-#TODO: google ne da POST zahtjeve iz mail poslužitelja. Možda se ovo može složiti preko GET-a?
 class PotvrdiLozinkuView(View):
     def post(self, request, *args, **kwargs):
         token = request.POST['token']
@@ -239,7 +236,9 @@ class PotvrdiLozinkuView(View):
         b.password = hashed
         b.save()
 
-        return HttpResponse()
+        #TODO: dodati malo opširniji opis?
+        # ovo je primitivno ali radi
+        return HttpResponse("<p>Vaša je lozinka uspješno promijenjena!</p>")
 
 
 
