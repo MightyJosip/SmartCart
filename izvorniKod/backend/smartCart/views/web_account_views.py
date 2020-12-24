@@ -20,7 +20,7 @@ from django.http import HttpResponse
 
 import random
 
-from allauth.account.views import *
+#from allauth.account.views import *
 
 class IndexView(View):
     template_name = "smartCart/index.html"
@@ -110,6 +110,7 @@ class LoginView(View):
         read_form(self, request)
         if self.form.is_valid():
             return self.check_user(request)
+        return render_form(self, request, message='Invalid username or password\n')
 
     def get(self, request, *args, **kwargs):
         return render_form(self, request)
@@ -120,7 +121,7 @@ class LoginView(View):
         return root_dispatch(self, request, *args, **kwargs)
 
     def check_user(self, request):
-        username = request.POST['login']
+        username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
         if user is not None:
