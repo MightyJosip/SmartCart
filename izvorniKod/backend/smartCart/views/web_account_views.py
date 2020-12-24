@@ -213,11 +213,13 @@ class NovaLozinkaView(View):
 
             temporary_password.save()
 
+            #return render(request, 'smartCart/confirm_password.html', {'token': temporary_password.token, 'email': temporary_password.user.email})
+
             subject = 'Subject'
-            html_message = render_to_string('smartCart/login.html', {'token': temporary_password.token, 'email': temporary_password.user.email})
+            html_message = render_to_string('smartCart/confirm_password.html', {'token': temporary_password.token, 'email': temporary_password.user.email})
             plain_message = strip_tags(html_message)
             from_email = 'From <from@example.com>'
-            to = 'antonio.lakos1@gmail.com'
+            to = 'smartestcart@gmail.com'
 
             mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)
             
