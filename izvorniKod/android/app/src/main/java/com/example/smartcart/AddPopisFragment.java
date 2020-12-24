@@ -15,6 +15,7 @@ import com.example.smartcart.database.Popis;
 import com.example.smartcart.database.PopisDao;
 import com.example.smartcart.database.SmartCartDatabase;
 import com.example.smartcart.database.Stavka;
+import com.example.smartcart.database.StavkaDao;
 
 import java.util.List;
 
@@ -91,9 +92,23 @@ public class AddPopisFragment extends Fragment {
                 PopisDao dao = db.popisDao();
                 dao.dodajPopise(popis);
                 //dao.dohvatiPoNazivu(ime);
+
                 List<Popis> lista = dao.dohvatiPoNazivu(ime);
                 Popis popis1 = lista.get(0);
-                Stavka stavka = new Stavka(0, popis1.getSifPopis(), "35263452", 3.99, "dragankovacevic", false, );
+                StavkaDao sdao = db.stavkaDao();
+                int popissif = popis.getSifPopis();
+
+                int n = 5;
+                Stavka[] stavke = new Stavka[n];
+                for (int i=0; i<n; i++) {
+                    Stavka stavka = new Stavka(popissif, i);
+                    stavke[i] = stavka;
+                }
+
+                sdao.dodajStavke(stavke);
+
+
+
                 Toast.makeText(getActivity(), "Popis uspjesno dodan", Toast.LENGTH_SHORT).show();
 
 
