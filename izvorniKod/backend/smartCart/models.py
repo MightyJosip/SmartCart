@@ -32,7 +32,6 @@ class AccountManager(BaseUserManager):
         return user
 
 
-###############
 class Uloga(models.Model):
     sif_uloga = models.IntegerField(primary_key=True)
 
@@ -60,14 +59,13 @@ class SecretCode(models.Model):
         return f'{self.value}'
 
 
-###############
 
 class BaseUserModel(AbstractUser):
     username = None
     first_name = None
     last_name = None
 
-    ########### LEGACY
+    ########### LEGACY SUPPORT
     is_kupac = models.BooleanField(default=False)
     is_trgovac = models.BooleanField(default=False)
     email = models.EmailField(unique=True)
@@ -252,7 +250,7 @@ class Glasovi(models.Model):
     opis_artikla = models.ForeignKey(OpisArtikla, on_delete=models.CASCADE)
     vrijednost_glasa = models.CharField(max_length=11, choices=VRSTE_GLASOVA, default='Nije glasao', null=False)
 
-
+#TODO: implementiraj vremensko ograničenje
 class PrivremenaLozinka(models.Model):
     user = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=True)
     password = models.CharField(max_length=128, null=True) 

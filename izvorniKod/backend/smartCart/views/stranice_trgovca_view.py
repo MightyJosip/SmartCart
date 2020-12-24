@@ -6,6 +6,7 @@ from .functions import render_form, must_be_trgovac, read_form, stay_on_page, ge
 from ..forms import DodajTrgovinu, DodajArtikl, DodajProizvodaca, DodajArtiklUTrgovinu, PromijeniRadnoVrijeme, \
     UrediArtiklUTrgovini, PromijeniLongLat, PromijeniPrioritet, UploadFileForm
 from ..models import *
+from django.http import *
 
 import json, datetime
 
@@ -78,6 +79,7 @@ class TrgovinaView(View):
         return stay_on_page(request)
 
 
+#TODO: makni šumu "Submit" gumba
 @must_be_trgovac
 class UrediArtiklView(View):
     template_name = 'smartCart/artikl_u_trgovini.html'
@@ -125,39 +127,43 @@ class UrediArtiklView(View):
             #programmers be like
             #how to do x in one line
             #the line:
-            file = request.FILES['file'].read().decode("utf-8").replace('\r', '').split('\n')
-            
-            attributes = file[0].split(',')
-            values = file[1].split(',')
 
-            opis = OpisArtikla(
-                    autor_opisa= BaseUserModel.objects.get(email=values[0]),
-                    artikl= Artikl.objects.get(barkod_artikla=values[1]),
+            try:
+                file = request.FILES['file'].read().decode("utf-8").replace('\r', '').split('\n')
+                
+                attributes = file[0].split(',')
+                values = file[1].split(',')
 
-                    vrsta= Vrsta.objects.get(sif_vrsta=values[2]),
-                    zemlja_porijekla= Zemlja_porijekla.objects.get(naziv=values[3]),
-                    trgovina= Trgovina.objects.get(sif_trgovina=values[4]),
-                    trgovina_artikl= TrgovinaArtikli.objects.get(trgovina=values[4], artikl=values[1]),
+                opis = OpisArtikla(
+                        autor_opisa= BaseUserModel.objects.get(email=values[0]),
+                        artikl= Artikl.objects.get(barkod_artikla=values[1]),
 
-                    naziv_artikla=values[6],
-                    opis_artikla=values[7],
-                    broj_glasova=values[8],
-                    masa=values[9]
+                        vrsta= Vrsta.objects.get(sif_vrsta=values[2]),
+                        zemlja_porijekla= Zemlja_porijekla.objects.get(naziv=values[3]),
+                        trgovina= Trgovina.objects.get(sif_trgovina=values[4]),
+                        trgovina_artikl= TrgovinaArtikli.objects.get(trgovina=values[4], artikl=values[1]),
 
-                    )
-            opis.save()
+                        naziv_artikla=values[6],
+                        opis_artikla=values[7],
+                        broj_glasova=values[8],
+                        masa=values[9]
 
-            
-            dbfile = DBFile(
-                name=request.FILES['file'],
-                data=request.FILES['file'].read(),
-                uploaded_by=BaseUserModel.objects.get(email=values[0]),
-        	    date=datetime.datetime.now()
-            )
+                        )
+                opis.save()
 
-            dbfile.save()
-            
-            
+                
+                dbfile = DBFile(
+                    name=request.FILES['file'],
+                    data=request.FILES['file'].read(),
+                    uploaded_by=BaseUserModel.objects.get(email=values[0]),
+                    date=datetime.datetime.now()
+                )
+
+                dbfile.save()
+            except:
+                #TODO: zovi josipa upomoć
+                #return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'), file_err="Greška pri učitavanju datoteke")
+                return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
             return redirect(f'/trgovina/{self.t_id}')
 
         elif read_form(self, request, 'uredi_artikl_u_trgovini_form'):
