@@ -16,10 +16,6 @@ class Command(BaseCommand):
                 podaci_o_artiklu = artikl.split(';')
                 podaci_o_artiklu[-1] = podaci_o_artiklu[-1].rstrip()
                 art = Artikl(barkod_artikla=podaci_o_artiklu[0],
-                             naziv_artikla=podaci_o_artiklu[1],
-                             opis_artikla=podaci_o_artiklu[2],
-                             proizvodac=Proizvodac.objects.get(pk=podaci_o_artiklu[3]),
-                             zemlja_porijekla=Zemlja_porijekla.objects.get(pk=podaci_o_artiklu[4]),
-                             vegan=True if podaci_o_artiklu[5] == 'da' else False)
+                             naziv_artikla=podaci_o_artiklu[1])
                 art.save()
                 print(f"Dodan artikl {podaci_o_artiklu[1]}")

@@ -39,7 +39,7 @@
     <h2>Pregled namirnica</h2>
     <ul>
         {% for t in artikli %}
-        <li>{{ t.naziv_artikla }} <a href="{% url 'artikl' t.barkod_artikla %}">Detaljnije o namirnici</a></li> <!--štoviše, zajebava-->
+        <li>{{ t.barkod_artikla }} <a href="{% url 'artikl' t.barkod_artikla %}">Detaljnije o namirnici</a></li> <!--štoviše, zajebava-->
         {% endfor %}
     </ul>
     <hr />

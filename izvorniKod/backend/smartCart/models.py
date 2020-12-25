@@ -126,29 +126,9 @@ class Zemlja_porijekla(models.Model):
 
 class Artikl(models.Model):
     barkod_artikla = models.CharField(max_length=13, primary_key=True)
-
-    #########################################
-    #                                       #
-    #              LEGACY SUPPORT           #
-    #                                       #
-    #########################################
     naziv_artikla = models.CharField(max_length=100, null=False)
-    autor_naziva = models.CharField(max_length=100, null=True)
-    vote_count_naziva = models.IntegerField(null=True)
 
-    opis_artikla = models.CharField(max_length=5000, null=True)
-    autor_opisa = models.CharField(max_length=100, null=True)
-    vote_count_opisa = models.IntegerField(null=True)
 
-    proizvodac = models.ForeignKey(Proizvodac, on_delete=models.SET_NULL, null=True)
-    autor_proizvodaca = models.CharField(max_length=100, null=True)
-    vote_count_proizvodaca = models.IntegerField(null=True)
-
-    zemlja_porijekla = models.ForeignKey(Zemlja_porijekla, on_delete=models.SET_NULL, null=True)
-    autor_zemlje_porijekla = models.CharField(max_length=100, null=True)
-    vote_count_zemlje_porijekla = models.IntegerField(null=True)
-
-    vegan = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.barkod_artikla}'

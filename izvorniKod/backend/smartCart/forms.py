@@ -49,11 +49,8 @@ class DodajTrgovinu(forms.ModelForm):
 class DodajArtikl(forms.ModelForm):
     class Meta:
         model = Artikl
-        fields = ['barkod_artikla', 'naziv_artikla', 'opis_artikla', 'proizvodac', 'zemlja_porijekla', 'vegan']
-        labels = {
-            'proizvodac': 'Proizvođač',
-            'vegan': 'Veganski proizvod'
-        }
+        fields = ['barkod_artikla', 'naziv_artikla']
+
 
 
 class DodajProizvodaca(forms.ModelForm):
