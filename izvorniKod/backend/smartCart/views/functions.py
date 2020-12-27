@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.sessions.models import Session
@@ -111,7 +113,7 @@ def create_json_response(code, data=None, **kwargs):
     if data is not None:
         json_response = HttpResponse(data, content_type='application/json')
     else:
-        json_response = HttpResponse(kwargs, content_type='application/json')
+        json_response = HttpResponse(json.dumps(kwargs), content_type='application/json')
     json_response.status_code = code
     return json_response
 
