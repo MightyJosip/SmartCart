@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.sessions.models import Session
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.contrib.auth import logout
@@ -107,11 +107,11 @@ def android_login_function(request, user):
                                       session=Session.objects.get(pk=request.session.session_key))
 
 
-def create_json_response(code, data=None, safe=True, **kwargs):
+def create_json_response(code, data=None, **kwargs):
     if data is not None:
-        json_response = JsonResponse(data=data, safe=safe)
+        json_response = HttpResponse(data, content_type='application/json')
     else:
-        json_response = JsonResponse(data=kwargs, safe=safe)
+        json_response = HttpResponse(kwargs, content_type='application/json')
     json_response.status_code = code
     return json_response
 
