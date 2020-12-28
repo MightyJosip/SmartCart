@@ -237,6 +237,7 @@ class AndroidTrgovineView(View):
         return create_json_response(200, data=serializers.serialize('json', trgovine))
 
 # TODO: korisnik mora barem priložiti ime ako ne i cijeli opis?
+# TODO: testiraj
 class SkenirajBarkodView(View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body)
@@ -269,3 +270,5 @@ class SkenirajBarkodView(View):
                 trgovina_artikl.save()
             
         return HttpResponse()
+
+
