@@ -164,7 +164,7 @@ class AndroidPopisView(View):
             artikli += Artikl.objects.filter(barkod_artikla=barkod)
         return create_json_response(200, data=serializers.serialize('json', artikli))
 
-
+#TODO: dodati poruku "you have been vac banned"
 class AndroidLogInView(View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body)
@@ -235,3 +235,37 @@ class AndroidTrgovineView(View):
         if sif_trgovina is not None:
             trgovine = trgovine.filter(sif_trgovina=sif_trgovina)
         return create_json_response(200, data=serializers.serialize('json', trgovine))
+
+# TODO: korisnik mora barem priložiti ime ako ne i cijeli opis?
+class SkenirajBarkodView(View):
+    def post(self, request, *args, **kwargs):
+        data = json.loads(request.body)
+        barkod = data['barkod']
+        sif_trgovina = data['sif_trgovina']
+        cijena = data['cijena']
+
+        tmp = Artikl.objects.filter(barkod_artikla=barkod)
+
+        if (len(tmp) == 0):
+            artikl = Artikl(barkod_artikla=barkod, naziv_artikla="foo")
+            artikl.save()
+
+            trgovina_artikl = TrgovinaArtikli(
+                trgovina=Trgovina.objects.get(sif_trgovina=sif_trgovina),
+                artikl=Artikl.objects.get(barkod_artikla=barkod),
+                cijena=cijena)
+            trgovina_artikl.save()
+
+        else:
+            tmp = TrgovinaArtikli.objects.filter(
+                trgovina=Trgovina.objects.get(sif_trgovina=sif_trgovina),
+                artikl=Artikl.objects.get(barkod_artikla=barkod))
+
+            if (len(tmp) == 0):
+                trgovina_artikl = TrgovinaArtikli(
+                trgovina=Trgovina.objects.get(sif_trgovina=sif_trgovina),
+                artikl=Artikl.objects.get(barkod_artikla=barkod),
+                cijena=cijena)
+                trgovina_artikl.save()
+            
+        return HttpResponse()
