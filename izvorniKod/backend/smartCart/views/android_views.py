@@ -23,6 +23,23 @@ class AndroidArtikliView(View):
         artikli = Artikl.objects.filter(naziv_artikla__contains='%s' % naziv_artikla)
         return create_json_response(200, data=serializers.serialize('json', artikli))
 
+class AndroidSviArtikliUTrgovini(View):
+    def post(self, request, *args, **kwargs):
+        try:
+            data = json.loads(request.body)
+            sif_trgovina = data['sif_trgovina']
+        except:
+            res = HttpResponse()
+            res.status_code = 404
+            return res
+
+        trgovina = Trgovina.objects.get(sif_trgovina=sif_trgovina)
+        trgovinaartikli = TrgovinaArtikli.objects.filter(trgovina=trgovina)
+
+        print(trgovinaartikli)
+        return create_json_response(200, data=serializers.serialize('json', trgovinaartikli))
+
+    
 
 class AndroidArtiklTrgovina(View):
     def post(self, request, *args, **kwargs):
