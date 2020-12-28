@@ -5,11 +5,11 @@ package com.example.smartcart;
  *
  *
  * */
-public class IzracuniCijene {
+public abstract class IzracuniCijenePopisa {
 
     public static final int NACIN_1 = 1;
     public static final int NACIN_2 = 2;
     public static final int DEFAULT = NACIN_1;
 
-    private IzracuniCijene() {}
+    private IzracuniCijenePopisa() {}
 }

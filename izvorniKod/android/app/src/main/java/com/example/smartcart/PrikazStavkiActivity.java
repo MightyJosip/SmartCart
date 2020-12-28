@@ -44,8 +44,5 @@ public class PrikazStavkiActivity extends AppCompatActivity {
         }
         Toast.makeText(this, sb.toString(), Toast.LENGTH_SHORT).show();
 
-
-
-
     }
 }

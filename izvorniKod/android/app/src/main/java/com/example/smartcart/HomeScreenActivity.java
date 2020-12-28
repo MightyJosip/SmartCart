@@ -25,6 +25,12 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.smartcart.database.Popis;
 import com.example.smartcart.database.SmartCartDatabase;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +42,7 @@ public class HomeScreenActivity extends AppCompatActivity{
     private static final int MENU_LOGOUT = 4;
     private static final int MENU_ACCOUNTSETTINGS = 5;
     public static FragmentManager fragmentManager;
+    private static List<Trgovina> trgovine = new ArrayList<>();
     //public static SmartCartDatabase myAppDatabase;
 
     /**
@@ -56,7 +63,33 @@ public class HomeScreenActivity extends AppCompatActivity{
         }
         Connector conn = Connector.getInstance(this);
         conn.fetchTrgovine(response -> {
-            Toast.makeText(this, response.toString(), Toast.LENGTH_SHORT).show();
+            android.os.Debug.waitForDebugger();
+           // Toast.makeText(this, response, Toast.LENGTH_SHORT).show(); // TODO: Finish parsing response for stores. Currently an error in the received response is given by the android OS
+            JSONObject stores;
+            JSONArray arr = null;
+            try {
+                //response = "{ \"nesto\": " + response + " }";
+                stores = new JSONObject(response);
+                arr = stores.getJSONArray("");
+
+                //JSONArray arr = new JSONArray(response);
+
+                for(int i = 0; i < arr.length(); i++){
+
+                    int identifikator = Integer.parseInt(arr.getJSONObject(i).getString("id"));
+                    String nazivTrgovine = arr.getJSONObject(i).getString("naz_trgovina");
+                    String adresa = arr.getJSONObject(i).getString("adresa_trgovina");
+                    Time vrijemeOtvaranja = Time.valueOf(arr.getJSONObject(i).getString("radno_vrijeme_pocetak"));
+                    Time vrijemeZatvaranja = Time.valueOf(arr.getJSONObject(i).getString("radno_vrijeme_kraj"));
+                    int vlasnik = Integer.parseInt(arr.getJSONObject(i).getString("vlasnik"));
+
+                    Trgovina store = new Trgovina(identifikator, nazivTrgovine, adresa, vrijemeOtvaranja, vrijemeZatvaranja, vlasnik);
+                    trgovine.add(store);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }, error -> Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show());
 
     }
@@ -125,7 +158,6 @@ public class HomeScreenActivity extends AppCompatActivity{
                 break;
         }
 
-
         if (enableLogin)
             menu.add(Menu.NONE, MENU_LOGIN, Menu.NONE, R.string.log_in);
         if (enableSignup)
@@ -136,8 +168,6 @@ public class HomeScreenActivity extends AppCompatActivity{
             menu.add(Menu.NONE, MENU_LOGOUT, Menu.NONE, "Log out"); //treba dodati to u Strings konstante
         if (enableAccountSettings)
             menu.add(Menu.NONE, MENU_ACCOUNTSETTINGS, Menu.NONE, "Postavke računa"); //treba dodati to u Strings konstante
-
-
 
     }
 
@@ -162,9 +192,9 @@ public class HomeScreenActivity extends AppCompatActivity{
                 break;
             }
 
-            case MENU_ACCOUNTSETTINGS:
-                Toast.makeText(this, "Nije implementirano :(", Toast.LENGTH_LONG).show();
-                break;
+            case MENU_ACCOUNTSETTINGS: startAccountSettingsActivity(); break;
+//                Toast.makeText(this, "Nije implementirano :(", Toast.LENGTH_LONG).show();
+//                break;
 
             case MENU_LOGOUT:
                 SharedPreferences prefs = getSharedPreferences("user_info", Context.MODE_PRIVATE);
@@ -180,7 +210,6 @@ public class HomeScreenActivity extends AppCompatActivity{
         return super.onContextItemSelected(item);
     }
 
-
     public void startLogInActivity() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
@@ -195,6 +224,11 @@ public class HomeScreenActivity extends AppCompatActivity{
         SharedPreferences sp = getSharedPreferences("user_info", Context.MODE_PRIVATE);
 
         return sp.getString("auth_level", AuthLevels.DEFAULT);
+    }
+
+    private void startAccountSettingsActivity(){
+        Intent intent = new Intent(this, AccountSettingsActivity.class);
+        startActivity(intent);
     }
 
 
