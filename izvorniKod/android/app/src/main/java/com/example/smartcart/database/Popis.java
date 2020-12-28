@@ -6,7 +6,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import com.example.smartcart.IzracuniCijene;
+import com.example.smartcart.IzracuniCijenePopisa;
 
 @Entity(tableName = "popis")
 public class Popis {
@@ -18,7 +18,7 @@ public class Popis {
     private String nazivPopis;
 
     @ColumnInfo(name = "izrCijene")
-    private int nacinIzracuna = IzracuniCijene.DEFAULT;
+    private int nacinIzracuna = IzracuniCijenePopisa.DEFAULT;
 
     @ColumnInfo(name = "sifTrgovina")
     private int sifTrgovina = 69420;
