@@ -3,7 +3,6 @@ import json
 from django.contrib.auth import authenticate, logout
 from django.contrib.sessions.models import Session
 from django.core import serializers
-from django.views.generic.base import View
 from django.http import HttpResponse
 
 from .functions import create_json_response, android_login_function, get_user_from_session, User, get_object_or_none
@@ -22,7 +21,7 @@ class AndroidArtikliView(View):
         except KeyError:
             naziv_artikla = ''
         artikli = Artikl.objects.filter(naziv_artikla__contains='%s' % naziv_artikla)
-        return create_json_response(200, data=serializers.serialize('json', artikli), safe=False)
+        return create_json_response(200, data=serializers.serialize('json', artikli))
 
 
 class AndroidArtiklTrgovina(View):
@@ -46,7 +45,7 @@ class AndroidArtiklTrgovina(View):
         else:
             data = serializers.serialize('json', [artikl_trgovina])
 
-        return create_json_response(200, data=data, safe=False)
+        return create_json_response(200, data=data)
 
 
 class AndroidOpisiView(View):
@@ -55,7 +54,7 @@ class AndroidOpisiView(View):
         id_artikltrgovina = data['id']
 
         opisi = OpisArtikla.objects.filter(trgovina_artikl_id=id_artikltrgovina)
-        return create_json_response(200, data=serializers.serialize('json', opisi), safe=False)
+        return create_json_response(200, data=serializers.serialize('json', opisi))
 
 
 class AndroidDownvoteView(View):
@@ -131,7 +130,7 @@ class AndroidWriteProductDescription(View):
             opis.save()
         except Exception as e:
             data = json.dumps({'err': str(e)})
-            return create_json_response(403, data=data, safe=False)
+            return create_json_response(403, data=data)
 
         return HttpResponse()
 
@@ -142,7 +141,7 @@ class AndroidPopisView(View):
         artikli = []
         for barkod in barkodovi:
             artikli += Artikl.objects.filter(barkod_artikla=barkod)
-        return create_json_response(200, data=serializers.serialize('json', artikli), safe=False)
+        return create_json_response(200, data=serializers.serialize('json', artikli))
 
 
 class AndroidLogInView(View):
@@ -214,4 +213,4 @@ class AndroidTrgovineView(View):
         trgovine = Trgovina.objects.filter(naz_trgovina__contains=f'{naz_trgovina}')
         if sif_trgovina is not None:
             trgovine = trgovine.filter(sif_trgovina=sif_trgovina)
-        return create_json_response(200, data=serializers.serialize('json', trgovine), safe=False)
+        return create_json_response(200, data=serializers.serialize('json', trgovine))
