@@ -29,7 +29,7 @@ class AndroidSviArtikliUTrgovini(View):
             data = json.loads(request.body)
             sif_trgovina = data['sif_trgovina']
         except:
-            res = HttpResponse()
+            res = HttpResponse(content="Takva trgovina ne postoji")
             res.status_code = 404
             return res
 
@@ -68,9 +68,13 @@ class AndroidArtiklTrgovina(View):
 class AndroidOpisiView(View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body)
-        id_artikltrgovina = data['id']
+        sif_trgovina = data['sif_trgovina']
+        barkod = data['barkod']
 
-        opisi = OpisArtikla.objects.filter(trgovina_artikl_id=id_artikltrgovina)
+        opisi = OpisArtikla.objects.filter(
+            trgovina=Trgovina.objects.get(sif_trgovina=sif_trgovina),
+            artikl=Artikl.objects.get(barkod_artikla=barkod)
+            )
         return create_json_response(200, data=serializers.serialize('json', opisi))
 
 

@@ -51,12 +51,14 @@ urlpatterns = [
     path('android/artikli', AndroidArtikliView.as_view(), name='android_artikli'),
     path('android/trgovine', AndroidTrgovineView.as_view(), name='android_trgovine'),
     path('android/popis', AndroidPopisView.as_view(), name='android_popis'),
+    # dobro paziti na sljedeća dva!
     path('android/artikltrgovina', AndroidArtiklTrgovina.as_view(), name='artikltrgovina'),
+    path('android/artiklitrgovina', AndroidSviArtikliUTrgovini.as_view(), name="artiklitrgovina"),
+    #
     path('android/opisi', AndroidOpisiView.as_view(), name='opisi'),
     path('android/downvote', AndroidDownvoteView.as_view(), name ='downvote'),
     path('android/upvote', AndroidUpvoteView.as_view(), name='upvote'),
     path('android/write_description', AndroidWriteProductDescription.as_view(), name='write_description'),
-    path('android/artiklitrgovina', AndroidSviArtikliUTrgovini.as_view(), name="artiklitrgovina"),
 
     path('accounts/', include('allauth.urls')),
     path('', TemplateView.as_view(template_name='social_app/index.html'))
