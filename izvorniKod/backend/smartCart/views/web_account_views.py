@@ -19,6 +19,7 @@ from ..templates.smartCart import *
 from django.http import HttpResponse
 
 import random
+import json
 
 #from allauth.account.views import *
 
@@ -58,6 +59,8 @@ class SignUpTrgovacView(View):
         secret_code = SecretCode.objects.filter(value=secret_code)
         if User.objects.filter(email=email).exists():
             return render_form(self, request, message='Mail already exists\n')
+        if (secret_code[0].uloga.auth_level != "Trgovac"):
+            return render_form(self, request, message='Wrong authorisation level\n')
         if not secret_code.exists():
             return render_form(self, request, message='Wrong secret code\n')
         else:
@@ -126,6 +129,8 @@ class SignUpAdminView(View):
         secret_code = SecretCode.objects.filter(value=secret_code)
         if User.objects.filter(email=email).exists():
             return render_form(self, request, message='Mail already exists\n')
+        if (secret_code[0].uloga.auth_level != "Admin"):
+            return render_form(self, request, message='Wrong authorisation level\n')
         if not secret_code.exists():
             return render_form(self, request, message='Wrong secret code\n')
         else:
