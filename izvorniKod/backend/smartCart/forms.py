@@ -21,6 +21,12 @@ class SignUpTrgovacForm(forms.Form):
     confirm_password = forms.CharField(max_length=32, widget=forms.PasswordInput)
     secret_code = forms.IntegerField(label='Secret code')
 
+class SignUpAdminForm(forms.Form):
+    email = forms.CharField(label='E-mail', max_length=100)
+    password = forms.CharField(max_length=32, widget=forms.PasswordInput)
+    confirm_password = forms.CharField(max_length=32, widget=forms.PasswordInput)
+    secret_code = forms.IntegerField(label='Secret code')
+
 
 class SignUpKupacForm(forms.Form):
     email = forms.CharField(label='E-mail', max_length=100)

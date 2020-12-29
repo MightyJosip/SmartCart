@@ -29,6 +29,7 @@ urlpatterns = [
     path('', IndexView.as_view(), name='index'),
     path('signup/kupac', SignUpKupacView.as_view(), name='signup_kupac'),
     path('signup/trgovac', SignUpTrgovacView.as_view(), name='signup_trgovac'),
+    path('signup/admin', SignUpAdminView.as_view(), name='signup_admin'),
     path('login', LoginView.as_view(), name='login'),
     path('logout', LogoutView.as_view(), name='logout'),
     path('trgovac', TrgovacView.as_view(), name='trgovac'),

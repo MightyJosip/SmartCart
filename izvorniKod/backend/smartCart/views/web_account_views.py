@@ -7,7 +7,7 @@ from django.core.mail import send_mail
 
 from .functions import render_template, render_form, read_form, User, redirect_to_home_page, root_dispatch, \
     must_be_logged, must_be_enabled
-from ..forms import SignUpTrgovacForm, SignUpKupacForm, LoginForm, EditLogin, NovaLozinkaForm
+from ..forms import SignUpTrgovacForm, SignUpKupacForm, LoginForm, EditLogin, NovaLozinkaForm, SignUpAdminForm
 from ..models import SecretCode, Uloga, BaseUserModel, PrivremenaLozinka, AbstractUser
 from django.contrib.auth.hashers import *
 from django.core.mail import EmailMultiAlternatives
@@ -95,6 +95,47 @@ class SignUpKupacView(View):
         if User.objects.filter(email=email).exists():
             return render_form(self, request, message='Mail already exists\n')
         User.objects.create_user(email, password, uloga = Uloga.objects.get(auth_level='Kupac'))
+        return render(request, 'smartCart/index.html', {})
+
+class SignUpAdminView(View):
+    template_name = 'smartCart/signup_admin.html'
+    form_class = SignUpAdminForm
+
+    def __init__(self):
+        super(SignUpAdminView, self).__init__()
+        self.form = SignUpAdminView.form_class()
+
+    def post(self, request, *args, **kwargs):
+        if read_form(self, request):
+            return self.check_user(request)
+
+    def get(self, request, *args, **kwargs):
+        return render_form(self, request)
+
+    def check_user(self, request):
+        email = request.POST['email']
+        password = request.POST['password']
+        confirm_password = request.POST['confirm_password']
+        secret_code = request.POST['secret_code']
+        try:
+            validate_email(email)
+        except ValidationError:
+            return render_form(self, request, message='Wrong mail format\n')
+        if password != confirm_password:
+            return render_form(self, request, message='Passwords don\'t match\n')
+        secret_code = SecretCode.objects.filter(value=secret_code)
+        if User.objects.filter(email=email).exists():
+            return render_form(self, request, message='Mail already exists\n')
+        if not secret_code.exists():
+            return render_form(self, request, message='Wrong secret code\n')
+        else:
+            secret_code.delete()
+        #User.objects.create_user(email, password, uloga = Uloga.objects.get(auth_level='Trgovac'))
+        u = User(email=email)
+        u.set_password(password)
+        u.is_superuser = True
+        u.is_staff = True
+        u.save()
         return render(request, 'smartCart/index.html', {})
 
 

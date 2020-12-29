@@ -47,6 +47,11 @@
         {%csrf_token%}
         <button type="submit">Sign up as kupac</button>
     </form>
+    <br>
+    <form action="/signup/admin" method="get">
+        {%csrf_token%}
+        <button type="submit">Sign up as admin</button>
+    </form>
 </body>
 
 </html>
