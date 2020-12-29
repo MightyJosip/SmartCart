@@ -140,6 +140,7 @@ class SignUpAdminView(View):
         u.set_password(password)
         u.is_superuser = True
         u.is_staff = True
+        u.uloga = Uloga.objects.get(auth_level='Admin')
         u.save()
         return render(request, 'smartCart/index.html', {})
 
