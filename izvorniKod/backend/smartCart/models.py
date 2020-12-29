@@ -89,6 +89,7 @@ class OnemoguceniRacun(models.Model):
 
 
 # TODO: ovo valja urediti tako da se prikazuje auth_level
+# TODO. također treba dodati sustav glasanja
 class MyUserAdmin(ModelAdmin):
     model = BaseUserModel
     list_display = ('email', 'is_staff', 'omogucen')

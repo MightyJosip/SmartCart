@@ -165,6 +165,7 @@ class AndroidPopisView(View):
         return create_json_response(200, data=serializers.serialize('json', artikli))
 
 #TODO: dodati poruku "you have been vac banned"
+#TODO: srediti ovo i za google login
 class AndroidLogInView(View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body)
