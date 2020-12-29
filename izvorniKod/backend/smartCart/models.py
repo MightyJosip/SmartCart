@@ -37,7 +37,7 @@ class Uloga(models.Model):
         ('G', 'Gost'),
         ('K', 'Kupac'),
         ('T', 'Trgovac'),
-        ('A', 'Administrator')
+        ('A', 'Admin')
     ]
 
     auth_level = models.CharField(max_length=7, choices=AUTH_LEVEL_CHOICES, default='Gost', null=False)
