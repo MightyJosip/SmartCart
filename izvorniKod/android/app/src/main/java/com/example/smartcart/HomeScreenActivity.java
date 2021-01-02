@@ -63,7 +63,7 @@ public class HomeScreenActivity extends AppCompatActivity{
         }
         Connector conn = Connector.getInstance(this);
         conn.fetchTrgovine(response -> {
-            android.os.Debug.waitForDebugger();
+            //android.os.Debug.waitForDebugger();
             Toast.makeText(this, response, Toast.LENGTH_SHORT).show(); // TODO: Finish parsing response for stores. Currently an error in the received response is given by the android OS
 //            //JSONObject stores;
 //            //JSONArray arr = null;
@@ -192,9 +192,10 @@ public class HomeScreenActivity extends AppCompatActivity{
                 break;
             }
 
-            case MENU_ACCOUNTSETTINGS: startAccountSettingsActivity(); break;
-//                Toast.makeText(this, "Nije implementirano :(", Toast.LENGTH_LONG).show();
-//                break;
+            case MENU_ACCOUNTSETTINGS:
+                //startAccountSettingsActivity(); break
+                Toast.makeText(this, "Nije implementirano :(", Toast.LENGTH_LONG).show();
+                break;
 
             case MENU_LOGOUT:
                 SharedPreferences prefs = getSharedPreferences("user_info", Context.MODE_PRIVATE);
