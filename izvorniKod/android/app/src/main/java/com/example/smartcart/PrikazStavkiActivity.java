@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.List;
@@ -43,6 +45,21 @@ public class PrikazStavkiActivity extends AppCompatActivity {
             sb.append(s).append("\n");
         }
         Toast.makeText(this, sb.toString(), Toast.LENGTH_SHORT).show();
+
+        EditText et = findViewById(R.id.ime_stavke);
+        Button btn = findViewById(R.id.nova_stavka);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String input = et.getText().toString().trim();
+                if (input.isEmpty())
+                    return;
+
+                Stavka novaStavka = new Stavka(myExtra, input);
+
+                dao.dodajStavke(novaStavka);
+            }
+        });
 
     }
 }

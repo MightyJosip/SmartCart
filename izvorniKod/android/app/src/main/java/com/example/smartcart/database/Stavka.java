@@ -36,7 +36,7 @@ public class Stavka {
     private int kolicina = 69;
 
     @ColumnInfo(name = "naziv")
-    private String naziv = "nez";
+    private String naziv;
 
     @ColumnInfo(name = "omiljeni")
     private boolean omiljeni = false;
@@ -47,10 +47,10 @@ public class Stavka {
 
 
     @Ignore
-    public Stavka(int sifPopis, int i) {
+    public Stavka(int sifPopis, String naziv) {
 
         this.sifPopis = sifPopis;
-        naziv = naziv + " " + i;
+        this.naziv = naziv;
     }
 
     public Stavka(int sifStavka, int sifPopis, String barkod, double cijena, String filtarFunkcija, boolean uKosarici,

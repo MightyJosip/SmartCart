@@ -91,7 +91,9 @@ public class AddPopisFragment extends Fragment {
                 SmartCartDatabase db = SmartCartDatabase.getInstance(AddPopisFragment.this.getContext());
                 PopisDao dao = db.popisDao();
                 dao.dodajPopise(popis);
-                //dao.dohvatiPoNazivu(ime);
+                /*
+                dao.dohvatiPoNazivu(ime);
+
 
                 List<Popis> lista = dao.dohvatiPoNazivu(ime);
                 Popis popis1 = lista.get(0);
@@ -106,7 +108,7 @@ public class AddPopisFragment extends Fragment {
                 }
 
                 sdao.dodajStavke(stavke);
-
+                */
 
 
                 Toast.makeText(getActivity(), "Popis uspjesno dodan", Toast.LENGTH_SHORT).show();

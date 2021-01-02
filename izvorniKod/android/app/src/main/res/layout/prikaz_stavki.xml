@@ -21,5 +21,14 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
+    <Button
+        android:id="@+id/nova_stavka"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dodaj"
+        tools:layout_editor_absoluteX="41dp"
+        tools:layout_editor_absoluteY="102dp" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 
