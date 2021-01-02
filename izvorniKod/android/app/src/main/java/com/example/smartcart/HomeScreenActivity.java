@@ -24,14 +24,19 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.smartcart.database.Popis;
 import com.example.smartcart.database.SmartCartDatabase;
+import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class HomeScreenActivity extends AppCompatActivity{
@@ -43,7 +48,6 @@ public class HomeScreenActivity extends AppCompatActivity{
     private static final int MENU_ACCOUNTSETTINGS = 5;
     public static FragmentManager fragmentManager;
     private static List<Trgovina> trgovine = new ArrayList<>();
-    //public static SmartCartDatabase myAppDatabase;
 
     /**
      * Provjerava je li korisnik odabrao hoće li se prijaviti. Ako nije, otvara se MainActivity kako
@@ -64,33 +68,28 @@ public class HomeScreenActivity extends AppCompatActivity{
         Connector conn = Connector.getInstance(this);
         conn.fetchTrgovine(response -> {
             android.os.Debug.waitForDebugger();
-            Toast.makeText(this, response, Toast.LENGTH_SHORT).show(); // TODO: Finish parsing response for stores. Currently an error in the received response is given by the android OS
-            JSONObject stores;
-            //JSONArray arr = null;
-            try {
-                //response = "{ \"nesto\": " + response + " }";
-                stores = new JSONObject(response);
-                //arr = stores.getJSONArray("");
+            //Toast.makeText(this, response, Toast.LENGTH_SHORT).show(); // TODO: Finish parsing response for stores. Currently an error in the received response is given by the android OS
 
-                JSONArray arr = new JSONArray(response);
+            Gson gson = new Gson();
+            Type storeType = new TypeToken<ArrayList<Object>>(){}.getType();
+            List<Object> trgovineHelper = gson.fromJson(response, storeType);
 
-                for(int i = 0; i < arr.length(); i++){
+            Toast.makeText(this, "Done", Toast.LENGTH_LONG).show();
 
-                    int identifikator = Integer.parseInt(arr.getJSONObject(i).getString("id"));
-                    String nazivTrgovine = arr.getJSONObject(i).getString("naz_trgovina");
-                    String adresa = arr.getJSONObject(i).getString("adresa_trgovina");
-                    Time vrijemeOtvaranja = Time.valueOf(arr.getJSONObject(i).getString("radno_vrijeme_pocetak"));
-                    Time vrijemeZatvaranja = Time.valueOf(arr.getJSONObject(i).getString("radno_vrijeme_kraj"));
-                    int vlasnik = Integer.parseInt(arr.getJSONObject(i).getString("vlasnik"));
+           for(Object o : trgovineHelper) {
+               Map<String, Object> bla = (Map<String, Object>) (((LinkedTreeMap<String, Object>) o).get("fields"));
+               trgovine.add(new Trgovina(((Double) ((LinkedTreeMap<String, Object>) o).get("pk")).intValue(), (String) bla.get("naz_trgovina"), (String) bla.get("adresa_trgovina"), Time.valueOf((String) bla.get("radno_vrijeme_pocetak")),
+                       Time.valueOf((String) bla.get("radno_vrijeme_kraj")), ((Double) bla.get("vlasnik")).intValue()));
+           }
 
-                    Trgovina store = new Trgovina(identifikator, nazivTrgovine, adresa, vrijemeOtvaranja, vrijemeZatvaranja, vlasnik);
-                    trgovine.add(store);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+           drawOnScreenStores();
 
         }, error -> Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show());
+
+    }
+
+    private void drawOnScreenStores() {
+
 
     }
 
