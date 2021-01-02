@@ -99,10 +99,8 @@ class PromijeniLongLat(forms.ModelForm):
 
 
 # dodaj id da se zna tko je tko
-class PromijeniPrioritet(forms.ModelForm):
-    class Meta:
-        model = OpisArtikla
-        fields = ['prioritiziran', 'id']
+class PromijeniPrioritet(forms.Form):
+    prioritiziran = forms.BooleanField(required=False)
 
 class UploadFileForm(forms.Form):
     title = forms.CharField(max_length=100)
