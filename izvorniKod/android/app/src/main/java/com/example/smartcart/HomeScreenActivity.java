@@ -65,30 +65,30 @@ public class HomeScreenActivity extends AppCompatActivity{
         conn.fetchTrgovine(response -> {
             android.os.Debug.waitForDebugger();
             Toast.makeText(this, response, Toast.LENGTH_SHORT).show(); // TODO: Finish parsing response for stores. Currently an error in the received response is given by the android OS
-//            //JSONObject stores;
-//            //JSONArray arr = null;
-//            try {
-//                //response = "{ \"nesto\": " + response + " }";
-//               // stores = new JSONObject(response);
-//                //arr = stores.getJSONArray("");
-//
-//                JSONArray arr = new JSONArray(response);
-//
-//                for(int i = 0; i < arr.length(); i++){
-//
-//                    int identifikator = Integer.parseInt(arr.getJSONObject(i).getString("id"));
-//                    String nazivTrgovine = arr.getJSONObject(i).getString("naz_trgovina");
-//                    String adresa = arr.getJSONObject(i).getString("adresa_trgovina");
-//                    Time vrijemeOtvaranja = Time.valueOf(arr.getJSONObject(i).getString("radno_vrijeme_pocetak"));
-//                    Time vrijemeZatvaranja = Time.valueOf(arr.getJSONObject(i).getString("radno_vrijeme_kraj"));
-//                    int vlasnik = Integer.parseInt(arr.getJSONObject(i).getString("vlasnik"));
-//
-//                    Trgovina store = new Trgovina(identifikator, nazivTrgovine, adresa, vrijemeOtvaranja, vrijemeZatvaranja, vlasnik);
-//                    trgovine.add(store);
-//                }
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
+            JSONObject stores;
+            //JSONArray arr = null;
+            try {
+                //response = "{ \"nesto\": " + response + " }";
+                stores = new JSONObject(response);
+                //arr = stores.getJSONArray("");
+
+                JSONArray arr = new JSONArray(response);
+
+                for(int i = 0; i < arr.length(); i++){
+
+                    int identifikator = Integer.parseInt(arr.getJSONObject(i).getString("id"));
+                    String nazivTrgovine = arr.getJSONObject(i).getString("naz_trgovina");
+                    String adresa = arr.getJSONObject(i).getString("adresa_trgovina");
+                    Time vrijemeOtvaranja = Time.valueOf(arr.getJSONObject(i).getString("radno_vrijeme_pocetak"));
+                    Time vrijemeZatvaranja = Time.valueOf(arr.getJSONObject(i).getString("radno_vrijeme_kraj"));
+                    int vlasnik = Integer.parseInt(arr.getJSONObject(i).getString("vlasnik"));
+
+                    Trgovina store = new Trgovina(identifikator, nazivTrgovine, adresa, vrijemeOtvaranja, vrijemeZatvaranja, vlasnik);
+                    trgovine.add(store);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
         }, error -> Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show());
 
