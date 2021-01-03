@@ -2,6 +2,8 @@ package com.example.smartcart;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import android.content.Context;
@@ -15,9 +17,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -48,6 +53,8 @@ public class HomeScreenActivity extends AppCompatActivity{
     private static final int MENU_ACCOUNTSETTINGS = 5;
     public static FragmentManager fragmentManager;
     private static List<Trgovina> trgovine = new ArrayList<>();
+    RecyclerView recyclerView;
+    Adapter adapter;
 
     /**
      * Provjerava je li korisnik odabrao hoće li se prijaviti. Ako nije, otvara se MainActivity kako
@@ -90,19 +97,50 @@ public class HomeScreenActivity extends AppCompatActivity{
 
     private void drawOnScreenStores() {
 
+//        ArrayList<String> array = new ArrayList<>();
+//        /*TextView text = new TextView(this);
+//        text.setText("tusam");*/
+//        //Toast toast = Toast.makeText(this, "Uspjeh. Poruka: ", Toast.LENGTH_LONG);
+//
+//        ListView lista = (ListView) findViewById(R.id.storeList);
+//        lista.setOnItemClickListener((parent, v, position, id) -> {
+//            //Toast.makeText(PrikazPopisaActivity.this, array.get(position), Toast.LENGTH_LONG).show();
+//            Intent intent = new Intent(getBaseContext(), PrikazStavkiActivity.class);
+//            String s = array.get(position);
+//            String[] s1 = s.split(" ");
+//            int sif = Integer.parseInt(s1[0]);
+//            intent.putExtra("id", sif);
+//            startActivity(intent);
+//
+//        });
+//
+//        List<Popis> svi = SmartCartDatabase.getInstance(this).popisDao().dohvatiSvePopise();
+//        for (Popis p : svi) {
+//            TextView text = new TextView(this);
+//            text.setText(p.toString());
+//            array.add((String) text.getText());
+//        }
+//
+//        ArrayAdapter adapter = new ArrayAdapter(HomeScreenActivity.this, android.R.layout.simple_list_item_1, array);
+//
+//        lista.setAdapter(adapter);
 
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        adapter = new Adapter(getApplicationContext(),trgovine);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        fragmentManager = getSupportFragmentManager();
+        //fragmentManager = getSupportFragmentManager();
         //myAppDatabase = SmartCartDatabase.getInstance(this);
 
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         getSupportActionBar().hide();
         setContentView(R.layout.home_screen);
+        recyclerView = findViewById(R.id.storeList);
 
 
 
@@ -115,14 +153,14 @@ public class HomeScreenActivity extends AppCompatActivity{
 
 
 
-        if(findViewById(R.id.fragment_container) != null ){
-
-            if( savedInstanceState!= null ){
-                return;
-            }
-
-            fragmentManager.beginTransaction().add(R.id.fragment_container, new AddPopisHomeFragment()).commit();
-        }
+//        if(findViewById(R.id.fragment_container) != null ){
+//
+//            if( savedInstanceState!= null ){
+//                return;
+//            }
+//
+//            fragmentManager.beginTransaction().add(R.id.fragment_container, new AddPopisHomeFragment()).commit();
+//        }
     }
 
     @Override

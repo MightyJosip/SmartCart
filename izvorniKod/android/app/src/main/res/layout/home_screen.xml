@@ -87,8 +87,21 @@
         app:layout_constraintTop_toBottomOf="@+id/textView9"
         android:autofillHints="Enter something" />
 
-    <FrameLayout
-        android:id="@+id/fragment_container"
+<!--    <FrameLayout-->
+<!--        android:id="@+id/fragment_container"-->
+<!--        android:layout_width="414dp"-->
+<!--        android:layout_height="489dp"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:layout_marginEnd="8dp"-->
+<!--        android:layout_marginBottom="8dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+
+<!--        >-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/storeList"
         android:layout_width="414dp"
         android:layout_height="489dp"
         android:layout_marginStart="8dp"
@@ -96,19 +109,7 @@
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-
-        >
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/storeSpace"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </FrameLayout>
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

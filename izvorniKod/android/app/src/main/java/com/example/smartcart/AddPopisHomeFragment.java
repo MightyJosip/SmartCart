@@ -71,6 +71,6 @@ public class AddPopisHomeFragment extends Fragment implements View.OnClickListen
     @Override
     public void onClick(View v) {
 
-        HomeScreenActivity.fragmentManager.beginTransaction().replace(R.id.fragment_container, new AddPopisFragment()).addToBackStack(null).commit();
+//        HomeScreenActivity.fragmentManager.beginTransaction().replace(R.id.fragment_container, new AddPopisFragment()).addToBackStack(null).commit();
     }
 }
