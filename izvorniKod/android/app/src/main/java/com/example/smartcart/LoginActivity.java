@@ -86,6 +86,9 @@ public class LoginActivity extends AppCompatActivity {
             }
             spe.apply();
 
+            Intent intent = new Intent(this, HomeScreenActivity.class);
+            intent.putExtra("isFirstLaunch", false);
+            startActivity(intent);
 
             finish();
         }, err -> {

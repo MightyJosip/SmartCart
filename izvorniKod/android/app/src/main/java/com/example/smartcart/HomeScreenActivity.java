@@ -66,22 +66,16 @@ public class HomeScreenActivity extends AppCompatActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences sp = getSharedPreferences("user_info", Context.MODE_PRIVATE);
-        if (!sp.contains("auth_level")) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            intent.putExtra("isFirstLaunch", true);
-            startActivity(intent);
-        }
         Connector conn = Connector.getInstance(this);
         conn.fetchTrgovine(response -> {
-            android.os.Debug.waitForDebugger();
+           // android.os.Debug.waitForDebugger();
             //Toast.makeText(this, response, Toast.LENGTH_SHORT).show(); // TODO: Finish parsing response for stores. Currently an error in the received response is given by the android OS
 
             Gson gson = new Gson();
             Type storeType = new TypeToken<ArrayList<Object>>(){}.getType();
             List<Object> trgovineHelper = gson.fromJson(response, storeType);
 
-            Toast.makeText(this, "Done", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "Done", Toast.LENGTH_LONG).show();
 
            for(Object o : trgovineHelper) {
                Map<String, Object> bla = (Map<String, Object>) (((LinkedTreeMap<String, Object>) o).get("fields"));
@@ -93,6 +87,11 @@ public class HomeScreenActivity extends AppCompatActivity{
 
         }, error -> Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show());
 
+//        try {
+//            Thread.sleep(1000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private void drawOnScreenStores() {
