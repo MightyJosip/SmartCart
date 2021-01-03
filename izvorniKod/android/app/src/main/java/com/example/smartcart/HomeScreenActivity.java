@@ -97,34 +97,6 @@ public class HomeScreenActivity extends AppCompatActivity{
 
     private void drawOnScreenStores() {
 
-//        ArrayList<String> array = new ArrayList<>();
-//        /*TextView text = new TextView(this);
-//        text.setText("tusam");*/
-//        //Toast toast = Toast.makeText(this, "Uspjeh. Poruka: ", Toast.LENGTH_LONG);
-//
-//        ListView lista = (ListView) findViewById(R.id.storeList);
-//        lista.setOnItemClickListener((parent, v, position, id) -> {
-//            //Toast.makeText(PrikazPopisaActivity.this, array.get(position), Toast.LENGTH_LONG).show();
-//            Intent intent = new Intent(getBaseContext(), PrikazStavkiActivity.class);
-//            String s = array.get(position);
-//            String[] s1 = s.split(" ");
-//            int sif = Integer.parseInt(s1[0]);
-//            intent.putExtra("id", sif);
-//            startActivity(intent);
-//
-//        });
-//
-//        List<Popis> svi = SmartCartDatabase.getInstance(this).popisDao().dohvatiSvePopise();
-//        for (Popis p : svi) {
-//            TextView text = new TextView(this);
-//            text.setText(p.toString());
-//            array.add((String) text.getText());
-//        }
-//
-//        ArrayAdapter adapter = new ArrayAdapter(HomeScreenActivity.this, android.R.layout.simple_list_item_1, array);
-//
-//        lista.setAdapter(adapter);
-
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         adapter = new Adapter(getApplicationContext(),trgovine);
         recyclerView.setAdapter(adapter);
