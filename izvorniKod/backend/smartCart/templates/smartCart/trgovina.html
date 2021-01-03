@@ -14,19 +14,17 @@
 <body>
     <h1>Ovdje su prikazani podaci za trgovinu {{trgovina}} </h1>
     <h2>Radno vrijeme : {{trgovina.radno_vrijeme_pocetak|time:"H:i"}}-{{trgovina.radno_vrijeme_kraj|time:"H:i"}}</h2>
-    <br />
     <h2>Pozicija trgovine: longitude {{trgovina.longitude}} latitude {{trgovina.latitude}}</h2>
     <hr>
 
     <h2>Artikli dostupni u ovoj trgovini</h2>
     <table>
         {% if artikli %}
-            <tr><th>Barkod</th><th>Naziv</th><th>Cijena</th><th>Akcija</th><th>Dostupan</th><th>Uredi</th><th>Obriši</th>
+            <tr><th>Barkod</th><th>Cijena</th><th>Akcija</th><th>Dostupan</th><th>Uredi</th><th>Obriši</th>
         {% endif %}
         {% for trgartikl in artikli %}
             <tr>
                 <td>{{ trgartikl.artikl.barkod_artikla }}</td>
-                <td>{{ trgartikl.artikl.naziv_artikla }}</td>
                 <td>{{ trgartikl.cijena }}</td>
                 {% if trgartikl.akcija %}
                     <td>Da</td>
@@ -48,9 +46,15 @@
     <h2>Dodaj artikle u ovu trgovinu</h2>
     <form action="/trgovina/{{trgovina.sif_trgovina}}" method="POST"> <!-- /0 because of parsing, stupid premanent temporary hack which works -->
         {%csrf_token%}
-        {% for field in artikl_form %}
-            <b>{{ field.label_tag }}</b><br> {{ field }}<br><br>
-        {% endfor %}
+        <table>
+            {% for field in artikl_form %}
+                <tr>
+                    <td><b>{{ field.label_tag }}</b></td>
+                    <td>{{ field }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br>
         <input type="submit" value="Submit">
     </form>
     <hr>
@@ -58,9 +62,15 @@
     <h2>Promijeni radno vrijeme trgovine</h2>
     <form action="/trgovina/{{trgovina.sif_trgovina}}" method="POST"> <!-- /0 because of parsing, stupid premanent temporary hack which works -->
         {%csrf_token%}
-        {% for field in vrijeme_form %}
-            <b>{{ field.label_tag }}</b><br> {{ field }}<br><br>
-        {% endfor %}
+        <table>
+            {% for field in vrijeme_form %}
+                <tr>
+                    <td><b>{{ field.label_tag }}</b></td>
+                    <td>{{ field }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br>
         <input type="submit" value="Submit">
     </form>
     <hr>
@@ -68,9 +78,15 @@
     <h2>Promijeni lokaciju trgovine</h2>
     <form action="/trgovina/{{trgovina.sif_trgovina}}" method="POST"> <!-- /0 because of parsing, stupid premanent temporary hack which works -->
         {%csrf_token%}
-        {% for field in longlat_form %}
-            <b>{{ field.label_tag }}</b><br> {{ field }}<br><br>
-        {% endfor %}
+        <table>
+            {% for field in longlat_form %}
+                <tr>
+                    <td><b>{{ field.label_tag }}</b></td>
+                    <td>{{ field }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br>
         <input type="submit" value="Submit">
     </form>
     <hr>

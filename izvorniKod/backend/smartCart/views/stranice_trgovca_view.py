@@ -2,13 +2,13 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import View
 
 from .functions import render_form, must_be_trgovac, read_form, stay_on_page, get_artikli_from_trgovina, root_dispatch, \
-    redirect_to_home_page, User, get_object_or_none, get_vlasnik_trgovine, render_template, must_be_enabled, get_user_from_session
+    redirect_to_home_page, User, get_vlasnik_trgovine, render_template
 from ..forms import DodajTrgovinu, DodajArtikl, DodajProizvodaca, DodajArtiklUTrgovinu, PromijeniRadnoVrijeme, \
     UrediArtiklUTrgovini, PromijeniLongLat, PromijeniPrioritet, UploadFileForm
 from ..models import *
-from django.http import *
 
-import json, datetime
+import datetime
+
 
 @must_be_trgovac
 class TrgovacView(View):
@@ -31,10 +31,10 @@ class TrgovinaView(View):
     def __init__(self):
         super(TrgovinaView, self).__init__()
         self.form = {
-            'artikl_form': DodajArtiklUTrgovinu(), 
+            'artikl_form': DodajArtiklUTrgovinu(),
             'vrijeme_form': PromijeniRadnoVrijeme(),
             'longlat_form': PromijeniLongLat()
-            }
+        }
 
     def dispatch(self, request, *args, **kwargs):
         t = Trgovina.objects.get(sif_trgovina=self.kwargs['sif_trgovina'])
@@ -79,19 +79,19 @@ class TrgovinaView(View):
         return stay_on_page(request)
 
 
-#TODO: makni šumu "Submit" gumba
 @must_be_trgovac
 class UrediArtiklView(View):
     template_name = 'smartCart/artikl_u_trgovini.html'
-    #form_class = UrediArtiklUTrgovini
+
+    # form_class = UrediArtiklUTrgovini
 
     def __init__(self):
         super(UrediArtiklView, self).__init__()
         self.form = {
             'uredi_artikl_u_trgovini_form': UrediArtiklUTrgovini(),
             'prioritet_form': PromijeniPrioritet(),
-            'upload_file_form' : UploadFileForm()
-            }
+            'upload_file_form': UploadFileForm()
+        }
 
     def dispatch(self, request, *args, **kwargs):
         self.t_id = TrgovinaArtikli.objects.get(id=self.kwargs['artikl_trgovina']).trgovina.sif_trgovina
@@ -107,50 +107,40 @@ class UrediArtiklView(View):
         return super(UrediArtiklView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        opisi = OpisArtikla.objects.all().filter(trgovina_artikl=TrgovinaArtikli.objects.get(id = self.kwargs['artikl_trgovina']))
-        
-        if len(opisi) == 0:
-            opisi = ''
-        else:
-            opisi = sorted(opisi, key = lambda a: (a.prioritiziran, a.broj_glasova), reverse=True)
-            for opis in opisi:
-                opis.f = PromijeniPrioritet(initial={'prioritiziran': opis.prioritiziran})
         return render_form(self, request,
-                            trgovina = Trgovina.objects.get(sif_trgovina=self.t_id),
-                            artikl = self.old_art.artikl.naziv_artikla,
-                            opisi = opisi)
-
+                           trgovina=Trgovina.objects.get(sif_trgovina=self.t_id),
+                           artikl=self.old_art.artikl.barkod_artikla,
+                           opisi=self.get_opisi())
 
     def post(self, request, *args, **kwargs):
         if read_form(self, request, 'upload_file_form', files=True):
-            #programmers be like
-            #how to do x in one line
-            #the line:
+            # programmers be like
+            # how to do x in one line
+            # the line:
 
             try:
                 file = request.FILES['file'].read().decode("utf-8").replace('\r', '').split('\n')
-                
+
                 attributes = file[0].split(',')
                 values = file[1].split(',')
 
                 opis = OpisArtikla(
-                        autor_opisa= BaseUserModel.objects.get(email=values[0]),
-                        artikl= Artikl.objects.get(barkod_artikla=values[1]),
+                    autor_opisa=BaseUserModel.objects.get(email=values[0]),
+                    artikl=Artikl.objects.get(barkod_artikla=values[1]),
 
-                        vrsta= Vrsta.objects.get(sif_vrsta=values[2]),
-                        zemlja_porijekla= Zemlja_porijekla.objects.get(naziv=values[3]),
-                        trgovina= Trgovina.objects.get(sif_trgovina=values[4]),
-                        trgovina_artikl= TrgovinaArtikli.objects.get(trgovina=values[4], artikl=values[1]),
+                    vrsta=Vrsta.objects.get(sif_vrsta=values[2]),
+                    zemlja_porijekla=Zemlja_porijekla.objects.get(naziv=values[3]),
+                    trgovina=Trgovina.objects.get(sif_trgovina=values[4]),
+                    trgovina_artikl=TrgovinaArtikli.objects.get(trgovina=values[4], artikl=values[1]),
 
-                        naziv_artikla=values[6],
-                        opis_artikla=values[7],
-                        broj_glasova=values[8],
-                        masa=values[9]
+                    naziv_artikla=values[6],
+                    opis_artikla=values[7],
+                    broj_glasova=values[8],
+                    masa=values[9]
 
-                        )
+                )
                 opis.save()
 
-                
                 dbfile = DBFile(
                     name=request.FILES['file'],
                     data=request.FILES['file'].read(),
@@ -160,9 +150,11 @@ class UrediArtiklView(View):
 
                 dbfile.save()
             except:
-                #TODO: zovi josipa upomoć
-                #return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'), file_err="Greška pri učitavanju datoteke")
-                return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+                return render_form(self, request,
+                                   trgovina=Trgovina.objects.get(sif_trgovina=self.t_id),
+                                   artikl=self.old_art.artikl.naziv_artikla,
+                                   opisi=self.get_opisi(),
+                                   file_err="Greška pri učitavanju datoteke")
             return redirect(f'/trgovina/{self.t_id}')
 
         elif read_form(self, request, 'uredi_artikl_u_trgovini_form'):
@@ -171,7 +163,7 @@ class UrediArtiklView(View):
             old_art.akcija = True if 'akcija' in request.POST else False
             old_art.dostupan = True if 'dostupan' in request.POST else False
             old_art.save()
-        
+
         elif read_form(self, request, 'prioritet_form'):
             opis_set = OpisArtikla.objects.all()
             for opis in opis_set.iterator():
@@ -180,8 +172,19 @@ class UrediArtiklView(View):
                 else:
                     opis.prioritiziran = False
                 opis.save()
- 
+
         return redirect(f'/trgovina/{self.t_id}')
+
+    def get_opisi(self):
+        opisi = OpisArtikla.objects.all().filter(
+            trgovina_artikl=TrgovinaArtikli.objects.get(id=self.kwargs['artikl_trgovina']))
+        if len(opisi) == 0:
+            return ''
+        else:
+            opisi = sorted(opisi, key=lambda a: (a.prioritiziran, a.broj_glasova), reverse=True)
+            for opis in opisi:
+                opis.f = PromijeniPrioritet(initial={'prioritiziran': opis.prioritiziran})
+            return opisi
 
 
 @must_be_trgovac
@@ -256,11 +259,6 @@ class DodajArtikleView(View):
         if read_form(self, request):
             artikl_za_dodati = Artikl(
                 barkod_artikla=request.POST['barkod_artikla'],
-                naziv_artikla=request.POST['naziv_artikla'],
-                opis_artikla=request.POST['opis_artikla'],
-                proizvodac=get_object_or_none(Proizvodac, naziv=request.POST['proizvodac']),
-                zemlja_porijekla=get_object_or_none(Zemlja_porijekla, naziv=request.POST['zemlja_porijekla']),
-                vegan=True if 'vegan' in request.POST else False
             )
             artikl_za_dodati.save()
         return stay_on_page(request)
@@ -283,4 +281,17 @@ class ArtiklView(View):
     template_name = 'smartCart/artikl.html'
 
     def get(self, request, *args, **kwargs):
-        return render_template(self, request, artikl=Artikl.objects.get(barkod_artikla=self.kwargs["barkod_artikla"]))
+        opis = OpisArtikla.objects.filter(
+            artikl=Artikl.objects.get(barkod_artikla=self.kwargs["barkod_artikla"])).order_by("prioritiziran",
+                                                                                              "broj_glasova").last()
+        artikl = {
+            "barkod_artikla": self.kwargs["barkod_artikla"],
+            "naziv_artikla": opis.naziv_artikla,
+            "opis_artikla": opis.opis_artikla,
+            "autor_opisa": opis.autor_opisa,
+            "broj_glasova": opis.broj_glasova,
+            "masa": opis.masa,
+            "vrsta": opis.vrsta,
+            "zemlja_porijekla": opis.zemlja_porijekla
+        }
+        return render_template(self, request, artikl=artikl)

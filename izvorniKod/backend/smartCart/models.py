@@ -57,10 +57,7 @@ class SecretCode(models.Model):
         return f'{self.value}'
 
 
-
 class BaseUserModel(AbstractUser):
-
-    # TODO: implementiraj da korisnik može odabrati username i prikazuj username (ili izbaci)
     username = None
     first_name = None
     last_name = None
@@ -127,9 +124,6 @@ class Zemlja_porijekla(models.Model):
 
 class Artikl(models.Model):
     barkod_artikla = models.CharField(max_length=13, primary_key=True)
-    naziv_artikla = models.CharField(max_length=100, null=False)
-
-
 
     def __str__(self):
         return f'{self.barkod_artikla}'
@@ -226,12 +220,14 @@ class Glasovi(models.Model):
     opis_artikla = models.ForeignKey(OpisArtikla, on_delete=models.CASCADE)
     vrijednost_glasa = models.CharField(max_length=11, choices=VRSTE_GLASOVA, default='Nije glasao', null=False)
 
-#TODO: implementiraj vremensko ograničenje
+
+# TODO: implementiraj vremensko ograničenje
 class PrivremenaLozinka(models.Model):
     user = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=True)
-    password = models.CharField(max_length=128, null=True) 
-    token = models.CharField(max_length=50 ,null=True)
+    password = models.CharField(max_length=128, null=True)
+    token = models.CharField(max_length=50, null=True)
     istice = models.CharField(max_length=100, null=True)  # placeholder
+
 
 class DBFile(models.Model):
     name = models.CharField(max_length=500, null=False)

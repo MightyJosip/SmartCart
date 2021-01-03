@@ -1,8 +1,6 @@
 from django import forms
-from django.forms import TimeInput
-from django import forms
 
-from .models import Artikl, Trgovina, TrgovinaArtikli, Proizvodac, OpisArtikla
+from .models import Artikl, Trgovina, TrgovinaArtikli, Proizvodac
 
 
 class LoginForm(forms.Form):
@@ -47,15 +45,15 @@ class DodajTrgovinu(forms.ModelForm):
             'longitude': 'Longitude'
         }
         widgets = {
-            'radno_vrijeme_pocetak': TimeInput(format='%H:%M'),
-            'radno_vrijeme_kraj': TimeInput(format='%H:%M')
+            'radno_vrijeme_pocetak': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M'),
+            'radno_vrijeme_kraj': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M')
         }
 
 
 class DodajArtikl(forms.ModelForm):
     class Meta:
         model = Artikl
-        fields = ['barkod_artikla', 'naziv_artikla']
+        fields = ['barkod_artikla']
 
 
 
@@ -65,13 +63,8 @@ class DodajProizvodaca(forms.ModelForm):
         fields = ['naziv']
 
 
-class ArtiklField(forms.ModelChoiceField):
-    def label_from_instance(self, obj):
-        return obj.naziv_artikla
-
-
 class DodajArtiklUTrgovinu(forms.Form):
-    artikl = ArtiklField(queryset=Artikl.objects.all())
+    artikl = forms.ModelChoiceField(queryset=Artikl.objects.all())
     cijena = forms.DecimalField(max_digits=8, decimal_places=2)
     akcija = forms.BooleanField(required=False)
     dostupan = forms.BooleanField(required=False)
@@ -89,6 +82,10 @@ class PromijeniRadnoVrijeme(forms.ModelForm):
         fields = ['radno_vrijeme_pocetak', 'radno_vrijeme_kraj']
         labels = {
             'radno_vrijeme_pocetak': 'Radno vrijeme početak',
+        }
+        widgets = {
+            'radno_vrijeme_pocetak': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M'),
+            'radno_vrijeme_kraj': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M')
         }
 
 

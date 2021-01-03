@@ -15,7 +15,6 @@ class Command(BaseCommand):
             for artikl in artikli:
                 podaci_o_artiklu = artikl.split(';')
                 podaci_o_artiklu[-1] = podaci_o_artiklu[-1].rstrip()
-                art = Artikl(barkod_artikla=podaci_o_artiklu[0],
-                             naziv_artikla=podaci_o_artiklu[1])
+                art = Artikl(barkod_artikla=podaci_o_artiklu[0])
                 art.save()
-                print(f"Dodan artikl {podaci_o_artiklu[1]}")
+                print(f"Dodan artikl {podaci_o_artiklu[0]}")

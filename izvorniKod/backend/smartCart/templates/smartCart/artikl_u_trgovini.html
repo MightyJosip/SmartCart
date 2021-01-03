@@ -5,27 +5,34 @@
     <meta charset="UTF-8">
     <title>Uredi artikl</title>
     <link rel="stylesheet" type="text/css" href="{% static 'tablica.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'login.css' %}"/>
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
 </head>
 <body>
     <h1>Uredi artikl: "{{artikl}}" u trgovini: "{{trgovina}}"</h1>
-    <br><br>
+    <br>
     <form action="" method="POST">
         {%csrf_token%}
-        {% for field in uredi_artikl_u_trgovini_form  %}
-            <b>{{ field.label_tag }}</b><br> {{ field }}<br><br>
-        {% endfor %}
+        <table>
+            {% for field in uredi_artikl_u_trgovini_form  %}
+                <tr>
+                    <td>{{ field.label_tag }}</td>
+                    <td>{{ field }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br>
         <input type="submit" value="Submit">
     </form>
 
-    <hr>
+    <br><hr>
 
     <h1>Opisi artikala</h1>
     {% if opisi == '' %}
         <h2>Ovdje nema opisa</h2>
-    {% endif %}
-
+    {% else %}
     <form action="" method="POST">
+        {% csrf_token %}
         {% for opis in opisi %}
             <table>
                 <tr>
@@ -44,35 +51,41 @@
                     <td><b>Glasovi</b></td>
                     <td>{{opis.broj_glasova}}</td>
                 </tr>
+                {% if opis.prioritiziran %}
+                    <tr><th><label>Prioritiziran:</label></th><td><label>
+                        <input type="checkbox" name={{opis.id}} checked>
+                    </label></td></tr>
+                {% else %}
+                    <tr><th><label>Prioritiziran:</label></th><td><label>
+                        <input type="checkbox" name={{opis.id}}>
+                </label></td></tr>
+            {% endif %}
             </table>
             <br>
-            {% if opis.prioritiziran %}
-                <tr><th><label for="id_prioritiziran">Prioritiziran:</label></th><td><input type="checkbox" name={{opis.id}} checked></td></tr>
-            {% else %}
-                <tr><th><label for="id_prioritiziran">Prioritiziran:</label></th><td><input type="checkbox" name={{opis.id}}></td></tr>
-            {% endif %}
-            <br><br><br>
         {% endfor %}
         <input type="submit" value="Submit">
     </form>
-
-    <!--TODO: ovo uredi! -->
-    <!--<form action="" method="POST">
-        {%csrf_token%}
-        {% for field in upload_file_form  %}
-            <b>{{ field.label_tag }}</b><br> {{ field }}<br><br>
-        {% endfor %}
-        <input type="submit" value="Submit">
-    </form>-->
-    {% if file_err != None%}
-        {{file_err}}
     {% endif %}
+
+    <br><hr>
+
+    <h1>Upload datoteke s podacima</h1>
     <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ upload_file_form.as_p }}
+        <table>
+            {% for field in upload_file_form  %}
+                <tr>
+                    <td>{{ field.label_tag }}</td>
+                    <td>{{ field }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br>
         <input type="submit" value="Submit">
     </form>
-
+    {% if file_err != None%}
+        <div class="error">{{file_err}}</div>
+    {% endif %}
     
 
 
