@@ -11,10 +11,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartCart"
         android:usesCleartextTraffic="true">
+        <activity android:name=".PrikazArtikla"></activity>
+        <activity android:name=".PrikazTrgovine" />
         <activity
             android:name=".PrikazStavkiActivity"
             android:label="@string/title_activity_prikaz_stavki"
-            android:theme="@style/Theme.SmartCart.NoActionBar"></activity>
+            android:theme="@style/Theme.SmartCart.NoActionBar" />
         <activity
             android:name=".PrikazPopisaActivity"
             android:label="@string/title_activity_prikaz_popisa"
@@ -31,7 +33,7 @@
         </activity>
         <activity android:name=".LoginActivity" />
         <activity android:name=".SignUpActivity" />
-        <activity android:name=".HomeScreenActivity"/>
+        <activity android:name=".HomeScreenActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

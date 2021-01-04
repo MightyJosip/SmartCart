@@ -88,7 +88,7 @@ public class HomeScreenActivity extends AppCompatActivity{
     private void drawOnScreenStores() {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        adapter = new Adapter(getApplicationContext(),trgovine);
+        adapter = new Adapter(getApplicationContext(),trgovine, this);
         recyclerView.setAdapter(adapter);
     }
 
