@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Layout;
 import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +59,10 @@ public class PrikazTrgovine extends AppCompatActivity {
                     TextView textView = new TextView(this);
                     textView.setText(fields.toString());
                     linearLayout.addView(textView);
+
+
+
+
 
 
                     textView.setOnClickListener(v -> {
