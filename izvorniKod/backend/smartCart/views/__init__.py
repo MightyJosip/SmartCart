@@ -5,4 +5,4 @@ from .stranice_trgovca_view import TrgovacView, TrgovinaView, DodajTrgovineView,
                                    DodajArtikleView, UrediArtiklView, ObrisiArtiklView, DodajProizvodaceView
 
 from .android_views import AndroidSignUpView, AndroidLogInView, AndroidLogoutView, AndroidArtikliView, \
-                           AndroidTrgovineView, AndroidPopisView
+                           AndroidTrgovineView, AndroidPopisView, AndroidEditProfileView
