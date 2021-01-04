@@ -4,6 +4,15 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.contrib.sessions.models import Session
+from django.db.models import ManyToManyField
+from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
+
+
+class UserAccountAdapter(DefaultSocialAccountAdapter):
+    def save_user(self, request, sociallogin, form=None):
+        user = super(UserAccountAdapter, self).save_user(request, sociallogin, form)
+        user.uloga = Uloga(sif_uloga=2)
+        user.save()
 
 
 class AccountManager(BaseUserManager):
@@ -19,39 +28,87 @@ class AccountManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, password, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_active', True)
-        extra_fields.setdefault('is_kupac', True)
-        extra_fields.setdefault('is_trgovac', True)
+        user = self.model(email=email)
+        user.is_superuser = True
+        user.is_staff = True
+        user.uloga = Uloga(sif_uloga=4)
+        user.omogucen = True
+        user.set_password(password)
+        user.save()
+        return user
 
-        return self.create_user(email, password, **extra_fields)
+
+class Uloga(models.Model):
+    sif_uloga = models.IntegerField(primary_key=True)
+
+    AUTH_LEVEL_CHOICES = [
+        ('G', 'Gost'),
+        ('K', 'Kupac'),
+        ('T', 'Trgovac'),
+        ('A', 'Admin')
+    ]
+
+    auth_level = models.CharField(max_length=7, choices=AUTH_LEVEL_CHOICES, default='Gost', null=False)
+
+    def __str__(self):
+        return f'{self.sif_uloga}, {self.auth_level}'
+
+
+class SecretCode(models.Model):
+    value = models.IntegerField(primary_key=True)
+    uloga = models.ForeignKey(Uloga, on_delete=models.CASCADE, null=True)
+
+    class Meta():
+        managed = True
+
+    def __str__(self):
+        return f'{self.value}'
 
 
 class BaseUserModel(AbstractUser):
     username = None
     first_name = None
     last_name = None
-    is_kupac = models.BooleanField(default=False)
-    is_trgovac = models.BooleanField(default=False)
+
     email = models.EmailField(unique=True)
+    uloga = models.ForeignKey(Uloga, on_delete=models.CASCADE, null=True)
+    onemogucio = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
+    omogucen = models.BooleanField(default=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
     objects = AccountManager()
 
+    def get_auth_level(self):
+        return self.uloga.auth_level
+
     def __str__(self):
         return self.email
 
 
+# nepotrebno
+class OnemoguceniRacun(models.Model):
+    emailAdmin = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=True)
+    datum = models.CharField(max_length=100, null=True)  # placeholder
+
+
+# TODO: ovo valja urediti tako da se prikazuje auth_level
+# TODO. također treba dodati sustav glasanja
 class MyUserAdmin(ModelAdmin):
     model = BaseUserModel
-    list_display = ('email', 'is_staff', 'is_kupac', 'is_trgovac')
+    list_display = ('email', 'is_staff', 'omogucen')
     list_filter = ()
     search_fields = ('email',)
-    ordering = ('email', )
+    ordering = ('email',)
     filter_horizontal = ()
+    actions = ['onemoguci_racune']
+
+    def onemoguci_racune(self, request, queryset):
+        queryset.update(omogucen=False)
+        queryset.update(onemogucio=request.user)
+
+    onemoguci_racune.short_description = "Onemoguci oznacene racune"
 
 
 class UserSession(models.Model):
@@ -59,9 +116,6 @@ class UserSession(models.Model):
     session = models.OneToOneField(Session, on_delete=models.CASCADE)
 
 
-# predstavlja proizvođača u bazi podataka
-# trenutno ima samo jedan atribut - naziv
-# TODO: dodati još atributa
 class Proizvodac(models.Model):
     naziv = models.CharField(primary_key=True, max_length=100)
 
@@ -69,10 +123,6 @@ class Proizvodac(models.Model):
         return f'{self.naziv}'
 
 
-# predstavlja zemlju porijekla
-# trenutno ima jedan atribut - naziv
-# TODO: dodaj više atributa
-# ovu bi tablicu mi trebali napuniti
 class Zemlja_porijekla(models.Model):
     naziv = models.CharField(primary_key=True, max_length=100)
 
@@ -80,47 +130,13 @@ class Zemlja_porijekla(models.Model):
         return f'{self.naziv}'
 
 
-# klasa artikl
-# atribute barkod_artikla, naziv_artikla, opis_artikla, proizvođač, zemlja_porijekla i vegan dodaje korisnik
-# autor atributa bi se trebao sam ispuniti
-# vote count bi trebao biti postavljen na nulu
-# TODO: srediti vote count atribude iz NULL prebaciti u DEFAULT = 0
 class Artikl(models.Model):
     barkod_artikla = models.CharField(max_length=13, primary_key=True)
 
-    naziv_artikla = models.CharField(max_length=100, null=False)
-    autor_naziva = models.CharField(max_length=100, null=True)
-    vote_count_naziva = models.IntegerField(null=True)
-
-    opis_artikla = models.CharField(max_length=5000, null=True)
-    autor_opisa = models.CharField(max_length=100, null=True)
-    vote_count_opisa = models.IntegerField(null=True)
-    
-    proizvodac = models.ForeignKey(Proizvodac, on_delete=models.SET_NULL, null=True)       #uh, može i set default ali brate ima tu posla
-    autor_proizvodaca = models.CharField(max_length=100, null=True)
-    vote_count_proizvodaca = models.IntegerField(null=True)
-
-    zemlja_porijekla = models.ForeignKey(Zemlja_porijekla, on_delete=models.SET_NULL,
-                                         null=True)  # krivo jer može biti točnije. Npr. uzmite bilo koji med i pisat će "Zemlja porijeka: 5% iz hrvatske, 99.9% iz kine"
-    autor_zemlje_porijekla = models.CharField(max_length=100, null=True)
-    vote_count_zemlje_porijekla = models.IntegerField(null=True)
-
-    vegan = models.BooleanField(default=False)
-
     def __str__(self):
-        return f'{self.naziv_artikla}'
+        return f'{self.barkod_artikla}'
 
 
-# klasa trgovina
-# sve jasno
-# TODO: dodaj atribute tipa lokacija, adresa itd..
-# TODO: rastaviti ovaj "many to many fields" u zasebnu klasu, dodati "dostupnost" i "cijena" kao atribute
-# stvar je u tome da je N:N veza ne isparava pretvaranjem iz ER u Relacijski model
-# ovdje je pak stvar da N:N veza može biti dio neke druge veze sve dok....
-# nema svoje atribute.
-# E al mi znamo da svaka trgovina određuje svoju cijenu za artikle koji se razlikuju od trgovine do trgovine
-# Na istu foru dodaj "dostupnost"
-# udari u google py django many to many relationship i otvori službenu stranicu i šamaraj
 class Trgovina(models.Model):
     sif_trgovina = models.AutoField(primary_key=True)
     naz_trgovina = models.CharField(max_length=100)
@@ -142,9 +158,87 @@ class TrgovinaArtikli(models.Model):
     akcija = models.BooleanField(default=False)
     dostupan = models.BooleanField(default=False)
 
+    def __str__(self):
+        return f'{self.trgovina}, {self.artikl}'
 
-class SecretCode(models.Model):
-    value = models.IntegerField(primary_key=True)
+
+class Kategorija(models.Model):
+    sif_kategorija = models.AutoField(primary_key=True)
+    naz_kategorija = models.CharField(max_length=100)
 
     def __str__(self):
-        return f'{self.value}'
+        return f'{self.sif_kategorija}, {self.naz_kategorija}'
+
+
+class Potkategorija(models.Model):
+    sif_potkategorija = models.AutoField(primary_key=True)
+    kategorija = models.ForeignKey(Kategorija, on_delete=models.SET_NULL, null=True)
+    naz_potkategorija = models.CharField(max_length=100)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['kategorija', 'sif_potkategorija'], name="constraint_1")]
+
+    def __str__(self):
+        return f'{self.sif_potkategorija}, {self.naz_potkategorija}'
+
+
+class Vrsta(models.Model):
+    sif_vrsta = models.AutoField(primary_key=True)
+    potkategorija = models.ForeignKey(Potkategorija, on_delete=models.SET_NULL, null=True)
+    naz_vrsta = models.CharField(max_length=100)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['potkategorija', 'sif_vrsta'], name="constraint_2")]
+
+    def __str__(self):
+        return f'{self.sif_vrsta}, {self.naz_vrsta}'
+
+
+class OpisArtikla(models.Model):
+    autor_opisa = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=True)
+    artikl = models.ForeignKey(Artikl, on_delete=models.CASCADE, null=True)
+
+    vrsta = models.ForeignKey(Vrsta, on_delete=models.CASCADE, null=True)
+    zemlja_porijekla = models.ForeignKey(Zemlja_porijekla, on_delete=models.CASCADE, null=True)
+    trgovina = models.ForeignKey(Trgovina, on_delete=models.CASCADE, null=True)
+    trgovina_artikl = models.ForeignKey(TrgovinaArtikli, on_delete=models.CASCADE, null=True)
+
+    naziv_artikla = models.CharField(max_length=100, null=False)
+    opis_artikla = models.CharField(max_length=5000, null=True)
+    popis_glasova = ManyToManyField(BaseUserModel, through='Glasovi', related_name='glasaci')
+    broj_glasova = models.IntegerField(null=False, default=0)
+    masa = models.IntegerField(null=True)
+
+    prioritiziran = models.BooleanField(default=False)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['autor_opisa', 'artikl'], name='constraint_3')]
+
+    def __str__(self):
+        return f'{self.autor_opisa}, {self.artikl}'
+
+
+class Glasovi(models.Model):
+    VRSTE_GLASOVA = [
+        ('N', 'Nije glasao'),
+        ('G', 'Goreglas'),
+        ('D', 'Doljeglas'),
+    ]
+    user = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE)
+    opis_artikla = models.ForeignKey(OpisArtikla, on_delete=models.CASCADE)
+    vrijednost_glasa = models.CharField(max_length=11, choices=VRSTE_GLASOVA, default='Nije glasao', null=False)
+
+
+# TODO: implementiraj vremensko ograničenje
+class PrivremenaLozinka(models.Model):
+    user = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=True)
+    password = models.CharField(max_length=128, null=True)
+    token = models.CharField(max_length=50, null=True)
+    istice = models.CharField(max_length=100, null=True)  # placeholder
+
+
+class DBFile(models.Model):
+    name = models.CharField(max_length=500, null=False)
+    data = models.BinaryField()
+    uploaded_by = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=False)
+    date = models.DateTimeField()

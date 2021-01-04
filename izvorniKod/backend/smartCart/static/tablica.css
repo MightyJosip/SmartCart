@@ -4,3 +4,7 @@ table, th, td {
     padding: 5px;
     text-align: center;
 }
+
+label[for="id_prioritiziran"] {
+    font-weight: bold;
+}

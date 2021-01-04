@@ -1,7 +1,8 @@
 # Python byte code files
 __pycache__/
-izvorniKod/backend/smartCart/migration
+izvorniKod/backend/smartCart/migrations
 izvorniKod/backend/constants.txt
+izvorniKod/backend/test.py
 *.log
 *.pot
 *.pyc
