@@ -5,6 +5,14 @@ from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.contrib.sessions.models import Session
 from django.db.models import ManyToManyField
+from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
+
+
+class UserAccountAdapter(DefaultSocialAccountAdapter):
+    def save_user(self, request, sociallogin, form=None):
+        user = super(UserAccountAdapter, self).save_user(request, sociallogin, form)
+        user.uloga = Uloga(sif_uloga=2)
+        user.save()
 
 
 class AccountManager(BaseUserManager):

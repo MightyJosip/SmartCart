@@ -138,6 +138,7 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
+SOCIALACCOUNT_ADAPTER = 'smartCart.models.UserAccountAdapter'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -189,7 +190,7 @@ SOCIALACCOUNT_PROVIDERS = {
         # credentials, or list them here:
         'APP': {
             'client_id': '197701493351-l5j9llbv8r93kce4ajgf1kque7bcqqhr.apps.googleusercontent.com',
-            'secret': 'zK8Si-9hcPJlQD8z3cisPE5m',
+            'secret': CONST['GOOGLE_CLIENT_SECRET'],
             'key': ''
         }
     }
