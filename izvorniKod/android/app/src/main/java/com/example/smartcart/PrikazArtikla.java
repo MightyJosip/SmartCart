@@ -49,10 +49,11 @@ public class PrikazArtikla extends AppCompatActivity {
 
                         TextView txt_naziv = (TextView) findViewById(R.id.txt_naziv);
                         TextView txt_opis = (TextView) findViewById(R.id.txt_opis);
+                        TextView txt_broj_glasova = (TextView) findViewById(R.id.txt_broj_glasova);
 
                         txt_naziv.setText(opis.get("naziv_artikla").toString());
                         txt_opis.setText(opis.get("opis_artikla").toString());
-
+                        txt_broj_glasova.setText("Broj glasova : " + opis.get("broj_glasova").toString());
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -69,9 +70,6 @@ public class PrikazArtikla extends AppCompatActivity {
                 }
             }, jsonArray -> Log.e("err", jsonArray.toString()));
 
-            //TextView upvote = new Button(this);
-            //upvote.setText("Upvote");
-            //linearLayout.addView(upvote);
 
             Button upvote = (Button) findViewById(R.id.btn_upvote);
 
@@ -85,9 +83,6 @@ public class PrikazArtikla extends AppCompatActivity {
                 );
             });
 
-            //TextView downvote = new Button(this);
-            //downvote.setText("Downvote");
-            //linearLayout.addView(downvote);
 
             Button downvote = (Button) findViewById(R.id.btn_downvote);
 
@@ -111,12 +106,7 @@ public class PrikazArtikla extends AppCompatActivity {
 
         }
 
-        //Toast.makeText(this, sif_trgovina + " - " + barkod, Toast.LENGTH_SHORT).show();
 
 
-        TextView textView = new TextView(this);
-        textView.setText("Prikaz artikla");
-        linearLayout.addView(textView);
-        //setContentView(linearLayout);
     }
 }
