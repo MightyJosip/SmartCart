@@ -232,7 +232,11 @@ class AndroidTrgovineView(View):
             sif_trgovina = json.loads(request.body)['sif_trgovina']
         except KeyError:
             sif_trgovina = None
-        trgovine = Trgovina.objects.filter(naz_trgovina__contains=f'{naz_trgovina}')
+        try:
+            start_index = json.loads(request.body)['start_index']
+        except KeyError:
+            start_index = 0
+        trgovine = Trgovina.objects.filter(naz_trgovina__icontains=f'{naz_trgovina}').order_by('sif_trgovina')[start_index:start_index+20]
         if sif_trgovina is not None:
             trgovine = trgovine.filter(sif_trgovina=sif_trgovina)
         return create_json_response(200, data=serializers.serialize('json', trgovine))
