@@ -49,6 +49,7 @@ urlpatterns = [
     path('android/signup', AndroidSignUpView.as_view(), name='android_sign_up'),
     path('android/login', AndroidLogInView.as_view(), name='android_login'),
     path('android/logout', AndroidLogoutView.as_view(), name='android_logout'),
+    path('android/edit_profile', AndroidEditProfileView.as_view(), name='android_edit_profile'),
     path('android/artikli', AndroidArtikliView.as_view(), name='android_artikli'),
     path('android/trgovine', AndroidTrgovineView.as_view(), name='android_trgovine'),
     path('android/popis', AndroidPopisView.as_view(), name='android_popis'),
@@ -57,7 +58,7 @@ urlpatterns = [
     path('android/artiklitrgovina', AndroidSviArtikliUTrgovini.as_view(), name="artiklitrgovina"),
     #
     path('android/opisi', AndroidOpisiView.as_view(), name='opisi'),
-    path('android/downvote', AndroidDownvoteView.as_view(), name ='downvote'),
+    path('android/downvote', AndroidDownvoteView.as_view(), name='downvote'),
     path('android/upvote', AndroidUpvoteView.as_view(), name='upvote'),
     path('android/write_description', AndroidWriteProductDescription.as_view(), name='write_description'),
     path('android/skenirajbarkod', SkenirajBarkodView.as_view(), name='skenirajbarkod'),
@@ -65,4 +66,5 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('', TemplateView.as_view(template_name='social_app/index.html'))
 ]
+
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

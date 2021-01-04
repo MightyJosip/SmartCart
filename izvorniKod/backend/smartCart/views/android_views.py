@@ -36,7 +36,6 @@ class AndroidSviArtikliUTrgovini(View):
         trgovina = Trgovina.objects.get(sif_trgovina=sif_trgovina)
         trgovinaartikli = TrgovinaArtikli.objects.filter(trgovina=trgovina)
 
-        print(trgovinaartikli)
         return create_json_response(200, data=serializers.serialize('json', trgovinaartikli))
 
     
@@ -188,6 +187,16 @@ class AndroidLogoutView(View):
         user = get_user_from_session(json.loads(request.body)['sessionId'])
         Session.objects.filter(usersession__user=user).delete()
         logout(request=request)
+        return create_json_response(200, success='done')
+
+
+class AndroidEditProfileView(View):
+    def post(self, request, *args, **kwargs):
+        data = json.loads(request.body)
+        user = get_user_from_session(data['session_id'])
+        password = data['password']
+        user.set_password(password)
+        user.save()
         return create_json_response(200, success='done')
 
 
