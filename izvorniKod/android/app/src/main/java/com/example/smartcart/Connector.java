@@ -11,7 +11,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
@@ -101,6 +100,19 @@ public class Connector {
 
     public void fetchTrgovine( Response.Listener<String> onSuccess, Response.ErrorListener onFail) {
         JSONObject jo = new JSONObject();
+        String url = HOST + "android/trgovine";
+        JsonToStringRequest jtsr = new JsonToStringRequest(Request.Method.POST, url, jo, onSuccess, onFail);
+        getRequestQueue().add(jtsr);
+    }
+
+    public void fetchSomething(String query, String queryData, Response.Listener<String> onSuccess, Response.ErrorListener onFail){
+
+        JSONObject jo = new JSONObject();
+        try{
+            jo.put(query, queryData);
+        }catch (JSONException e){
+            Log.e("Error", e.toString());
+        }
         String url = HOST + "android/trgovine";
         JsonToStringRequest jtsr = new JsonToStringRequest(Request.Method.POST, url, jo, onSuccess, onFail);
         getRequestQueue().add(jtsr);
