@@ -1,0 +1,13 @@
+Atributi redom: sif_vrsta, sif_potkategorija, naz_vrsta
+1;1;Majica
+2;1;Vesta
+3;2;Cipele
+4;2;Čizme
+5;3;Junetina
+6;3;Nojevo meso
+7;4;Srdela
+8;4;Arbun
+9;5;Tamna piva
+10;5;Viski
+11;6;Multivitamin
+12;6;Energetsko piće

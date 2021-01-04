@@ -15,37 +15,54 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from smartCart import views
+from smartCart.views import *
+from smartCart.views.android_views import *
+from smartCart.views.web_account_views import *
+from django.views.generic import TemplateView
+from django.urls import path, include
 
 urlpatterns = [
-    # path('smartcart/', include('smartCart.urls')),
     path('admin', admin.site.urls),
-    path('', views.index, name='index'),
-    path('signup/trgovac', views.sign_up_trgovac, name='signup_trgovac'),
-    path('signup/kupac', views.sign_up_kupac, name='signup_kupac'),
-    path('login', views.login, name='login'), #bilo je login/, sad je login
-    path('edit_profile', views.edit_profile, name='edit_profile'),
-    path('delete_account', views.delete_account, name='delete_account'),
-    path('trgovac', views.trgovac, name='trgovac'),  ############<-------------------------------------------------
-    path('logout', views.logout, name='logout'),
-    path('trgovac/dodaj-trgovine', views.dodaj_trgovine, name='dodaj_trgovine'),
-    path('trgovac/dodaj-artikle', views.dodaj_artikle, name='dodaj_artikle'),
-    path('trgovac/dodaj-proizvodace', views.dodaj_proizvodace, name='dodaj_proizvodace'),
-    path('trgovina/<int:sif_trgovina>', views.trgovina, name='trgovina'),  # int kinda sus
-    path('trgovina/delete/<int:sif_trgovina>', views.delete_trgovina, name='delete_trgovina'),  # int kinda sus
-    path('artikl/<int:barkod_artikla>', views.artikl, name='artikl'),
-    path('uredi_artikl/<int:artikl_trgovina>', views.uredi_artikl_u_trgovini, name='uredi_artikl_u_trgovini'),
-    path('obrisi_artikl/<int:artikl_trgovina>', views.obrisi_artikl_u_trgovini, name='obrisi_artikl_u_trgovini'),
+    path('', IndexView.as_view(), name='index'),
+    path('signup/kupac', SignUpKupacView.as_view(), name='signup_kupac'),
+    path('signup/trgovac', SignUpTrgovacView.as_view(), name='signup_trgovac'),
+    path('signup/admin', SignUpAdminView.as_view(), name='signup_admin'),
+    path('login', LoginView.as_view(), name='login'),
+    path('logout', LogoutView.as_view(), name='logout'),
+    path('trgovac', TrgovacView.as_view(), name='trgovac'),
+    path('edit_profile', EditProfileView.as_view(), name='edit_profile'),
+    path('delete_account', DeleteAccountView.as_view(), name='delete_account'),
+    path('trgovac/dodaj-trgovine', DodajTrgovineView.as_view(), name='dodaj_trgovine'),
+    path('trgovac/dodaj-artikle', DodajArtikleView.as_view(), name='dodaj_artikle'),
+    path('trgovac/dodaj-proizvodace', DodajProizvodaceView.as_view(), name='dodaj_proizvodace'),
+    path('trgovina/<int:sif_trgovina>', TrgovinaView.as_view(), name='trgovina'),
+    path('trgovina/delete/<int:sif_trgovina>', DeleteTrgovinaView.as_view(), name='delete_trgovina'),
+    path('artikl/<int:barkod_artikla>', ArtiklView.as_view(), name='artikl'),
+    path('uredi_artikl/<int:artikl_trgovina>', UrediArtiklView.as_view(), name='uredi_artikl_u_trgovini'),
+    path('obrisi_artikl/<int:artikl_trgovina>', ObrisiArtiklView.as_view(), name='obrisi_artikl_u_trgovini'),
+    path('nova_lozinka', NovaLozinkaView.as_view(), name='nova_lozinka'),
+    path('potvrdi_lozinku', PotvrdiLozinkuView.as_view(), name='potvrdi_lozinku'),
     # android dio
-    path('android/signup', views.android_sign_up, name='android_sign_up'),
-    path('android/login', views.android_login, name='android_login'),
-    path('android/logout', views.android_logout, name='android_logout'),
-    path('android/artikli', views.android_artikli, name='android_artikli'),
-    path('android/trgovine', views.android_trgovine, name='android_trgovine'),
-    path('android/popis', views.android_popis, name='android_popis')
+    path('android/signup', AndroidSignUpView.as_view(), name='android_sign_up'),
+    path('android/login', AndroidLogInView.as_view(), name='android_login'),
+    path('android/logout', AndroidLogoutView.as_view(), name='android_logout'),
+    path('android/artikli', AndroidArtikliView.as_view(), name='android_artikli'),
+    path('android/trgovine', AndroidTrgovineView.as_view(), name='android_trgovine'),
+    path('android/popis', AndroidPopisView.as_view(), name='android_popis'),
+    # dobro paziti na sljedeća dva!
+    path('android/artikltrgovina', AndroidArtiklTrgovina.as_view(), name='artikltrgovina'),
+    path('android/artiklitrgovina', AndroidSviArtikliUTrgovini.as_view(), name="artiklitrgovina"),
+    #
+    path('android/opisi', AndroidOpisiView.as_view(), name='opisi'),
+    path('android/downvote', AndroidDownvoteView.as_view(), name ='downvote'),
+    path('android/upvote', AndroidUpvoteView.as_view(), name='upvote'),
+    path('android/write_description', AndroidWriteProductDescription.as_view(), name='write_description'),
+    path('android/skenirajbarkod', SkenirajBarkodView.as_view(), name='skenirajbarkod'),
 
+    path('accounts/', include('allauth.urls')),
+    path('', TemplateView.as_view(template_name='social_app/index.html'))
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

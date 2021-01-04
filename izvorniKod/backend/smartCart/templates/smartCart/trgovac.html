@@ -6,6 +6,7 @@
     <head>
         <meta charset="UTF-8">
         <title>Trgovac {{request.user.email}}</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'tablica.css' %}"/>
         <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
     </head>
 </head>
@@ -21,36 +22,56 @@
     <hr />
 
     <h2>Moje trgovine</h2>
+    <form action="" method="POST">
+        {%csrf_token%}
+        <table>
+            <tr>
+                <td><b>Naziv trgovine</b></td>
+                <td><b>Adresa trgovine</b></td>
+                <td><b>Stranica trgovine</b></td>
+                <td><b>Obriši</b></td>
+            </tr>
+            {% for t in trgovine %}
+                <tr>
+                    <td><b>{{ t.naz_trgovina }}</b></td>
+                    <td>{{ t.adresa_trgovina }}</td>
+                    <td><a href="{% url 'trgovina' t.sif_trgovina %}">Stranica trgovine</a></td>
+                    <td><input type="submit" value="Obriši trgovinu" formaction="trgovina/delete/{{t.sif_trgovina}}" onclick="return confirm('Je si li siguran da želiš obrisati trgovinu?')"></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </form>
     
-    <ul>
-        {% for t in trgovine %}
-            {{ t }}
-            <a href="{% url 'trgovina' t.sif_trgovina %}">Detaljnije o trgovini</a>
-            <form action="trgovina/delete/{{t.sif_trgovina}}" method="POST">
-                {%csrf_token%}
-                <input type="submit" value="Obriši trgovinu" onclick="return confirm('Je si li siguran da želiš obrisati trgovinu?')">
-            </form>
-            <br>
-        {% endfor %}
-    </ul>
-    
-    <hr />
+    <hr>
 
     <h2>Pregled namirnica</h2>
-    <ul>
-        {% for t in artikli %}
-        <li>{{ t.naziv_artikla }} <a href="{% url 'artikl' t.barkod_artikla %}">Detaljnije o namirnici</a></li> <!--štoviše, zajebava-->
+    <table>
+        <tr>
+            <td><b>Barkod artikla</b></td>
+            <td><b>Opisi artikla</b></td>
+        </tr>
+        {% for a in artikli %}
+            <tr>
+                <td>{{ a.barkod_artikla }}</td>
+                <td><a href="{% url 'artikl' a.barkod_artikla %}">Opisi artikla</a></td>
+            </tr>
         {% endfor %}
-    </ul>
-    <hr />
+    </table>
+    <hr>
 
     <h2>Dodavanje trgovina</h2>
 
     <form action="/trgovac/dodaj-trgovine" method="POST">
         {%csrf_token%}
-        {% for field in trg_form  %}
-            {{ field.label_tag }}<br> {{ field }}<br><br>
-        {% endfor %}
+        <table>
+            {% for field in trg_form  %}
+                <tr>
+                    <td>{{ field.label_tag }}</td>
+                    <td>{{ field }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br>
         <input type="submit" value="Submit">
     </form>
 
@@ -60,9 +81,15 @@
 
     <form action="/trgovac/dodaj-artikle" method="POST">
         {%csrf_token%}
-        {% for field in art_form  %}
-            {{ field.label_tag }}<br> {{ field }}<br><br>
-        {% endfor %}
+        <table>
+            {% for field in art_form  %}
+                <tr>
+                    <td>{{ field.label_tag }}</td>
+                    <td>{{ field }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br>
         <input type="submit" value="Submit">
     </form>
     <hr />
