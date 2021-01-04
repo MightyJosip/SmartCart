@@ -77,10 +77,18 @@ public class PrikazArtikla extends AppCompatActivity {
                 SharedPreferences sp = getSharedPreferences("user_info", Context.MODE_PRIVATE);
                 Log.d("shared", (String) sp.getAll().get( (Object) "session"));
                 String session_id = (String) sp.getAll().get( (Object) "session");
+                if (id_opis == null) return;
+
                 connector.downvote(id_opis[0]
                         , session_id, response -> Log.d("res" , response.toString())
                         , response -> Log.e("res", response.toString())
                 );
+
+                // nakon downvote-a slijedi prikaz alternativnih opisa
+                Intent intent1 = new Intent(PrikazArtikla.this, PrikazOpisaActivity.class);
+                intent1.putExtra("sif_trgovina", sif_trgovina);
+                intent1.putExtra("barkod", barkod);
+                startActivity(intent1);
             });
 
         }
