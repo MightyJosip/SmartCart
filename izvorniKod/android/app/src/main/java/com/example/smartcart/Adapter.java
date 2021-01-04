@@ -68,7 +68,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "Do Something With this Click", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(context, PrikazTrgovine.class);
                     intent.putExtra("name", (Serializable) storeName.getText());
                     context.startActivity(intent);

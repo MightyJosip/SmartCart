@@ -105,6 +105,18 @@ public class Connector {
         getRequestQueue().add(jtsr);
     }
 
+    public void fetch_artikli_u_trgovini(String sif_trgovina, Response.Listener<JSONArray> onSuccess, Response.ErrorListener onFail){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("sif_trgovina", sif_trgovina);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String url = HOST + "android/artiklitrgovina";
+        JsonToJsonArrayRequest request = new JsonToJsonArrayRequest(Request.Method.POST, url, jsonObject, onSuccess, onFail);
+        getRequestQueue().add(request);
+    }
+
     private static class JsonToStringRequest extends JsonRequest<String> {
         public JsonToStringRequest(int method, String url,
                                    JSONObject requestBody,
