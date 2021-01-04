@@ -1,7 +1,9 @@
 package com.example.smartcart;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
+
 
 import androidx.annotation.Nullable;
 
@@ -127,6 +129,34 @@ public class Connector {
         }
         String url = HOST + "android/artikltrgovina";
         JsonToJsonArrayRequest request = new JsonToJsonArrayRequest(Request.Method.POST, url, jsonObject, onSuccess, onFail);
+        getRequestQueue().add(request);
+    }
+
+    public void upvote(String sif_opis, String session_id, Response.Listener<String> onSuccess, Response.ErrorListener onFail) {
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.put("id", sif_opis);
+            jsonObject.put("session_id", session_id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String url = HOST + "android/upvote";
+        JsonToStringRequest request = new JsonToStringRequest(Request.Method.POST, url, jsonObject, onSuccess, onFail);
+        getRequestQueue().add(request);
+    }
+
+    public void downvote(String sif_opis, String session_id, Response.Listener<String> onSuccess, Response.ErrorListener onFail) {
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.put("id", sif_opis);
+            jsonObject.put("session_id", session_id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String url = HOST + "android/downvote";
+        JsonToStringRequest request = new JsonToStringRequest(Request.Method.POST, url, jsonObject, onSuccess, onFail);
         getRequestQueue().add(request);
     }
 
