@@ -45,7 +45,9 @@ public class PrikazTrgovine extends AppCompatActivity {
 
 
 
-        String id = name.split(" ")[2];
+        String[] arr = name.split(" ");
+        String id = arr[arr.length -1];
+
         Toast.makeText(this, id, Toast.LENGTH_SHORT).show();
 
         Connector conn = Connector.getInstance(this);
