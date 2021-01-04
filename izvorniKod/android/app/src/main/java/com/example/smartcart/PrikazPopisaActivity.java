@@ -15,6 +15,8 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +35,36 @@ public class PrikazPopisaActivity extends AppCompatActivity {
         setContentView(R.layout.prikaz_popisa);
 
 
+        Button stvori_popis = (Button) findViewById(R.id.stvori_novi_popis);
+        stvori_popis.setOnClickListener( v ->{
+            EditText ime_popisa = findViewById(R.id.ime_popisa);
+            String ime = ime_popisa.getText().toString();
+            ime = ime.trim();
+            if(ime.isEmpty()){
+                Toast.makeText(this, "Upišite ime popisa", Toast.LENGTH_LONG).show();
+            }
+            Popis popis = new Popis(ime);
+
+            SmartCartDatabase db = SmartCartDatabase.getInstance(PrikazPopisaActivity.this);
+            PopisDao dao = db.popisDao();
+            dao.dodajPopise(popis);
+            draw_popisi();
+            Toast.makeText(PrikazPopisaActivity.this, "Popis uspjesno dodan", Toast.LENGTH_SHORT).show();
+        });
+
+        draw_popisi();
+
+
+
+
+
+
+
+
+    }
+
+    protected void draw_popisi(){
+
         ArrayList<String> array = new ArrayList<>();
         /*TextView text = new TextView(this);
         text.setText("tusam");*/
@@ -47,7 +79,6 @@ public class PrikazPopisaActivity extends AppCompatActivity {
             int sif = Integer.parseInt(s1[0]);
             intent.putExtra("id", sif);
             startActivity(intent);
-
         });
 
         List<Popis> svi = SmartCartDatabase.getInstance(this).popisDao().dohvatiSvePopise();
@@ -60,7 +91,6 @@ public class PrikazPopisaActivity extends AppCompatActivity {
         ArrayAdapter adapter = new ArrayAdapter(PrikazPopisaActivity.this, android.R.layout.simple_list_item_1, array);
 
         lista.setAdapter(adapter);
-
 
     }
 }
