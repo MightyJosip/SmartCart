@@ -84,9 +84,9 @@ class AndroidDownvoteView(View):
         session_key = json.loads(request.body)['session_id']
         opis = OpisArtikla.objects.get(id=id)
         korisnik = BaseUserModel.objects.get(pk=get_user_from_session(session_key).id)
-        old_vote = get_object_or_none(Glasovi, user_id=korisnik, sif_opis=opis)
+        old_vote = get_object_or_none(Glasovi, user_id=korisnik, opis_artikla=opis)
         if old_vote is None:
-            Glasovi.objects.create(user=korisnik, sif_opis=opis, vrijednost_glasa='G')
+            Glasovi.objects.create(user=korisnik, opis_artikla=opis, vrijednost_glasa='G')
             opis.broj_glasova -= 1
             opis.save()
             return create_json_response(200, msg='Successfully voted')
