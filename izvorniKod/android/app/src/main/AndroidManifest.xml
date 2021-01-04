@@ -11,7 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartCart"
         android:usesCleartextTraffic="true">
-        <activity android:name=".PrikazTrgovine"></activity>
+        <activity android:name=".PrikazArtikla"></activity>
+        <activity android:name=".PrikazTrgovine" />
         <activity
             android:name=".PrikazStavkiActivity"
             android:label="@string/title_activity_prikaz_stavki"
