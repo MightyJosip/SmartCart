@@ -113,11 +113,11 @@ public class HomeScreenActivity extends AppCompatActivity{
             if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                     (keyCode == KeyEvent.KEYCODE_ENTER)) {
 
-                conn.fetchSomething("naz_trgovina", findStoreOrItem.getText().toString(), response -> {
+                conn.fetch_artikl_u_trgovini("naz_trgovina", findStoreOrItem.getText().toString(), response -> {
 
                     Gson gson = new Gson();
                     Type storeType = new TypeToken<ArrayList<Object>>(){}.getType();
-                    List<Object> trgovineHelper = gson.fromJson(response, storeType);
+                    List<Object> trgovineHelper = gson.fromJson(String.valueOf(response), storeType);
 
                     fetchStores(trgovineHelper);
 
