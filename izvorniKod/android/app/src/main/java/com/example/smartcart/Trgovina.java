@@ -30,6 +30,7 @@ public class Trgovina {
         this.radno_vrijeme_kraj = radno_vrijeme_kraj;
         this.vlasnik = vlasnik;
         proizvodi = new ArrayList<>();
+        System.out.println(this.naz_trgovina);
     }
 
     public Integer getPk() {

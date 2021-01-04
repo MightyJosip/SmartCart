@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -55,43 +56,33 @@ public class HomeScreenActivity extends AppCompatActivity{
     private static List<Trgovina> trgovine = new ArrayList<>();
     RecyclerView recyclerView;
     Adapter adapter;
+    Connector conn;
 
-    /**
-     * Provjerava je li korisnik odabrao hoće li se prijaviti. Ako nije, otvara se MainActivity kako
-     * bi mogao odabrati.
-     * Tamo se pritisak na back presreće da se ne vrati nazad ovdje
-     * Alternativni način:
-     * https://android.jlelse.eu/login-and-main-activity-flow-a52b930f8351
-     */
     @Override
     protected void onResume() {
         super.onResume();
-        Connector conn = Connector.getInstance(this);
         conn.fetchTrgovine(response -> {
-           // android.os.Debug.waitForDebugger();
-            //Toast.makeText(this, response, Toast.LENGTH_SHORT).show(); // TODO: Finish parsing response for stores. Currently an error in the received response is given by the android OS
 
             Gson gson = new Gson();
             Type storeType = new TypeToken<ArrayList<Object>>(){}.getType();
             List<Object> trgovineHelper = gson.fromJson(response, storeType);
 
-            //Toast.makeText(this, "Done", Toast.LENGTH_LONG).show();
+            fetchStores(trgovineHelper);
 
-           for(Object o : trgovineHelper) {
-               Map<String, Object> bla = (Map<String, Object>) (((LinkedTreeMap<String, Object>) o).get("fields"));
-               trgovine.add(new Trgovina(((Double) ((LinkedTreeMap<String, Object>) o).get("pk")).intValue(), (String) bla.get("naz_trgovina"), (String) bla.get("adresa_trgovina"), Time.valueOf((String) bla.get("radno_vrijeme_pocetak")),
-                       Time.valueOf((String) bla.get("radno_vrijeme_kraj")), ((Double) bla.get("vlasnik")).intValue()));
-           }
-
-           drawOnScreenStores();
+            drawOnScreenStores();
 
         }, error -> Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show());
+    }
 
-//        try {
-//            Thread.sleep(1000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+    private void fetchStores(List<Object> trgovineHelper) {
+
+        trgovine.clear();
+        for(Object o : trgovineHelper) {
+            Map<String, Object> bla = (Map<String, Object>) (((LinkedTreeMap<String, Object>) o).get("fields"));
+            trgovine.add(new Trgovina(((Double) ((LinkedTreeMap<String, Object>) o).get("pk")).intValue(), (String) bla.get("naz_trgovina"), (String) bla.get("adresa_trgovina"), Time.valueOf((String) bla.get("radno_vrijeme_pocetak")),
+                    Time.valueOf((String) bla.get("radno_vrijeme_kraj")), ((Double) bla.get("vlasnik")).intValue()));
+        }
+        System.out.println(trgovine);
     }
 
     private void drawOnScreenStores() {
@@ -113,11 +104,32 @@ public class HomeScreenActivity extends AppCompatActivity{
         setContentView(R.layout.home_screen);
         recyclerView = findViewById(R.id.storeList);
 
+        conn = Connector.getInstance(this);
 
+        final EditText findStoreOrItem = findViewById(R.id.search_field);
 
-        // TODO: sve na što korisnik kika bi trebalo biti "button" po PS-u, ali ako vas ne smeta,
-        // TODO: neka ostane
-        ImageView settingsButton = (ImageView) findViewById(R.id.imageView7);
+        findStoreOrItem.setOnKeyListener((v, keyCode, event) -> {
+            // If the event is a key-down event on the "enter" button
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                    (keyCode == KeyEvent.KEYCODE_ENTER)) {
+
+                conn.fetchSomething("naz_trgovina", findStoreOrItem.getText().toString(), response -> {
+
+                    Gson gson = new Gson();
+                    Type storeType = new TypeToken<ArrayList<Object>>(){}.getType();
+                    List<Object> trgovineHelper = gson.fromJson(response, storeType);
+
+                    fetchStores(trgovineHelper);
+
+                    drawOnScreenStores();
+
+                }, error -> Toast.makeText(HomeScreenActivity.this, error.toString(), Toast.LENGTH_SHORT).show());
+                return true;
+            }
+            return false;
+        });
+
+        ImageView settingsButton = findViewById(R.id.imageView7);
         registerForContextMenu(settingsButton);
         settingsButton.setOnClickListener(this::openContextMenu);
         settingsButton.setOnLongClickListener(v -> true);
@@ -192,9 +204,9 @@ public class HomeScreenActivity extends AppCompatActivity{
                 break;
             }
 
-            case MENU_ACCOUNTSETTINGS: startAccountSettingsActivity(); break;
-//                Toast.makeText(this, "Nije implementirano :(", Toast.LENGTH_LONG).show();
-//                break;
+            case MENU_ACCOUNTSETTINGS: //startAccountSettingsActivity(); break;
+                Toast.makeText(this, "Nije implementirano :(", Toast.LENGTH_LONG).show();
+                break;
 
             case MENU_LOGOUT:
                 SharedPreferences prefs = getSharedPreferences("user_info", Context.MODE_PRIVATE);
@@ -206,6 +218,8 @@ public class HomeScreenActivity extends AppCompatActivity{
                     prefs.edit().remove("auth_level").apply();
                 }, error -> Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show());
 
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
         }
         return super.onContextItemSelected(item);
     }
@@ -230,6 +244,5 @@ public class HomeScreenActivity extends AppCompatActivity{
         Intent intent = new Intent(this, AccountSettingsActivity.class);
         startActivity(intent);
     }
-
 
 }

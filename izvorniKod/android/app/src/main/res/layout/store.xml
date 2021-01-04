@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -24,11 +23,11 @@
 
             <TextView
                 android:id="@+id/storeName"
-                android:layout_width="116dp"
+                android:layout_width="wrap_content"
                 android:layout_height="24dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="4dp"
-                android:text="Store Name"
+                android:text="@string/store_name"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
@@ -36,12 +35,12 @@
 
             <TextView
                 android:id="@+id/storeLocation"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="4dp"
 
-                android:text="Store location"
+                android:text="@string/store_location"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/storeName" />
 
@@ -50,7 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Store opening time"
+                android:text="@string/store_opening_time"
                 app:layout_constraintStart_toStartOf="@+id/storeLocation"
                 app:layout_constraintTop_toBottomOf="@+id/storeLocation" />
 
@@ -59,9 +58,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="Store closeing time"
+                android:text="@string/store_closeing_time"
                 app:layout_constraintStart_toEndOf="@+id/storeTimeOfOpening"
                 app:layout_constraintTop_toBottomOf="@+id/storeLocation" />
+
+            <ImageView
+                android:id="@+id/mapLogo"
+                android:layout_width="54dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="32dp"
+                android:contentDescription="@string/mapLogo"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/map_marker" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

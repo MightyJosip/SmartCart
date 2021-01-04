@@ -1,24 +1,12 @@
 package com.example.smartcart;
 
-        import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
-        import android.os.Bundle;
-        import android.util.Log;
-        import android.view.View;
-        import android.view.Window;
-        import android.widget.EditText;
-        import android.widget.Toast;
-
-        import com.android.volley.Request;
-        import com.android.volley.RequestQueue;
-        import com.android.volley.Response;
-        import com.android.volley.VolleyError;
-        import com.android.volley.toolbox.StringRequest;
-        import com.android.volley.toolbox.Volley;
-
-        import java.math.BigInteger;
-        import java.security.MessageDigest;
-        import java.security.NoSuchAlgorithmException;
+import android.os.Bundle;
+import android.view.View;
+import android.view.Window;
+import android.widget.EditText;
+import android.widget.Toast;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -34,10 +22,10 @@ public class SignUpActivity extends AppCompatActivity {
         // TODO: dodati provjeru jesu li lozinke iste
         // TODO: dodati mogućnost za trgovca, validaciju
 
-        EditText etEmail = (EditText) findViewById(R.id.edit_email);
+        EditText etEmail = findViewById(R.id.edit_email);
         String email = etEmail.getText().toString();
 
-        EditText etSecret = (EditText) findViewById(R.id.edit_secret);
+        EditText etSecret = findViewById(R.id.edit_secret);
 
         int secret = etSecret.getText().toString().equals("") ? 0 : Integer.parseInt(etSecret.getText().toString());
 
@@ -48,20 +36,10 @@ public class SignUpActivity extends AppCompatActivity {
         String password2 = etPassword2.getText().toString();
 
         if (password.equals(password2)){
-            //Toast t1 = Toast.makeText(this, "Passwords are matching", Toast.LENGTH_LONG);
-            //t1.show();
 
           Connector conn = Connector.getInstance(this);
-            conn.signUp(email, password, secret, response -> {
-                // Display the first 20 characters of the response string.
-                //Toast t2 = Toast.makeText(this, "Response is: " + response.toString(), Toast.LENGTH_LONG);
-                //t2.show();
-
-                finish();
-            }, error -> Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show());
-
+            conn.signUp(email, password, secret, response -> finish(), error -> Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show());
         }
-
         else{
             Toast t3 = Toast.makeText(this, "Passwords are not matching, try again", Toast.LENGTH_LONG);
             t3.show();

@@ -36,4 +36,9 @@
     <string name="title_activity_prikaz_stavki">PrikazStavkiActivity</string>
     <string name="ime">Ime</string>
     <string name="addButton">Add list</string>
+    <string name="mapLogo">Map logo</string>
+    <string name="store_name">Store Name</string>
+    <string name="store_location">Store location</string>
+    <string name="store_opening_time">Store opening time</string>
+    <string name="store_closeing_time">Store closeing time</string>
 </resources>
