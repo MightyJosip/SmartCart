@@ -98,8 +98,8 @@ public class PrikazTrgovine extends AppCompatActivity {
         }, obj -> Log.e("err", obj.toString()));
 
 
-        //setContentView(R.layout.activity_prikaz_trgovine);
-        setContentView(linearLayout);
+        setContentView(R.layout.activity_prikaz_trgovine);
+        //setContentView(linearLayout);
     }
 
     private void draw_artikli(List<JSONObject> artikli) {
