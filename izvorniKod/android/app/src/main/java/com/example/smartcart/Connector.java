@@ -1,7 +1,9 @@
 package com.example.smartcart;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
+
 
 import androidx.annotation.Nullable;
 
@@ -105,17 +107,75 @@ public class Connector {
         getRequestQueue().add(jtsr);
     }
 
-    public void fetchSomething(String query, String queryData, Response.Listener<String> onSuccess, Response.ErrorListener onFail){
-
-        JSONObject jo = new JSONObject();
-        try{
-            jo.put(query, queryData);
-        }catch (JSONException e){
-            Log.e("Error", e.toString());
+    public void fetch_artikli_u_trgovini(String sif_trgovina, Response.Listener<JSONArray> onSuccess, Response.ErrorListener onFail){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("sif_trgovina", sif_trgovina);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        String url = HOST + "android/trgovine";
-        JsonToStringRequest jtsr = new JsonToStringRequest(Request.Method.POST, url, jo, onSuccess, onFail);
-        getRequestQueue().add(jtsr);
+        String url = HOST + "android/artiklitrgovina";
+        JsonToJsonArrayRequest request = new JsonToJsonArrayRequest(Request.Method.POST, url, jsonObject, onSuccess, onFail);
+        getRequestQueue().add(request);
+    }
+
+    public void fetch_artikl_u_trgovini(String sif_trgovina, String barkod, Response.Listener<JSONArray> onSuccess, Response.ErrorListener onFail) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("sif_trgovina", sif_trgovina);
+            jsonObject.put("barkod", barkod);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String url = HOST + "android/artikltrgovina";
+        JsonToJsonArrayRequest request = new JsonToJsonArrayRequest(Request.Method.POST, url, jsonObject, onSuccess, onFail);
+        getRequestQueue().add(request);
+    }
+
+    public void upvote(String sif_opis, String session_id, Response.Listener<String> onSuccess, Response.ErrorListener onFail) {
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.put("id", sif_opis);
+            jsonObject.put("session_id", session_id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String url = HOST + "android/upvote";
+        JsonToStringRequest request = new JsonToStringRequest(Request.Method.POST, url, jsonObject, onSuccess, onFail);
+        getRequestQueue().add(request);
+    }
+
+    public void downvote(String sif_opis, String session_id, Response.Listener<String> onSuccess, Response.ErrorListener onFail) {
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.put("id", sif_opis);
+            jsonObject.put("session_id", session_id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String url = HOST + "android/downvote";
+        JsonToStringRequest request = new JsonToStringRequest(Request.Method.POST, url, jsonObject, onSuccess, onFail);
+        getRequestQueue().add(request);
+    }
+
+    public void dodaj_na_popis(){
+
+    }
+
+    public void fetch_opisi(String sif_trgovina, String barkod, Response.Listener<JSONArray> onSuccess, Response.ErrorListener onFail) {
+        JSONObject jsonObject = new JSONObject();
+        String url = HOST + "android/opisi";
+        try {
+            jsonObject.put("sif_trgovina", sif_trgovina);
+            jsonObject.put("barkod", barkod);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonToJsonArrayRequest request = new JsonToJsonArrayRequest(Request.Method.POST, url, jsonObject, onSuccess, onFail);
+        getRequestQueue().add(request);
     }
 
     public void changePassword(String sessionId, String oldPassword, String newPassword, Response.Listener<String> onSuccess, Response.ErrorListener onFail){
@@ -157,9 +217,9 @@ public class Connector {
 
     private static class JsonToJsonArrayRequest extends JsonRequest<JSONArray> {
         public JsonToJsonArrayRequest(int method, String url,
-                                   JSONObject requestBody,
-                                   Response.Listener<JSONArray> listener,
-                                   @Nullable Response.ErrorListener errorListener
+                                      JSONObject requestBody,
+                                      Response.Listener<JSONArray> listener,
+                                      @Nullable Response.ErrorListener errorListener
         ) {
             super(method, url, requestBody.toString(), listener, errorListener);
         }

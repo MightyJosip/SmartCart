@@ -1,0 +1,6 @@
+Atributi redom: sif_kategorija, naz_kategorija
+1; Odjevni predmeti
+2; Namirnice
+3; Sredstva za čišćenje
+4; Tehnologija
+5; Energetika

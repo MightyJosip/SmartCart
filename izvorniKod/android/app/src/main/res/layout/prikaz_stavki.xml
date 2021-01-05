@@ -6,20 +6,12 @@
     android:layout_height="match_parent"
     android:background="@drawable/gradient">
 
-    <EditText
-        android:id="@+id/ime_stavke"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:autofillHints=""
-        android:ems="10"
-        android:hint="@string/ime"
-        android:inputType="textPersonName"
+    <ListView
+        android:id="@+id/stavkalistview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.19"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
-
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 

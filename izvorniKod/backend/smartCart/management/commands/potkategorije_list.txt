@@ -1,0 +1,7 @@
+Atributi redom: sif_potkategorija, sif_kategorija, naz_potkategorija
+1;1;Odjeća
+2;1;Obuća
+3;2;Meso
+4;2;Riba
+5;2;Alkoholno piće
+6;2;Bezalkoholno piće

@@ -2,6 +2,7 @@
 __pycache__/
 izvorniKod/backend/smartCart/migrations
 izvorniKod/backend/constants.txt
+izvorniKod/backend/test.py
 *.log
 *.pot
 *.pyc
