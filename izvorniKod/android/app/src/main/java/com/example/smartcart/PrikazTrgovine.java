@@ -90,4 +90,10 @@ public class PrikazTrgovine extends AppCompatActivity {
 
         setContentView(linearLayout);
     }
+
+    private void draw_artikli() {
+
+    }
+
 }
+
