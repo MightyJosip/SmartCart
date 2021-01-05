@@ -1,6 +1,8 @@
 package com.example.smartcart;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,17 +21,21 @@ import org.json.JSONObject;
 
 import java.awt.font.TextAttribute;
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 
 import kotlin.reflect.KVariance;
 
 public class PrikazTrgovine extends AppCompatActivity {
+
+    RecyclerView recyclerView;
+    ArtiklAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // koristi se ovaj programski layout, valja prebaciti na xml
-        //setContentView(R.layout.activity_prikaz_trgovine);
 
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -51,13 +57,14 @@ public class PrikazTrgovine extends AppCompatActivity {
         Toast.makeText(this, id, Toast.LENGTH_SHORT).show();
 
         Connector conn = Connector.getInstance(this);
+        List<JSONObject> artikli = new LinkedList<JSONObject>();
         conn.fetch_artikli_u_trgovini(id, jsonArray -> {
             //Log.d("msg", jsonArray.toString());
             for(int i = 0; i < jsonArray.length(); i++){
                 try {
                     //Log.d("trgovina", jsonArray.getJSONObject(i).toString());
                     JSONObject fields = new JSONObject(jsonArray.getJSONObject(i).get("fields").toString());
-
+                    artikli.add(fields);
                     TextView textView = new TextView(this);
                     textView.setText(fields.toString());
                     linearLayout.addView(textView);
@@ -84,15 +91,21 @@ public class PrikazTrgovine extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+
+            Log.d("artikli", artikli.toString());
+            recyclerView = findViewById(R.id.artikli_list);
+            draw_artikli(artikli);
         }, obj -> Log.e("err", obj.toString()));
 
 
-
+        //setContentView(R.layout.activity_prikaz_trgovine);
         setContentView(linearLayout);
     }
 
-    private void draw_artikli() {
-
+    private void draw_artikli(List<JSONObject> artikli) {
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        adapter = new ArtiklAdapter(getApplicationContext(),artikli, this);
+        recyclerView.setAdapter(adapter);
     }
 
 }
