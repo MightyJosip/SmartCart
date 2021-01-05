@@ -1,52 +1,77 @@
 ﻿<!DOCTYPE html>
 {% load static %}
 <html>
+
 <head>
     <meta charset="UTF-8">
-    <title>Početna stranica</title>
-    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+    <title>SmartCart početna stranica</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'site.css' %}" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 
 <body>
-    <h1>Dobro došli na internetske stranice SmartCart</h1>
+    <h1 class="text-center">Dobro došli na web stranice SmartCart!</h1>
     <hr />
-    {% if user.is_authenticated %}
-        Logged in as {{user}}
-        <br><br>
-        {% if user.is_trgovac %}
-            <form action="/trgovac" method="get">
-                {%csrf_token%}
-                <button type="submit">Stranica trgovca</button>
-            </form>
-            <br>
-        {% endif %}
-        <form action="/edit_profile" method="get">
-            {%csrf_token%}
-            <button type="submit">Edit profile</button>
-        </form>
-        <br>
-        <form action="/logout" method="get">
-            {%csrf_token%}
-            <button type="submit">Log out</button>
-        </form>
-        <br>
-        <hr />
-    {% else %}
-        <form action="/login" method="GET">
-            {%csrf_token%}
-            <button type="submit">Log in</button>
-        </form>
-    {% endif %}
-    <br>
-    <form action="/signup/trgovac" method="get">
-        {%csrf_token%}
-        <button type="submit">Sign up as trgovac</button>
-    </form>
-    <br>
-    <form action="/signup/kupac" method="get">
-        {%csrf_token%}
-        <button type="submit">Sign up as kupac</button>
-    </form>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+            {% if user.is_authenticated %}
+            Prijavljeni ste kao <mark>{{user}}</mark>
+            {% if user.is_trgovac %}
+                <form action="/trgovac" method="get">
+                    {%csrf_token%}
+                    <button type="submit">Stranica trgovca</button>
+                </form>
+            {% endif %}
+            </div>
+            <div class="col">
+                <form action="/edit_profile" method="get">
+                    {%csrf_token%}
+                    <button type="submit">Edit profile</button>
+                </form>
+            </div>
+            <div class="col">
+                <form action="/logout" method="get">
+                    {%csrf_token%}
+                    <button type="submit">Log out</button>
+                </form>
+            </div>
+            <hr />
+
+            {% else %}
+            <div class="col">
+                <form action="/login" method="GET">
+                    {%csrf_token%}
+                    <button type="submit">Log in</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+        <div class="row">
+            <div class="col">
+                <form action="/signup/trgovac" method="get">
+                    {%csrf_token%}
+                    <button type="submit">Sign up as trgovac</button>
+                </form>
+            </div>
+            <div class="col">
+                <form action="/signup/kupac" method="get">
+                    {%csrf_token%}
+                    <button type="submit">Sign up as kupac</button>
+                </form>
+            </div>
+            <div class="col">
+                <form action="/signup/admin" method="get">
+                    {%csrf_token%}
+                    <button type="submit">Sign up as admin</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
