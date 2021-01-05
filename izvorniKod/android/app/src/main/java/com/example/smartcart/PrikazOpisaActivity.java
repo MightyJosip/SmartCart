@@ -1,6 +1,8 @@
 package com.example.smartcart;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,13 +16,17 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class PrikazOpisaActivity extends AppCompatActivity {
+    RecyclerView recyclerView;
+    OpisAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // riješiti preko xml-a
-        //setContentView(R.layout.activity_prikaz_opisa);
 
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -30,11 +36,13 @@ public class PrikazOpisaActivity extends AppCompatActivity {
         String barkod = (String) intent.getSerializableExtra("barkod");
 
         Connector connector = Connector.getInstance(this);
+        List<JSONObject> opisi = new LinkedList<JSONObject>();
         connector.fetch_opisi(sif_trgovina, barkod, jsonArray -> {
             //Log.d("opis", jsonArray.toString());
             for (int i = 0; i < jsonArray.length(); i++) {
                 try {
                     JSONObject obj = jsonArray.getJSONObject(i);
+                    opisi.add(new JSONObject(obj.get("fields").toString()));
                     Log.d("opis", obj.toString());
 
                     TextView textView = new TextView(this);
@@ -63,10 +71,22 @@ public class PrikazOpisaActivity extends AppCompatActivity {
                 }
 
             }
+            Log.d("opisi", opisi.toString());
+            recyclerView = findViewById(R.id.opisi_list);
+            draw_opisi(opisi);
 
         }, v -> Log.e("opis", v.toString()));
 
-        setContentView(linearLayout);
+        setContentView(R.layout.activity_prikaz_opisa);
+        //setContentView(linearLayout);
 
     }
+
+    private void draw_opisi(List<JSONObject> opisi) {
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        adapter = new OpisAdapter(getApplicationContext(), opisi , this);
+        recyclerView.setAdapter(adapter);
+    }
+
 }
+
