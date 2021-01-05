@@ -32,7 +32,7 @@ class DecimalEncoder(json.JSONEncoder):
             return float(obj)
         return json.JSONEncoder.default(self, obj)
 
-# TODO: ograničiti opise na jednu trgovinu??
+# TODO: ograničiti opise na jednu trgovinu?
 class AndroidSviArtikliUTrgovini(View):
     def post(self, request, *args, **kwargs):
         try:
@@ -76,7 +76,8 @@ class AndroidArtiklTrgovina(View):
             artikl_trgovina = TrgovinaArtikli.objects.all().filter(artikl=Artikl.objects.get(barkod_artikla=barkod))
 
 
-        najbolji_opis = OpisArtikla.objects.all().filter(artikl_id=barkod).order_by('broj_glasova').reverse()
+        najbolji_opis = OpisArtikla.objects.all().filter(artikl_id=barkod)
+        najbolji_opis = sorted(najbolji_opis, key=lambda a: (a.prioritiziran, a.broj_glasova), reverse=True)
         if len(najbolji_opis) > 0:
             najbolji_opis = najbolji_opis[0]
             data = serializers.serialize('json', [artikl_trgovina] + [najbolji_opis])
