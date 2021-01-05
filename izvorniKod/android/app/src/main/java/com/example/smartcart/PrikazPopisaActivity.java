@@ -53,14 +53,6 @@ public class PrikazPopisaActivity extends AppCompatActivity {
         });
 
         draw_popisi();
-
-
-
-
-
-
-
-
     }
 
     protected void draw_popisi(){
