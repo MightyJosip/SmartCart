@@ -23,6 +23,16 @@ class AndroidArtikliView(View):
         artikli = Artikl.objects.filter(naziv_artikla__contains='%s' % naziv_artikla)
         return create_json_response(200, data=serializers.serialize('json', artikli))
 
+from django.forms.models import model_to_dict
+from decimal import Decimal
+
+class DecimalEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Decimal):
+            return float(obj)
+        return json.JSONEncoder.default(self, obj)
+
+# TODO: ograničiti opise na jednu trgovinu??
 class AndroidSviArtikliUTrgovini(View):
     def post(self, request, *args, **kwargs):
         try:
@@ -35,8 +45,20 @@ class AndroidSviArtikliUTrgovini(View):
 
         trgovina = Trgovina.objects.get(sif_trgovina=sif_trgovina)
         trgovinaartikli = TrgovinaArtikli.objects.filter(trgovina=trgovina)
+   
+        jsonArray = []
+        for x in trgovinaartikli:
+            tmp = model_to_dict(x)
+            najbolji_opis = OpisArtikla.objects.all().filter(artikl_id=x.artikl.barkod_artikla)
+            najbolji_opis = sorted(najbolji_opis, key=lambda a: (a.prioritiziran, a.broj_glasova), reverse=True)
 
-        return create_json_response(200, data=serializers.serialize('json', trgovinaartikli))
+            if (len(najbolji_opis) > 0):
+                tmp['naziv'] = najbolji_opis[0].naziv_artikla
+            else:
+                tmp['naziv'] = ''
+            jsonArray.append(tmp)
+        jsonArray = json.dumps(jsonArray, cls=DecimalEncoder)
+        return create_json_response(200, data=jsonArray)
 
     
 
