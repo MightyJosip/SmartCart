@@ -160,10 +160,6 @@ public class Connector {
         getRequestQueue().add(request);
     }
 
-    public void dodaj_na_popis(){
-
-    }
-
     public void fetch_opisi(String sif_trgovina, String barkod, Response.Listener<JSONArray> onSuccess, Response.ErrorListener onFail) {
         JSONObject jsonObject = new JSONObject();
         String url = HOST + "android/opisi";
