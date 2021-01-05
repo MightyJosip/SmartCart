@@ -41,5 +41,7 @@
     <string name="store_location">Store location</string>
     <string name="store_opening_time">Store opening time</string>
     <string name="store_closeing_time">Store closeing time</string>
+    <string name="hiMessage">Hi</string>
+    <string name="change_password">Change Password</string>
     <string name="title_activity_odabir_popisa">Odabir_popisa</string>
 </resources>

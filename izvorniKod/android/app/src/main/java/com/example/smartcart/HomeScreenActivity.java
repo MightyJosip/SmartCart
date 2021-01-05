@@ -204,9 +204,9 @@ public class HomeScreenActivity extends AppCompatActivity{
                 break;
             }
 
-            case MENU_ACCOUNTSETTINGS: //startAccountSettingsActivity(); break;
-                Toast.makeText(this, "Nije implementirano :(", Toast.LENGTH_LONG).show();
-                break;
+            case MENU_ACCOUNTSETTINGS: startAccountSettingsActivity(); break;
+//                Toast.makeText(this, "Nije implementirano :(", Toast.LENGTH_LONG).show();
+//                break;
 
             case MENU_LOGOUT:
                 SharedPreferences prefs = getSharedPreferences("user_info", Context.MODE_PRIVATE);
