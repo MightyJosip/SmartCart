@@ -31,13 +31,7 @@ public class PrikazStavkiActivity extends AppCompatActivity {
         setContentView(R.layout.prikaz_stavki);
 
         final Intent intent = getIntent();
-        final int myExtra= intent.getIntExtra("id", -1);
-
-
-        /*Toast.makeText(this, Integer.toString(myExtra), Toast.LENGTH_SHORT)
-                .show();
-
-         */
+        final int myExtra = intent.getIntExtra("id", -1);
 
 
         SmartCartDatabase db = SmartCartDatabase.getInstance(this);
@@ -51,39 +45,21 @@ public class PrikazStavkiActivity extends AppCompatActivity {
         Toast.makeText(this, sb.toString(), Toast.LENGTH_SHORT).show();
 
 
-        EditText et = findViewById(R.id.ime_stavke);
-        Button btn = findViewById(R.id.nova_stavka);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String input = et.getText().toString().trim();
-                if (input.isEmpty())
-                    return;
+        ArrayList<String> array = new ArrayList<>();
+        ListView listastavki = (ListView) findViewById(R.id.stavkalistview);
 
-                Stavka novaStavka = new Stavka(myExtra, input);
+        List<Stavka> stavke = SmartCartDatabase.getInstance(PrikazStavkiActivity.this).stavkaDao().dohvatiStavkeZaPopis(myExtra);
+        for (Stavka s : stavke) {
+            TextView text = new TextView(PrikazStavkiActivity.this);
+            text.setText(s.toString());
+            array.add((String) text.getText());
+        }
 
-                dao.dodajStavke(novaStavka);
-                ArrayList<String> array = new ArrayList<>();
-                ListView listastavki = (ListView) findViewById(R.id.stavkalistview);
+        ArrayAdapter adapter = new ArrayAdapter(PrikazStavkiActivity.this, android.R.layout.simple_list_item_1, array);
 
-                List<Stavka> stavke = SmartCartDatabase.getInstance(PrikazStavkiActivity.this).stavkaDao().dohvatiStavkeZaPopis(myExtra);
-                for (Stavka s : stavke) {
-                    TextView text = new TextView(PrikazStavkiActivity.this);
-                    text.setText(s.toString());
-                    array.add((String) text.getText());
-                }
-
-                ArrayAdapter adapter = new ArrayAdapter(PrikazStavkiActivity.this, android.R.layout.simple_list_item_1, array);
-
-                listastavki.setAdapter(adapter);
-            }
-        });
-
-
-
-
-
-
-
+        listastavki.setAdapter(adapter);
     }
+
+
+
 }
