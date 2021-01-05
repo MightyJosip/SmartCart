@@ -19,11 +19,13 @@ public class OpisAdapter extends RecyclerView.Adapter<OpisAdapter.ViewHolder> {
     LayoutInflater inflater;
     List<JSONObject> opisi;
     Context context;
+    String session_id;
 
-    public OpisAdapter(Context ctx, List<JSONObject> opisi, Context prikazTrgovineActivityContext) {
+    public OpisAdapter(Context ctx, List<JSONObject> opisi, Context prikazTrgovineActivityContext, String session_id) {
         this.inflater = LayoutInflater.from(ctx);
         this.opisi = opisi;
         this.context = prikazTrgovineActivityContext;
+        this.session_id = session_id;
     }
 
     @NonNull
@@ -38,7 +40,9 @@ public class OpisAdapter extends RecyclerView.Adapter<OpisAdapter.ViewHolder> {
         try {
             holder.opis_opis.setText("Opis artikla: " + opisi.get(position).get("opis_artikla").toString());
             holder.opis_glasovi.setText("Broj glasova: " + opisi.get(position).get("broj_glasova").toString());
-            holder.opis_upvote.setText("Ovaj gumb ništa ne radi :(");
+            //holder.opis_upvote.setText("Ovaj gumb ništa ne radi :(");
+            // set sif opis for upvote button
+            holder.sif_opis = opisi.get(position).getString("sif_opis");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -52,6 +56,8 @@ public class OpisAdapter extends RecyclerView.Adapter<OpisAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView opis_opis, opis_glasovi;
         Button opis_upvote;
+        // cheesy but ok
+        public String sif_opis;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -60,9 +66,10 @@ public class OpisAdapter extends RecyclerView.Adapter<OpisAdapter.ViewHolder> {
             opis_glasovi = itemView.findViewById(R.id.opis_glasovi);
             opis_upvote = itemView.findViewById(R.id.opis_upvote);
 
-            // TODO: dodaj upvote funkciju
-            opis_upvote.setOnClickListener(l -> {
 
+            Connector connector = Connector.getInstance(context);
+            opis_upvote.setOnClickListener(l -> {
+                connector.upvote(sif_opis, session_id, onSuccess -> {}, onFail -> {});
             });
         }
     }

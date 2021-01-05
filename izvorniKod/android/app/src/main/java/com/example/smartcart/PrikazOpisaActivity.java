@@ -42,7 +42,11 @@ public class PrikazOpisaActivity extends AppCompatActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 try {
                     JSONObject obj = jsonArray.getJSONObject(i);
-                    opisi.add(new JSONObject(obj.get("fields").toString()));
+                    JSONObject tmp = new JSONObject(obj.get("fields").toString());
+                    // add "sif_opis" into "fields" and send "fields" to OpisAdapter
+                    tmp.accumulate("sif_opis", obj.get("pk"));
+                    Log.d("aaaaargh", tmp.toString());
+                    opisi.add(tmp);
                     Log.d("opis", obj.toString());
 
                     TextView textView = new TextView(this);
@@ -83,8 +87,12 @@ public class PrikazOpisaActivity extends AppCompatActivity {
     }
 
     private void draw_opisi(List<JSONObject> opisi) {
+        // get session_id from shared preferences for upvote button
+        SharedPreferences sp = getSharedPreferences("user_info", Context.MODE_PRIVATE);
+        String session_id = (String) sp.getAll().get((Object) "session");
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        adapter = new OpisAdapter(getApplicationContext(), opisi , this);
+        adapter = new OpisAdapter(getApplicationContext(), opisi , this, session_id);
         recyclerView.setAdapter(adapter);
     }
 
