@@ -194,10 +194,15 @@ class AndroidEditProfileView(View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body)
         user = get_user_from_session(data['session_id'])
-        password = data['password']
-        user.set_password(password)
-        user.save()
-        return create_json_response(200, success='done')
+        old_password = data['old_password']
+        new_password = data['new_password']
+        check_user = authenticate(request, username=user.email, password=old_password)
+        if user == check_user:
+            user.set_password(new_password)
+            user.save()
+            return create_json_response(200, success='done')
+        else:
+            return create_json_response(401, err='Wrong password')
 
 
 class AndroidSignUpView(View):
