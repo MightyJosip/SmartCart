@@ -118,6 +118,22 @@ public class Connector {
         getRequestQueue().add(jtsr);
     }
 
+    public void changePassword(String sessionId, String oldPassword, String newPassword, Response.Listener<String> onSuccess, Response.ErrorListener onFail){
+
+        JSONObject jo = new JSONObject();
+        try{
+            jo.put("session_id", sessionId);
+            jo.put("old_password", oldPassword);
+            jo.put("new_password", newPassword);
+        }catch (JSONException e) {
+            Log.e("Change password", e.toString());
+        }
+
+        String url = HOST + "android/edit_profile";
+        JsonToStringRequest jtsr = new JsonToStringRequest(Request.Method.POST, url, jo, onSuccess, onFail);
+        getRequestQueue().add(jtsr);
+    }
+
     private static class JsonToStringRequest extends JsonRequest<String> {
         public JsonToStringRequest(int method, String url,
                                    JSONObject requestBody,

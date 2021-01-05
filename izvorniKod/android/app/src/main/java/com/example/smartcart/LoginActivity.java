@@ -50,6 +50,8 @@ public class LoginActivity extends AppCompatActivity {
             // TODO: na jednom mjestu
             spe.putString("auth_level", AuthLevels.DEFAULT);
             spe.apply();
+            Intent intent = new Intent(LoginActivity.this, HomeScreenActivity.class);
+            startActivity(intent);
             finish();
         });
     }
@@ -92,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
 
             finish();
         }, err -> {
-            Toast t = Toast.makeText(this, "NEUSPJEH. Poruka: " + err.toString(), Toast.LENGTH_LONG);
+            Toast t = Toast.makeText(this, "NEUSPJEH. Krivo korisničko ime ili lozinka", Toast.LENGTH_LONG);
             t.show();
         });
     }
