@@ -36,7 +36,6 @@ public class ArtiklAdapter extends RecyclerView.Adapter<ArtiklAdapter.ViewHolder
         return new ViewHolder(view);
     }
 
-
     @Override
     public void onBindViewHolder(@NonNull ArtiklAdapter.ViewHolder holder, int position) {
         try {
@@ -56,8 +55,6 @@ public class ArtiklAdapter extends RecyclerView.Adapter<ArtiklAdapter.ViewHolder
             }
 
             holder.artikl_sifTrg.setText(artikli.get(position).get("trgovina").toString());
-            //holder.artikl_dostupan.setText(artikli.get(position).get("dostupan").toString());
-            //holder.artikl_akcija.setText(artikli.get(position).get("akcija").toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -84,7 +81,6 @@ public class ArtiklAdapter extends RecyclerView.Adapter<ArtiklAdapter.ViewHolder
 
             artikl_btn.setOnClickListener(v -> {
                 Intent intent = new Intent(context, PrikazArtikla.class);
-                //Log.d("ovi", fields.getString("trgovina") + " " + fields.getString("artikl"));
 
                 String[] tmp;
                 tmp = ((String) artikl_sifTrg.getText()).split(" ");

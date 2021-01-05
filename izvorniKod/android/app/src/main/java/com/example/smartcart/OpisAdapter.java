@@ -65,11 +65,12 @@ public class OpisAdapter extends RecyclerView.Adapter<OpisAdapter.ViewHolder> {
             opis_opis = itemView.findViewById(R.id.opis_opis);
             opis_glasovi = itemView.findViewById(R.id.opis_glasovi);
             opis_upvote = itemView.findViewById(R.id.opis_upvote);
-
-
+            
             Connector connector = Connector.getInstance(context);
             opis_upvote.setOnClickListener(l -> {
-                connector.upvote(sif_opis, session_id, onSuccess -> {}, onFail -> {});
+                connector.upvote(sif_opis, session_id, onSuccess -> {
+                }, onFail -> {
+                });
             });
         }
     }
