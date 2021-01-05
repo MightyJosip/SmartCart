@@ -1,49 +1,41 @@
 package com.example.smartcart;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Layout;
 import android.util.Log;
-import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.smartcart.Connector;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.awt.font.TextAttribute;
 import java.io.Serializable;
 
-import kotlin.reflect.KVariance;
-
 public class PrikazTrgovine extends AppCompatActivity {
+
+    private static final int REQUEST_BARCODE = 9901;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // koristi se ovaj programski layout, valja prebaciti na xml
-        //setContentView(R.layout.activity_prikaz_trgovine);
+        setContentView(R.layout.activity_prikaz_trgovine);
 
-        LinearLayout linearLayout = new LinearLayout(this);
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout linearLayout = findViewById(R.id.trgovine_div);
 
         Intent intent = getIntent();
         String name = "";
         if (intent.hasExtra("name")) {
             name = (String)  intent.getSerializableExtra("name");
-            TextView textView = new TextView(this);
+            TextView textView = findViewById(R.id.textView6);
             textView.setText(name);
-            linearLayout.addView(textView);
         }
-
-
 
         String[] arr = name.split(" ");
         String id = arr[arr.length -1];
@@ -57,11 +49,9 @@ public class PrikazTrgovine extends AppCompatActivity {
                 try {
                     //Log.d("trgovina", jsonArray.getJSONObject(i).toString());
                     JSONObject fields = new JSONObject(jsonArray.getJSONObject(i).get("fields").toString());
-
                     TextView textView = new TextView(this);
                     textView.setText(fields.toString());
-                    linearLayout.addView(textView);
-
+                    ((LinearLayout) findViewById(R.id.trgovine_dynamic_list)).addView(textView);
 
 
 
@@ -86,8 +76,22 @@ public class PrikazTrgovine extends AppCompatActivity {
             }
         }, obj -> Log.e("err", obj.toString()));
 
+        FloatingActionButton fab = findViewById(R.id.barcode_fab);
+        fab.setBackgroundColor(getColor(R.color.white));
+        fab.setOnClickListener(v -> {
+            Intent i = new Intent(this, BarcodeScannerActivity.class);
+            startActivityForResult(i, REQUEST_BARCODE);
+        });
 
-
-        setContentView(linearLayout);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_BARCODE && resultCode == RESULT_OK) {
+            assert data != null;
+            Toast.makeText(this, data.getStringExtra("barcode"), Toast.LENGTH_LONG).show();
+        }
+    }
+
 }

@@ -1,9 +1,7 @@
 package com.example.smartcart;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
-
 
 import androidx.annotation.Nullable;
 
@@ -57,8 +55,7 @@ public class Connector {
             jo.put("email", email);
             jo.put("password", password);
         } catch (JSONException e) {
-            // za printati stacktrace napraviti stringwriter/printwriter wrapper i upisati u string
-            Log.e("Login", e.toString());
+            Log.e("Login", e.toString(), e);
         }
         String url = HOST + "android/login";
         JsonObjectRequest jor = new JsonObjectRequest(Request.Method.POST, url, jo, onSuccess, onFail);
@@ -73,8 +70,7 @@ public class Connector {
         try {
             jo.put("sessionId", sessionId );
         } catch (JSONException e) {
-            // za printati stacktrace napraviti stringwriter/printwriter wrapper i upisati u string
-            Log.e("Logout", e.toString());
+            Log.e("Logout", e.toString(), e);
         }
         String url = HOST + "android/logout";
         JsonObjectRequest jor = new JsonObjectRequest(Request.Method.POST, url, jo, onSuccess, onFail);
@@ -91,8 +87,7 @@ public class Connector {
             jo.put("password", password);
             jo.put("secret_code", secretCode);
         } catch (JSONException e) {
-            // za printati stacktrace napraviti stringwriter/printwriter wrapper i upisati u string
-            Log.e("Signup", e.toString());
+            Log.e("Signup", e.toString(), e);
         }
         String url = HOST + "android/signup";
         JsonToStringRequest jtsr = new JsonToStringRequest(Request.Method.POST, url, jo, onSuccess, onFail);

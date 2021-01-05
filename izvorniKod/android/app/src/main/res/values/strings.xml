@@ -41,4 +41,6 @@
     <string name="store_location">Store location</string>
     <string name="store_opening_time">Store opening time</string>
     <string name="store_closeing_time">Store closeing time</string>
+    <string name="type_in_a_barcode">Type in a barcode</string>
+    <string name="submit">Submit</string>
 </resources>
