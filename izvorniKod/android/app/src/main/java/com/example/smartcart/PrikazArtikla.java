@@ -36,6 +36,26 @@ public class PrikazArtikla extends AppCompatActivity {
             Log.d("artikl - sif_trgovina", sif_trgovina);
             Log.d("artikl - barkod", barkod);
 
+
+            Button dodajnapopis = (Button) findViewById(R.id.btn_dodaj_na_popis);
+            //JSONObject finalOpis = opis;
+            Intent intent2 = new Intent(PrikazArtikla.this, Odabir_popisa.class);
+
+            dodajnapopis.setOnClickListener(v -> {
+
+                intent2.putExtra("sif_trgovina", sif_trgovina);
+                intent2.putExtra("barkod", barkod);
+                            /*try {
+                                intent2.putExtra("naziv", finalOpis.get("naziv_artikla").toString());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }*/
+                startActivity(intent2);
+
+
+
+            });
+
             final String[] id_opis = {null};
             Connector connector = Connector.getInstance(this);
             connector.fetch_artikl_u_trgovini(sif_trgovina, barkod, jsonArray -> {
@@ -56,24 +76,6 @@ public class PrikazArtikla extends AppCompatActivity {
                         txt_broj_glasova.setText("Broj glasova : " + opis.get("broj_glasova").toString());
 
 
-                        Button dodajnapopis = (Button) findViewById(R.id.btn_dodaj_na_popis);
-
-                        JSONObject finalOpis = opis;
-                        dodajnapopis.setOnClickListener(v -> {
-
-                            Intent intent2 = new Intent(PrikazArtikla.this, Odabir_popisa.class);
-                            intent2.putExtra("sif_trgovina", sif_trgovina);
-                            intent2.putExtra("barkod", barkod);
-                            try {
-                                intent2.putExtra("naziv", finalOpis.get("naziv_artikla").toString());
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            startActivity(intent2);
-
-
-
-                        });
 
 
                     } catch (JSONException e) {
