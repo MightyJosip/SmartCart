@@ -21,7 +21,7 @@ public class Stavka {
     private int sifPopis;
 
     @ColumnInfo(name = "barkod")
-    private String barkod = "3333";
+    private String barkod = "653465363";
 
     @ColumnInfo(name = "cijena")
     private double cijena = 3.99;
@@ -42,7 +42,7 @@ public class Stavka {
     private boolean omiljeni = false;
 
     @ColumnInfo(name = "sifTrgovina")
-    private int sifTrgovina = 69420;
+    private int sifTrgovina;
 
 
 
@@ -52,6 +52,16 @@ public class Stavka {
         this.sifPopis = sifPopis;
         this.naziv = naziv;
     }
+
+    @Ignore
+    public Stavka(int sifPopis, String barkod, String naziv, int sifTrgovina) {
+
+        this.sifPopis = sifPopis;
+        this.naziv = naziv;
+        this.barkod = barkod;
+        this.sifTrgovina=sifTrgovina;
+    }
+
 
     public Stavka(int sifStavka, int sifPopis, String barkod, double cijena, String filtarFunkcija, boolean uKosarici,
                   int kolicina, String naziv, boolean omiljeni, int sifTrgovina) {
