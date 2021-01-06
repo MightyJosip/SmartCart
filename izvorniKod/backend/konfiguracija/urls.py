@@ -62,6 +62,7 @@ urlpatterns = [
     path('android/upvote', AndroidUpvoteView.as_view(), name='upvote'),
     path('android/write_description', AndroidWriteProductDescription.as_view(), name='write_description'),
     path('android/skenirajbarkod', SkenirajBarkodView.as_view(), name='skenirajbarkod'),
+    path('android/closeststores', FindClosestStores.as_view(), name='skenirajbarkod'),
 
     path('accounts/', include('allauth.urls')),
     path('', TemplateView.as_view(template_name='social_app/index.html'))
