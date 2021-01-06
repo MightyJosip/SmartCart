@@ -33,7 +33,6 @@ public class PrikazStavkiActivity extends AppCompatActivity {
         final Intent intent = getIntent();
         final int myExtra = intent.getIntExtra("id", -1);
 
-
         SmartCartDatabase db = SmartCartDatabase.getInstance(this);
         StavkaDao dao = db.stavkaDao();
         List<Stavka> stavcice = dao.dohvatiStavkeZaPopis(myExtra);
@@ -42,8 +41,6 @@ public class PrikazStavkiActivity extends AppCompatActivity {
         for (Stavka s : stavcice) {
             sb.append(s).append("\n");
         }
-        Toast.makeText(this, sb.toString(), Toast.LENGTH_SHORT).show();
-
 
         ArrayList<String> array = new ArrayList<>();
         ListView listastavki = (ListView) findViewById(R.id.stavkalistview);
@@ -54,6 +51,13 @@ public class PrikazStavkiActivity extends AppCompatActivity {
             text.setText(s.toString());
             array.add((String) text.getText());
         }
+
+        Button btnIzracunCijene = findViewById(R.id.btn_izracun_cijene);
+        btnIzracunCijene.setOnClickListener(l -> {
+            Intent nextIntent = new Intent(PrikazStavkiActivity.this, IzracunCijeneActivity.class);
+            nextIntent.putExtra("id", myExtra);
+            startActivity(nextIntent);
+        });
 
         ArrayAdapter adapter = new ArrayAdapter(PrikazStavkiActivity.this, android.R.layout.simple_list_item_1, array);
 
