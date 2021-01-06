@@ -1,8 +1,10 @@
-table,
-th,
-td {
+table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
     padding: 5px;
     text-align: center;
+}
+
+label[for="id_prioritiziran"] {
+    font-weight: bold;
 }

@@ -1,56 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient">
 
     <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="253dp"
-        android:layout_height="117dp"
-        app:srcCompat="@drawable/logo_smartcart"
-        tools:layout_editor_absoluteX="-5dp"
-        tools:layout_editor_absoluteY="-10dp"
+        android:id="@+id/mapLogo"
+        android:layout_width="241dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="24dp"
+        android:contentDescription="@string/smartcartTextLogo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/smartcartTextLogo" />
+        app:srcCompat="@drawable/logo_smartcart" />
 
     <ImageView
         android:id="@+id/imageView6"
         android:layout_width="41dp"
         android:layout_height="0dp"
         android:layout_marginEnd="8dp"
+        android:contentDescription="@string/cartButton"
         app:layout_constraintBottom_toBottomOf="@+id/imageView7"
         app:layout_constraintEnd_toStartOf="@+id/imageView7"
         app:layout_constraintTop_toTopOf="@+id/imageView7"
-        app:srcCompat="@drawable/ic_baseline_shopping_cart"
-        android:contentDescription="@string/cartButton" />
+        app:srcCompat="@drawable/logo" />
 
     <ImageView
         android:id="@+id/imageView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+        android:layout_width="41dp"
+        android:layout_height="46dp"
+        android:layout_marginEnd="24dp"
+        android:contentDescription="@string/settingsButton"
+        app:layout_constraintBottom_toBottomOf="@+id/mapLogo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView4"
-        app:srcCompat="@drawable/ic_account_settings"
-        android:contentDescription="@string/settingsButton" />
+        app:layout_constraintTop_toTopOf="@+id/mapLogo"
+        app:srcCompat="@drawable/settings" />
 
     <TextView
         android:id="@+id/textView9"
         android:layout_width="303dp"
         android:layout_height="25dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="20dp"
         android:text="@string/WelcomeInfo"
         android:textAlignment="center"
         android:textColor="@android:color/white"
         android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+        app:layout_constraintTop_toBottomOf="@+id/mapLogo" />
 
     <EditText
         android:id="@+id/search_field"
@@ -59,28 +58,48 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
+        android:autofillHints="Enter something"
         android:background="@drawable/search_bg"
         android:drawableStart="@drawable/ic_baseline_search_24"
         android:drawablePadding="12dp"
         android:ems="10"
         android:fontFamily="@font/montserrat"
         android:hint="@string/search"
-        android:textColorHint="@color/cardview_dark_background"
         android:inputType="text"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"
         android:textColor="@android:color/black"
+        android:textColorHint="@color/cardview_dark_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
+    <!--    <FrameLayout-->
+    <!--        android:id="@+id/fragment_container"-->
+    <!--        android:layout_width="414dp"-->
+    <!--        android:layout_height="489dp"-->
+    <!--        android:layout_marginStart="8dp"-->
+    <!--        android:layout_marginEnd="8dp"-->
+    <!--        android:layout_marginBottom="8dp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+
+    <!--        >-->
+
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="0dp"
-        android:layout_height="178dp"
-        android:layout_marginTop="24dp"
+        android:id="@+id/storeList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_field" />
+        app:layout_constraintTop_toBottomOf="@+id/search_field"
+        app:layout_constraintVertical_bias="1.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

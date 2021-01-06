@@ -10,10 +10,10 @@ package com.example.smartcart;
  * */
 public class AuthLevels {
 
-    public static final String GOST = "gost";
-    public static final String KUPAC = "kupac";
-    public static final String TRGOVAC = "trgovac";
-    public static final String ADMIN = "admin";
+    public static final String GOST = "Gost";
+    public static final String KUPAC = "Kupac";
+    public static final String TRGOVAC = "Trgovac";
+    public static final String ADMIN = "Admin";
     public static final String DEFAULT = GOST;
 
 

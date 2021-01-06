@@ -1,0 +1,74 @@
+package com.example.smartcart;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.Layout;
+import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.smartcart.Connector;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.awt.font.TextAttribute;
+import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
+
+import kotlin.reflect.KVariance;
+
+public class PrikazTrgovine extends AppCompatActivity {
+
+    RecyclerView recyclerView;
+    ArtiklAdapter adapter;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+        String name = "";
+        if (intent.hasExtra("name")) {
+            name = (String) intent.getSerializableExtra("name");
+        }
+
+        String[] arr = name.split(" ");
+        String id = arr[arr.length - 1];
+
+        Connector conn = Connector.getInstance(this);
+        List<JSONObject> artikli = new LinkedList<JSONObject>();
+        conn.fetch_artikli_u_trgovini(id, jsonArray -> {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                try {
+                    JSONObject fields = new JSONObject(jsonArray.getJSONObject(i).get("fields").toString());
+                    artikli.add(fields);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            recyclerView = findViewById(R.id.artikli_list);
+            draw_artikli(artikli);
+        }, obj -> Log.e("err", obj.toString()));
+
+
+        setContentView(R.layout.activity_prikaz_trgovine);
+    }
+
+    private void draw_artikli(List<JSONObject> artikli) {
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        adapter = new ArtiklAdapter(getApplicationContext(), artikli, this);
+        recyclerView.setAdapter(adapter);
+    }
+
+}
+

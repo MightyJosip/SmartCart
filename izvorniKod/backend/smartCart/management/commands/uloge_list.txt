@@ -1,0 +1,5 @@
+Atributi redom: id, uloga
+1;Gost
+2;Kupac
+3;Trgovac
+4;Admin

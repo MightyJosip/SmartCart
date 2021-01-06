@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from pathlib import Path
-import dj_database_url
+#import dj_database_url
 
 CONST = {}
 CONST_PATH = os.path.join(os.path.join(Path(os.path.dirname(__file__)).parent, "constants.txt"))
@@ -55,7 +55,7 @@ DEBUG = True
 
 #10.0.2.2 služi za spajanje emulatora iz android studia.
 # Možete dodati lokalni ip s mobitela da možete s njega pokretati server, a pristupati s Windowsa
-ALLOWED_HOSTS = ['10.0.2.2', 'localhost', '192.168.1.3', '192.168.0.24', '192.168.1.15',
+ALLOWED_HOSTS = ['10.0.2.2', 'localhost', '192.168.1.4', '192.168.0.24', '192.168.1.15',
     'preljevstoga-smartcart.herokuapp.com', '0.0.0.0']
 
 
@@ -69,6 +69,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    ###
+    'django.contrib.sites',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+    
+    'allauth.socialaccount.providers.google',
+
+
 ]
 
 MIDDLEWARE = [
@@ -122,6 +134,11 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'smartCart.BaseUserModel'
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+SOCIALACCOUNT_ADAPTER = 'smartCart.models.UserAccountAdapter'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -142,3 +159,43 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = 'static/'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'smartestcart@gmail.com'
+EMAIL_HOST_PASSWORD = 'tsvdjfatqulglkwb' 
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'default from email'
+
+
+AUTHENTICATION_BACKENDS = [
+    
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+    
+]
+
+SITE_ID = 1
+
+# Provider specific settings
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'APP': {
+            'client_id': '197701493351-l5j9llbv8r93kce4ajgf1kque7bcqqhr.apps.googleusercontent.com',
+            'secret': CONST['GOOGLE_CLIENT_SECRET'],
+            'key': ''
+        }
+    }
+}
+
+LOGIN_REDIRECT_URL = 'index'
+
+ACCOUNT_LOGOUT_ON_GET = True
