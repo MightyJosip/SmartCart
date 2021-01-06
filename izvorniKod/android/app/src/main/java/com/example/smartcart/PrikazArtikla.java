@@ -13,10 +13,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.CookieHandler;
+
 public class PrikazArtikla extends AppCompatActivity {
+
+    private JSONObject tmp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,17 +51,18 @@ public class PrikazArtikla extends AppCompatActivity {
                 dodajnapopis.setVisibility(View.GONE);
             }
 
+
             dodajnapopis.setOnClickListener(v -> {
 
 
                 Intent intent2 = new Intent(PrikazArtikla.this, Odabir_popisa.class);
                 intent2.putExtra("sif_trgovina", sif_trgovina);
                 intent2.putExtra("barkod", barkod);
-                            /*try {
-                                intent2.putExtra("naziv", finalOpis.get("naziv_artikla").toString());
-                            } catch (JSONException e) {
+                            try {
+                                intent2.putExtra("naziv", tmp.get("naziv_artikla").toString());
+                            } catch (Exception e) {
                                 e.printStackTrace();
-                            }*/
+                            }
                 startActivity(intent2);
 
 
@@ -63,6 +70,7 @@ public class PrikazArtikla extends AppCompatActivity {
             });
 
             final String[] id_opis = {null};
+
             Connector connector = Connector.getInstance(this);
             connector.fetch_artikl_u_trgovini(sif_trgovina, barkod, jsonArray -> {
                 Log.d("artikl", jsonArray.toString());
@@ -71,6 +79,7 @@ public class PrikazArtikla extends AppCompatActivity {
                     JSONObject opis = null;
                     try {
                         opis = new JSONObject(jsonArray.getJSONObject(1).get("fields").toString());
+                        tmp = opis;
                         id_opis[0] = jsonArray.getJSONObject(1).get("pk").toString();
 
                         TextView txt_naziv = (TextView) findViewById(R.id.txt_naziv);
