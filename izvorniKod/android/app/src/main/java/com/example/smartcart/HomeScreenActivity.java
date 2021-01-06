@@ -1,49 +1,36 @@
 package com.example.smartcart;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.SearchView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.smartcart.database.Popis;
-import com.example.smartcart.database.SmartCartDatabase;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class HomeScreenActivity extends AppCompatActivity{
 
@@ -214,6 +201,14 @@ public class HomeScreenActivity extends AppCompatActivity{
                 conn.logOut(sessionId, response -> {
                     prefs.edit().remove("session").apply();
                     prefs.edit().remove("auth_level").apply();
+                    if (prefs.getBoolean("is_google_signed", false)) {
+                        prefs.edit().putBoolean("is_google_signed", false).apply();
+                        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                .requestEmail()
+                                .build();
+                        GoogleSignInClient gsiClient = GoogleSignIn.getClient(this, gso);
+                        gsiClient.signOut(); // Ovo mozda pozvati prije komunikacije sa serverom
+                    }
                 }, error -> Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show());
 
                 Intent intent = new Intent(this, LoginActivity.class);

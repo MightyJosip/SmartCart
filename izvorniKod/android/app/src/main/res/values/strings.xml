@@ -44,4 +44,5 @@
     <string name="hiMessage">Hi</string>
     <string name="change_password">Change Password</string>
     <string name="title_activity_odabir_popisa">Odabir_popisa</string>
+    <string name="google_sign_in">Google sign-in</string>
 </resources>

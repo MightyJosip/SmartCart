@@ -106,6 +106,30 @@
             style = "?android:attr/borderlessButtonStyle" />
     </androidx.cardview.widget.CardView>
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView3"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        app:cardBackgroundColor="@color/purple_500"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CardView2">
+
+        <Button
+            android:id="@+id/google_sign_in"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:text="@string/google_sign_in"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            android:onClick="googleSignIn"
+            style = "?android:attr/borderlessButtonStyle" />
+    </androidx.cardview.widget.CardView>
+
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
