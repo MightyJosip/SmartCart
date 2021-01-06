@@ -19,6 +19,25 @@
                 </tr>
             {% endfor %}
         </table>
+
+        <br />
+        <h3>Upload slike artikla</h3>
+        <p>Title treba biti barkod artikla</p>
+
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <table>
+                {% for field in form %}
+                    <tr>
+                        <td>{{ field.label_tag }}</td>
+                        <td>{{ field }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <br>
+            <input type="submit" value="Submit">
+        </form>
+
         <h3>Povratak na početnu stranicu</h3>
         <form action="/trgovac" method="GET">
             <input type="submit" value="Povratak">

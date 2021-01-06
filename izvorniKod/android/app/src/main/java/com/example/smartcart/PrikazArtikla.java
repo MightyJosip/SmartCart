@@ -5,10 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,7 +22,12 @@ import com.google.gson.JsonObject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
 import java.net.CookieHandler;
+
 
 public class PrikazArtikla extends AppCompatActivity {
 
@@ -154,7 +163,39 @@ public class PrikazArtikla extends AppCompatActivity {
                 startActivity(intent1);
             });
 
+            connector.fetch_image(barkod, success -> {
+                Log.d("slika1", success.toString());
+                JSONObject obj = null;
+                try {
+                    obj = success.getJSONObject(0);
+                    JSONObject fields = obj.getJSONObject("fields");
+                    Log.d("slika2", fields.toString());
+                    String encoded_image = fields.getString("image");
+                    Log.d("slika3", encoded_image);
+                    /*
+                    byte[] decodedString = Base64.decode(encoded_image, Base64.URL_SAFE);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    Log.d("slika4", "yoo");
+                    ImageView slika = (ImageView) findViewById(R.id.slika);
+                    slika.setImageBitmap(decodedByte);
+                    */
 
+                    ImageView slika = (ImageView) findViewById(R.id.slika);
+                    byte[] decodedString = Base64.decode(encoded_image, Base64.NO_WRAP);
+                    InputStream input=new ByteArrayInputStream(decodedString);
+                    Bitmap ext_pic = BitmapFactory.decodeStream(input);
+                    slika.setImageBitmap(ext_pic);
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }, fail -> {
+                // TODO: stavi neki placeholder, nešto što će se prikazati kad nema slike
+                Toast.makeText(PrikazArtikla.this, "Nema slike", Toast.LENGTH_SHORT).show();
+            });
 
         }
 

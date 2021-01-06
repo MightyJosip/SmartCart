@@ -16,6 +16,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.JsonIOException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -205,6 +206,20 @@ public class Connector {
         String url = HOST + "android/edit_profile";
         JsonToStringRequest jtsr = new JsonToStringRequest(Request.Method.POST, url, jo, onSuccess, onFail);
         getRequestQueue().add(jtsr);
+    }
+
+    public void fetch_image(String barkod, Response.Listener<JSONArray> onSuccess, Response.ErrorListener onFail) {
+        JSONObject jsonObject = new JSONObject();
+        Log.d("barkodd", barkod);
+        try {
+            jsonObject.put("barkod", barkod);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String url = HOST + "image";
+
+        JsonToJsonArrayRequest request = new JsonToJsonArrayRequest(Request.Method.POST, url, jsonObject, onSuccess, onFail);
+        getRequestQueue().add(request);
     }
 
     private static class JsonToStringRequest extends JsonRequest<String> {
