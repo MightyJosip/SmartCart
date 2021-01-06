@@ -258,9 +258,9 @@ def sign_up_kupac(request):
 
 def login(request):
     """
-    stranica za ulogiravanje korisnika
-    ako joj se pristupa metodi GET, vraća se stranica za ulogriavanje: login.html
-    ako joj se pristupa metodi POST, podaci se validiraju
+    stranica za prijavu korisnika
+    ako joj se pristupa metodom GET, vraća se stranica za ulogriavanje: login.html
+    ako joj se pristupa metodom POST, podaci se validiraju
     ako se uspješno validiraju, šalje se HTML GET upit na "/trgovac"
     ako se neuspješno validiraju, stranica login.html se ponovno učitava
     """
@@ -305,7 +305,7 @@ def edit_profile(request):
         return render(request, 'smartCart/edit_profile.html', {'form': form})
 
 
-@user_passes_test(trgovac_login_required, login_url='login/')
+@user_passes_test(trgovac_login_required, login_url='login')
 def trgovac(request):
     """
     glavna stranica za trgovca, vraća se stranica "trgovac.html"
