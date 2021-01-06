@@ -25,31 +25,18 @@
         app:layout_constraintBottom_toBottomOf="@+id/imageView7"
         app:layout_constraintEnd_toStartOf="@+id/imageView7"
         app:layout_constraintTop_toTopOf="@+id/imageView7"
-        app:srcCompat="@drawable/ic_baseline_shopping_cart" />
+        app:srcCompat="@drawable/logo" />
 
     <ImageView
         android:id="@+id/imageView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="41dp"
+        android:layout_height="46dp"
         android:layout_marginEnd="24dp"
         android:contentDescription="@string/settingsButton"
         app:layout_constraintBottom_toBottomOf="@+id/mapLogo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/mapLogo"
-        app:srcCompat="@drawable/ic_account_settings" />
-
-    <ImageView
-        android:id="@+id/imageView8"
-        android:layout_width="0dp"
-        android:layout_height="32dp"
-        android:layout_marginEnd="8dp"
-        android:contentDescription="@string/addButton"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView6"
-        app:layout_constraintDimensionRatio="w,1:1"
-        app:layout_constraintEnd_toStartOf="@+id/imageView6"
-        app:layout_constraintTop_toTopOf="@+id/mapLogo"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/ic_action_add" />
+        app:srcCompat="@drawable/settings" />
 
     <TextView
         android:id="@+id/textView9"
