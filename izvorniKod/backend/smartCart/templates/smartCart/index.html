@@ -1,57 +1,90 @@
 ﻿<!DOCTYPE html>
 {% load static %}
 <html>
+
 <head>
     <meta charset="UTF-8">
-    <title>Početna stranica</title>
-    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+    <title>SmartCart početna stranica</title>
+     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'site.css' %}" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 
 <body>
-    <h1>Dobro došli na internetske stranice SmartCart</h1>
-    <hr />
-    {% if user.is_authenticated %}
-        Logged in as {{user}}
-        <br><br>
-        {% if user.is_trgovac %}
-            <form action="/trgovac" method="get">
-                {%csrf_token%}
-                <button type="submit">Stranica trgovca</button>
-            </form>
-            <br>
-        {% endif %}
-        <form action="/edit_profile" method="get">
-            {%csrf_token%}
-            <button type="submit">Edit profile</button>
-        </form>
-        <br>
-        <form action="/logout" method="get">
-            {%csrf_token%}
-            <button type="submit">Log out</button>
-        </form>
-        <br>
-        <hr />
-    {% else %}
-        <form action="/login" method="GET">
-            {%csrf_token%}
-            <button type="submit">Log in</button>
-        </form>
+    <div class="container">
+        <div class="row">
+            <div class="col sclogo">
+                <img src="{% static 'favicon.ico'%}" class"scLogo" alt="SmartCart Logo">
+            </div>
+            <div class="col m-3">
+                {% if user.is_authenticated %}
+                Prijavljeni ste kao <mark>{{user}}</mark>
+            </div>
+            <div class="col">
+                <form action="/edit_profile" method="get">
+                    {%csrf_token%}
+                    <button type="submit" class="btn btn-info m-3">Edit profile</button>
+                </form>
+            </div>
+            <div class="col">
+                <form action="/logout" method="get">
+                    {%csrf_token%}
+                    <button type="submit" class="btn btn-danger m-3">Log out</button>
+                </form>
+            </div>
+
+            {% else %}
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col">
+                <form action="login" method="GET">
+                    {%csrf_token%}
+                    <button type="submit" class="btn btn-primary">Prijavi se</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <h1 class="text-center p-3 my-3">Dobro došli na web stranice SmartCart!</h1>
+    {% if user.is_trgovac %}
+    <form action="/trgovac" method="get">
+        {%csrf_token%}
+        <button type="submit" class="btn btn-primary">Stranica trgovca {{user.is_}}</button>
+    </form>
     {% endif %}
-    <br>
-    <form action="/signup/trgovac" method="get">
-        {%csrf_token%}
-        <button type="submit">Sign up as trgovac</button>
-    </form>
-    <br>
-    <form action="/signup/kupac" method="get">
-        {%csrf_token%}
-        <button type="submit">Sign up as kupac</button>
-    </form>
-    <br>
-    <form action="/signup/admin" method="get">
-        {%csrf_token%}
-        <button type="submit">Sign up as admin</button>
-    </form>
+    <hr />
+
+    <div class="container">
+        <div class="row p-3">
+            <div class="col-6  align-self-center">
+                Kreiraj novi korisnički račun
+            </div>
+            <div class="col">
+                <form class"center" action="/signup/trgovac" method="get">
+                    {%csrf_token%}
+                    <button type="submit" class="btn btn-primary">Trgovac</button>
+                </form>
+            </div>
+            <div class="col">
+                <form class"center" action="/signup/kupac" method="get">
+                    {%csrf_token%}
+                    <button type="submit" class="btn btn-primary">Kupac</button>
+                </form>
+            </div>
+            <div class="col">
+                <form class"center" action="/signup/admin" method="get">
+                    {%csrf_token%}
+                    <button type="submit" class="btn btn-primary">Admin</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
