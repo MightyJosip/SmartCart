@@ -20,30 +20,33 @@
 <body>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-2 sclogo m-3">
-                <img src="{% static 'logo.png'%}" class="sclogo" alt="SmartCart Logo">
+            <div class="col">
+                <div class="d-flex justify-content-around mx-auto">
+                    <a href="">
+                        <img src="{% static 'logo.png'%}" class="m-2" alt="SmartCart Logo">
+                    </a>
+                    {% if user.is_authenticated %}
+                    <div class="mx-auto text-center m-3">
+                    Prijavljeni ste kao {{user.get_auth_level}} <mark>{{user}}</mark>
+                    </div>
+                </div>
             </div>
-            <div class="col-sm-4 m-3">
-                {% if user.is_authenticated %}
-                Prijavljeni ste kao {{user.get_auth_level}} <mark>{{user}}</mark>
-            </div>
-            <div class="d-flex justify-content-around mx-auto">
-            <div class="col-sm">
-                <form action="/edit_profile" method="get">
-                    {%csrf_token%}
-                    <button type="submit" class="btn btn-info m-3">Edit profile</button>
-                </form>
-            </div>
-            <!-- proba gumba-->
-            <div class="col-sm">
-                <button type="button" onclick="toggle" class="btn btn-info m-3" id="reveal">Edit profile</button>
-            </div>
-            <div class="col-sm">
-                <form action="/logout" method="get">
-                    {%csrf_token%}
-                    <button type="submit" class="btn btn-danger m-3">Log out</button>
-                </form>
-            </div>
+            <div class="col">
+                <div class="d-flex justify-content-around mx-auto">
+                    <form action="/edit_profile" method="get">
+                        {%csrf_token%}
+                        <button type="submit" class="btn btn-info m-3">Edit profile</button>
+                    </form>
+                    <!-- proba gumba za skrivanje/otkrivanje
+                    <div class="col-sm">
+                    <button type="button" onclick="toggle" class="btn btn-info m-3" id="reveal">Edit profile</button>
+                    </div>
+                    -->
+                    <form action="/logout" method="get">
+                        {%csrf_token%}
+                        <button type="submit" class="btn btn-danger m-3">Log out</button>
+                    </form>
+                </div>
             </div>
 
             {% else %}
@@ -57,18 +60,6 @@
             </div>
             {% endif %}
         </div>
-    </div>
-    <div id="urediProfil">
-    <form action="" method="POST">
-        {%csrf_token%}
-        {% for field in form  %}
-        <div class="form-group">
-            <b>{{ field.label_tag }}</b><br> {{ field }}<br><br>
-        </div>
-        {% endfor %}
-        <input type="submit" value="Submit">
-        <div class="fail-login">{{message}}</div>
-    </form>
     </div>
 
     <h1 class="text-center">Dobro došli na web stranice SmartCart!</h1>
