@@ -1,4 +1,22 @@
 atributi: email, sif_barkod, sif_vrst, sif_zemlj, sif_trg, id_trg_art, naziv_art, opis, broj_glasova, masa 
-ante@fer.hr;3850104008597;1;Hrvatska;1;1;Vegheta 250g;Ovo je za posolit hranu;9;500
-trgovac@fer.hr;3850104008597;1;Hrvatska;1;1;Vegheta;Ovo je za popaprit hranu;10;500
+ante@fer.hr;3850104008597;1;Hrvatska;1;1;Vegheta 250g;Ide dobro uz kokice!!;9;500
+trgovac@fer.hr;3850104008597;1;Hrvatska;1;1;Vegheta;Daje hrani dobar okus;10;500
 bla@fer.hr;3850104008597;1;Hrvatska;1;1;Vegheta;Ovo je za popaprit hranu;2;500
+ante@fer.hr;3850139435757;1;Hrvatska;1;2;Cedevita 250g;Najgora cedevita;2;500
+trgovac@fer.hr;3850139435757;1;Hrvatska;1;2;Cedevita;Najbolja cedevita;5;500
+bla@fer.hr;3850139435757;1;Hrvatska;1;2;Cedevita;zzzzzzzzzzzzzzzzzzzzzzziiiiizzz;1;500
+ante@fer.hr;3850116106052;1;Hrvatska;1;3;Dorina 250g;Najgora cedevita;2;500
+trgovac@fer.hr;3850116106052;1;Hrvatska;1;3;Dorina;Najbolja cedevita;5;500
+bla@fer.hr;3850116106052;1;Hrvatska;1;3;Dorina;zzzzzzzzzzzzzzzzzzzzzzziiiiizzz;1;500
+ante@fer.hr;3850102314126;1;Hrvatska;1;4;Pasta zara 250g chifferi;Doz dobra pasta;2;500
+trgovac@fer.hr;3850102314126;1;Hrvatska;1;4;Pasta zara;Pasta, ide uz rajčicu;5;500
+bla@fer.hr;3850102314126;1;Hrvatska;1;4;Chifferi;gggluposti;1;500
+ante@fer.hr;7622210194046;1;Hrvatska;1;5;Sjajilo 250g;Sjaji se;2;500
+trgovac@fer.hr;7622210194046;1;Hrvatska;1;5;Sjajilo za cipele;isplativo;5;500
+bla@fer.hr;7622210194046;1;Hrvatska;1;5;Sjajilo za cipele;zzzzzzzzzzzzzzzzzzzzzzziiiiizzz;1;500
+ante@fer.hr;3850108058215;1;Hrvatska;1;6;Walpole;Najgora cedevita;2;500
+trgovac@fer.hr;3850108058215;1;Hrvatska;1;6;Walpole;Tjera me da plačem;5;500
+bla@fer.hr;3850108058215;1;Hrvatska;1;6;Walpole;zzzzzzzzzzzzzzzzzzzzzzziiiiizzz;1;500
+ante@fer.hr;5000112618266;1;Hrvatska;1;7;C++;Najgora cedevita;2;500
+luka@fer.hr;5000112618266;1;Hrvatska;1;7;Demistificirani C++;Konačno mogu proći ASP!;165;500
+bla@fer.hr;5000112618266;1;Hrvatska;1;7;Demistificirani Cpp;zzzzzzzzzzzzzzzzzzzzzzziiiiizzz;1;500
