@@ -48,6 +48,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Dodaj na popis" />
+
+        <ImageView
+            android:id="@+id/slika"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

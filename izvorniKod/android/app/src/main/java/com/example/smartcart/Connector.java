@@ -207,6 +207,14 @@ public class Connector {
         getRequestQueue().add(jtsr);
     }
 
+    public void fetch_image(Response.Listener<JSONArray> onSuccess, Response.ErrorListener onFail) {
+        JSONObject jsonObject = new JSONObject();
+        String url = HOST + "image";
+
+        JsonToJsonArrayRequest request = new JsonToJsonArrayRequest(Request.Method.GET, url, jsonObject, onSuccess, onFail);
+        getRequestQueue().add(request);
+    }
+
     private static class JsonToStringRequest extends JsonRequest<String> {
         public JsonToStringRequest(int method, String url,
                                    JSONObject requestBody,

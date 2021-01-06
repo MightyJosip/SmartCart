@@ -296,11 +296,18 @@ class ArtiklView(View):
         }
         return render_template(self, request, artikl=artikl)
 
+from .functions import create_json_response
+from django.core import serializers
 class ArtiklImageView(View):
 
     def get(self, request, *args, **kwargs):
+        
+        image_file = ArtiklImage.objects.all()[3:]
+        return create_json_response(200, data=serializers.serialize('json', image_file))
+        """
         form = UploadFileForm
         return render(request, 'smartCart/upload_image.html', {'form': form})
+        """
 
     def post(self, request, *args, **kwargs):
         image_file = request.FILES['file'].read()
