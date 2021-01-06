@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>SmartCart početna stranica</title>
-     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'site.css' %}" />
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -16,26 +16,28 @@
 </head>
 
 <body>
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col sclogo">
-                <img src="{% static 'favicon.ico'%}" class"scLogo" alt="SmartCart Logo">
+            <div class="col-sm-2 sclogo">
+                <img src="{% static 'favicon.ico'%}" class="sclogo" alt="SmartCart Logo">
             </div>
-            <div class="col m-3">
+            <div class="col-sm-4 m-3">
                 {% if user.is_authenticated %}
-                Prijavljeni ste kao <mark>{{user}}</mark>
+                Prijavljeni ste kao {{user.get_auth_level}} <mark>{{user}}</mark>
             </div>
-            <div class="col">
+            <div class="d-flex justify-content-around mx-auto">
+            <div class="col-sm">
                 <form action="/edit_profile" method="get">
                     {%csrf_token%}
                     <button type="submit" class="btn btn-info m-3">Edit profile</button>
                 </form>
             </div>
-            <div class="col">
+            <div class="col-sm">
                 <form action="/logout" method="get">
                     {%csrf_token%}
                     <button type="submit" class="btn btn-danger m-3">Log out</button>
                 </form>
+            </div>
             </div>
 
             {% else %}
@@ -51,37 +53,41 @@
         </div>
     </div>
 
-    <h1 class="text-center p-3 my-3">Dobro došli na web stranice SmartCart!</h1>
-    {% if user.is_trgovac %}
-    <form action="/trgovac" method="get">
-        {%csrf_token%}
-        <button type="submit" class="btn btn-primary">Stranica trgovca {{user.is_}}</button>
-    </form>
+    <h1 class="text-center">Dobro došli na web stranice SmartCart!</h1>
+    {% if user.get_auth_level == "Trgovac" %}
+    <div class="d-flex justify-content-center">
+        <form action="trgovac" method="get">
+            {%csrf_token%}
+            <button type="submit" class="btn btn-success">Upravljanje trgovinama</button>
+        </form>
+    </div>
     {% endif %}
-    <hr />
 
-    <div class="container">
+    <hr />
+    <div class="container-fluid">
         <div class="row p-3">
-            <div class="col-6  align-self-center">
+            <div class="col-sm-6 text-center mx-auto m-2">
                 Kreiraj novi korisnički račun
             </div>
-            <div class="col">
-                <form class"center" action="/signup/trgovac" method="get">
-                    {%csrf_token%}
-                    <button type="submit" class="btn btn-primary">Trgovac</button>
-                </form>
-            </div>
-            <div class="col">
-                <form class"center" action="/signup/kupac" method="get">
-                    {%csrf_token%}
-                    <button type="submit" class="btn btn-primary">Kupac</button>
-                </form>
-            </div>
-            <div class="col">
-                <form class"center" action="/signup/admin" method="get">
-                    {%csrf_token%}
-                    <button type="submit" class="btn btn-primary">Admin</button>
-                </form>
+            <div class="d-flex justify-content-around mx-auto">
+                <div class="col-sm-2">
+                    <form action="/signup/trgovac" method="get">
+                        {%csrf_token%}
+                        <button type="submit" class="btn btn-primary">Trgovac</button>
+                    </form>
+                </div>
+                <div class="col-sm-2">
+                    <form action="/signup/kupac" method="get">
+                        {%csrf_token%}
+                        <button type="submit" class="btn btn-primary">Kupac</button>
+                    </form>
+                </div>
+                <div class="col-sm-2">
+                    <form action="/signup/admin" method="get">
+                        {%csrf_token%}
+                        <button type="submit" class="btn btn-primary">Admin</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
