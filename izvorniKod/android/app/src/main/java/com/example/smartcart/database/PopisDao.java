@@ -1,6 +1,7 @@
 package com.example.smartcart.database;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
@@ -20,6 +21,9 @@ public interface PopisDao {
 
     @Query("SELECT * FROM popis WHERE :id = sifPopis")
     Popis dohvatiId(int id);
+
+    @Delete
+    public void obrisiPopis(Popis popis);
 
     // i jos mnoge druge
 

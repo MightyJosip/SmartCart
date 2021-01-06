@@ -34,6 +34,17 @@ public class PrikazPopisaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.prikaz_popisa);
 
+        Button obrisi_popis = (Button) findViewById(R.id.btn_obrisi_popis);
+
+        obrisi_popis.setOnClickListener(v -> {
+
+            Intent intent2 = new Intent(PrikazPopisaActivity.this, Odabir_popisa_za_brisanje.class);
+            startActivity(intent2);
+            draw_popisi(); //mozda  obrisi
+        });
+
+        draw_popisi();
+
 
         Button stvori_popis = (Button) findViewById(R.id.stvori_novi_popis);
         stvori_popis.setOnClickListener( v ->{
@@ -61,6 +72,12 @@ public class PrikazPopisaActivity extends AppCompatActivity {
 
 
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        draw_popisi();
     }
 
     protected void draw_popisi(){
