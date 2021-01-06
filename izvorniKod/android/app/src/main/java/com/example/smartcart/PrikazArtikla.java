@@ -39,10 +39,16 @@ public class PrikazArtikla extends AppCompatActivity {
 
             Button dodajnapopis = (Button) findViewById(R.id.btn_dodaj_na_popis);
             //JSONObject finalOpis = opis;
-            Intent intent2 = new Intent(PrikazArtikla.this, Odabir_popisa.class);
+
+            SharedPreferences sp1 = getSharedPreferences("user_info", Context.MODE_PRIVATE);
+            if(sp1.getString("auth_level", AuthLevels.DEFAULT).equals(AuthLevels.DEFAULT)){
+                dodajnapopis.setVisibility(View.GONE);
+            }
 
             dodajnapopis.setOnClickListener(v -> {
 
+
+                Intent intent2 = new Intent(PrikazArtikla.this, Odabir_popisa.class);
                 intent2.putExtra("sif_trgovina", sif_trgovina);
                 intent2.putExtra("barkod", barkod);
                             /*try {
