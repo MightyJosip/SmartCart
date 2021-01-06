@@ -41,10 +41,7 @@
     <string name="store_location">Store location</string>
     <string name="store_opening_time">Store opening time</string>
     <string name="store_closeing_time">Store closeing time</string>
-    <string name="title_activity_izracun_cijene">IzracunCijeneActivity</string>
-    <!--
-    This string is used for square devices and overridden by hello_world in
-    values-round/strings.xml for round devices.
-    -->
-    <string name="hello_world">Hello Square World!</string>
+    <string name="hiMessage">Hi</string>
+    <string name="change_password">Change Password</string>
+    <string name="title_activity_odabir_popisa">Odabir_popisa</string>
 </resources>

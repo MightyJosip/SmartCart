@@ -113,7 +113,7 @@ public class HomeScreenActivity extends AppCompatActivity{
             if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                     (keyCode == KeyEvent.KEYCODE_ENTER)) {
 
-                conn.fetch_artikl_u_trgovini("naz_trgovina", findStoreOrItem.getText().toString(), response -> {
+                conn.fetchTrgovineByGivenName(findStoreOrItem.getText().toString(), response -> {
 
                     Gson gson = new Gson();
                     Type storeType = new TypeToken<ArrayList<Object>>(){}.getType();
@@ -204,9 +204,7 @@ public class HomeScreenActivity extends AppCompatActivity{
                 break;
             }
 
-            case MENU_ACCOUNTSETTINGS: //startAccountSettingsActivity(); break;
-                Toast.makeText(this, "Nije implementirano :(", Toast.LENGTH_LONG).show();
-                break;
+            case MENU_ACCOUNTSETTINGS: startAccountSettingsActivity(); break;
 
             case MENU_LOGOUT:
                 SharedPreferences prefs = getSharedPreferences("user_info", Context.MODE_PRIVATE);

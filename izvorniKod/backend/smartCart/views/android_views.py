@@ -194,17 +194,23 @@ class AndroidEditProfileView(View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body)
         user = get_user_from_session(data['session_id'])
-        password = data['password']
-        user.set_password(password)
-        user.save()
-        return create_json_response(200, success='done')
+        old_password = data['old_password']
+        new_password = data['new_password']
+        check_user = authenticate(request, username=user.email, password=old_password)
+        if user == check_user:
+            user.set_password(new_password)
+            user.save()
+            return create_json_response(200, success='done')
+        else:
+            return create_json_response(401, err='Wrong password')
 
 
 class AndroidSignUpView(View):
     def post(self, request, *args, **kwargs):
-        email = json.loads(request.body)['email']
-        password = json.loads(request.body)['password']
-        secret_code = json.loads(request.body)['secret_code']
+        data = json.loads(request.body)
+        email = data['email']
+        password = data['password']
+        secret_code = data['secret_code']
 
         if secret_code:
             authorisation_level = 'trgovac'
@@ -218,7 +224,7 @@ class AndroidSignUpView(View):
             return create_json_response(401, err='User already exists')
 
         if authorisation_level == 'kupac':
-            User.objects.create_user(email, password, authorisation_level=Uloga.objects.get(auth_level='Kupac'))
+            User.objects.create_user(email, password, uloga=Uloga.objects.get(auth_level='Kupac'))
             return create_json_response(200, success='done')
 
         if authorisation_level == 'trgovac':
@@ -226,7 +232,7 @@ class AndroidSignUpView(View):
             if not secret_code.exists():
                 return create_json_response(401, err='Wrong secret code')
             secret_code.delete()
-            User.objects.create_user(email, password, authorisation_level=Uloga.objects.get(auth_level='Trgovac'))
+            User.objects.create_user(email, password, uloga=Uloga.objects.get(auth_level='Trgovac'))
             return create_json_response(200, success='done')
         return create_json_response(401, err='Weird error :(')
 
