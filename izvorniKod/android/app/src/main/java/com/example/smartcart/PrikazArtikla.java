@@ -146,7 +146,7 @@ public class PrikazArtikla extends AppCompatActivity {
                 startActivity(intent1);
             });
 
-            connector.fetch_image(success -> {
+            connector.fetch_image(barkod, success -> {
                 Log.d("slika1", success.toString());
                 JSONObject obj = null;
                 try {
@@ -176,7 +176,8 @@ public class PrikazArtikla extends AppCompatActivity {
                 }
 
             }, fail -> {
-                Log.e("slika", fail.toString());
+                // TODO: stavi neki placeholder, nešto što će se prikazati kad nema slike
+                Toast.makeText(PrikazArtikla.this, "Nema slike", Toast.LENGTH_SHORT).show();
             });
 
         }

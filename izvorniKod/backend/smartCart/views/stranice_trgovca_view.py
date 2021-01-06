@@ -284,33 +284,54 @@ class ArtiklView(View):
         opis = OpisArtikla.objects.filter(
             artikl=Artikl.objects.get(barkod_artikla=self.kwargs["barkod_artikla"])).order_by("prioritiziran",
                                                                                               "broj_glasova").last()
-        artikl = {
-            "barkod_artikla": self.kwargs["barkod_artikla"],
-            "naziv_artikla": opis.naziv_artikla,
-            "opis_artikla": opis.opis_artikla,
-            "autor_opisa": opis.autor_opisa,
-            "broj_glasova": opis.broj_glasova,
-            "masa": opis.masa,
-            "vrsta": opis.vrsta,
-            "zemlja_porijekla": opis.zemlja_porijekla
-        }
-        return render_template(self, request, artikl=artikl)
+
+        if(opis is None):
+            artikl = {"barkod_artikla": self.kwargs["barkod_artikla"]}
+        else:
+            artikl = {
+                "barkod_artikla": self.kwargs["barkod_artikla"],
+                "naziv_artikla": opis.naziv_artikla,
+                "opis_artikla": opis.opis_artikla,
+                "autor_opisa": opis.autor_opisa,
+                "broj_glasova": opis.broj_glasova,
+                "masa": opis.masa,
+                "vrsta": opis.vrsta,
+                "zemlja_porijekla": opis.zemlja_porijekla
+            }
+        form = UploadFileForm
+        return render_template(self, request, artikl=artikl, form=form)
+
+    def post(self, request, *args, **kwargs):
+        print(request.POST)
+        barkod = request.POST['title']
+        image_file = request.FILES['file'].read()
+        tmp = ArtiklImage(artikl=Artikl.objects.get(barkod_artikla=barkod), image=image_file)
+        tmp.save()
+        return stay_on_page(request)
 
 from .functions import create_json_response
 from django.core import serializers
+import json
+from django.http import HttpResponse
+
 class ArtiklImageView(View):
 
-    def get(self, request, *args, **kwargs):
-        
-        image_file = ArtiklImage.objects.all()[3:]
-        return create_json_response(200, data=serializers.serialize('json', image_file))
-        """
-        form = UploadFileForm
-        return render(request, 'smartCart/upload_image.html', {'form': form})
-        """
+    def post(self, request, *args, **kwargs):
+        barkod = json.loads(request.body)['barkod']
+        print(barkod)
+        image_file = ArtiklImage.objects.filter(artikl=Artikl.objects.get(barkod_artikla=barkod))
+        if (len(image_file) > 0):
+            return create_json_response(200, data=serializers.serialize('json', image_file))
+        else:
+            res = HttpResponse()
+            res.status_code = 404
+            return res
+    
 
+    """
     def post(self, request, *args, **kwargs):
         image_file = request.FILES['file'].read()
         print(image_file)
         ArtiklImage.objects.create(image=image_file)
         return stay_on_page(request)
+    """
