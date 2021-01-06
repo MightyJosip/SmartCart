@@ -242,3 +242,6 @@ class DBFile(models.Model):
     data = models.BinaryField()
     uploaded_by = models.ForeignKey(BaseUserModel, on_delete=models.CASCADE, null=False)
     date = models.DateTimeField()
+
+class ArtiklImage(models.Model):
+    image = models.BinaryField(blank=True)

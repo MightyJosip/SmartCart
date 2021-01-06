@@ -295,3 +295,15 @@ class ArtiklView(View):
             "zemlja_porijekla": opis.zemlja_porijekla
         }
         return render_template(self, request, artikl=artikl)
+
+class ArtiklImageView(View):
+
+    def get(self, request, *args, **kwargs):
+        form = UploadFileForm
+        return render(request, 'smartCart/upload_image.html', {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        image_file = request.FILES['file'].read()
+        print(image_file)
+        ArtiklImage.objects.create(image=image_file)
+        return stay_on_page(request)
