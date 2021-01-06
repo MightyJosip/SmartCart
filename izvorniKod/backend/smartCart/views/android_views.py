@@ -1,4 +1,5 @@
 import json
+from math import cos, asin, sqrt, pi
 
 from django.contrib.auth import authenticate, logout
 from django.contrib.sessions.models import Session
@@ -292,3 +293,31 @@ class SkenirajBarkodView(View):
         return HttpResponse()
 
 
+class FindClosestStores(View):
+    def post(self, request, *args, **kwargs):
+        data = json.loads(request.body)
+        latitude = data['latitude']
+        longitude = data['longitude']
+        distance = data['distance']
+        artikli = data['artikli']
+        najnize_cijene = dict((barkod, None) for barkod in artikli)
+        trgovine = []
+        for trgovina in Trgovina.objects.all():
+            d = self.calculate_distance(latitude, longitude, float(trgovina.latitude), float(trgovina.longitude))
+            if d < distance:
+                trgovine.append(trgovina)
+        for artikl_u_trgovini in TrgovinaArtikli.objects.all():
+            barkod_artikla = artikl_u_trgovini.artikl.barkod_artikla
+            if artikl_u_trgovini.trgovina in trgovine and barkod_artikla in artikli:
+                prethodna_cijena = najnize_cijene[barkod_artikla]
+                if artikl_u_trgovini.dostupan and (prethodna_cijena is None or prethodna_cijena > artikl_u_trgovini.cijena):
+                    najnize_cijene[barkod_artikla] = artikl_u_trgovini.cijena
+        sum = 0
+        for cijena in najnize_cijene.values():
+            sum += cijena
+        return create_json_response(200, data=round(float(sum), 2))
+
+    def calculate_distance(self, lat1, lon1, lat2, lon2):
+        p = pi / 180
+        a = 0.5 - cos((lat2 - lat1) * p) / 2 + cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2
+        return 12742 * asin(sqrt(a))  # wtf is that number?!?!?!?!
