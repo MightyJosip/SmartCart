@@ -54,11 +54,21 @@ public class Stavka {
     }
 
     @Ignore
+    public Stavka(int sifPopis, String barkod, int sifTrgovina, String naziv) {
+
+        this.sifPopis = sifPopis;
+        this.barkod = barkod;
+        this.sifTrgovina=sifTrgovina;
+        this.naziv =naziv;
+    }
+
+    @Ignore
     public Stavka(int sifPopis, String barkod, int sifTrgovina) {
 
         this.sifPopis = sifPopis;
         this.barkod = barkod;
         this.sifTrgovina=sifTrgovina;
+
     }
 
 
@@ -159,15 +169,15 @@ public class Stavka {
     @Override
     public String toString() {
 
-        /*if(naziv == null){
+        if(naziv == null){
             return sifStavka + "  " + sifTrgovina+ "  "+barkod;
         }
         else{
             return naziv + "  "+ sifStavka + "  " + sifTrgovina+ "  "+barkod;
         }
-        */
-        return sifStavka + "  " + sifTrgovina+ "  "+barkod;
-        //return sifStavka +"  "+barkod;
+
+
+
     }
 
 }

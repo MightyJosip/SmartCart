@@ -32,7 +32,7 @@ public class Popis {
 
     @Ignore
     public Popis(String nazivPopis) {
-        this.setNazivPopis(nazivPopis);
+        this.nazivPopis = nazivPopis;
     }
 
 
