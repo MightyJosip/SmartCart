@@ -6,8 +6,6 @@ import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import kotlin.UByteArray;
-
 @Entity(tableName = "stavka")
 public class Stavka {
 
@@ -33,7 +31,7 @@ public class Stavka {
     private boolean uKosarici = false;
 
     @ColumnInfo(name = "kolicina")
-    private int kolicina = 69;
+    private int kolicina = 1;
 
     @ColumnInfo(name = "naziv")
     private String naziv;

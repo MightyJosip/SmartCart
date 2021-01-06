@@ -43,4 +43,6 @@
     <string name="store_closeing_time">Store closeing time</string>
     <string name="type_in_a_barcode">Type in a barcode</string>
     <string name="submit">Submit</string>
+    <string name="successfully_added">Sucessfully added</string>
+    <string name="no_barcode_in_store">Could not find item in the store</string>
 </resources>

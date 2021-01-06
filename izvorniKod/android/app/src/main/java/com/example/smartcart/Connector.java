@@ -120,7 +120,7 @@ public class Connector {
             jsonObject.put("sif_trgovina", sif_trgovina);
             jsonObject.put("barkod", barkod);
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e("Connector", e.toString(), e);
         }
         String url = HOST + "android/artikltrgovina";
         JsonToJsonArrayRequest request = new JsonToJsonArrayRequest(Request.Method.POST, url, jsonObject, onSuccess, onFail);

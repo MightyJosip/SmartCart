@@ -204,10 +204,8 @@ public class BarcodeScannerActivity extends AppCompatActivity {
             Image mediaImage = imageProxy.getImage();
             if (mediaImage != null) {
                 InputImage image = InputImage.fromMediaImage(mediaImage, imageProxy.getImageInfo().getRotationDegrees());
-                Log.d("Barcode", "analyzing");
                 barcodeScanner.process(image)
                         .addOnSuccessListener(barcodes -> {
-                            Log.d("Barcode", "# of barcodes = " + barcodes.size());
                             if (barcodes.size() > 0) {
                                 returnResult.accept(barcodes.get(0).getDisplayValue());
                             }
