@@ -98,6 +98,11 @@ public class PrikazArtikla extends AppCompatActivity {
 
             upvote.setOnClickListener(event -> {
                 SharedPreferences sp = getSharedPreferences("user_info", Context.MODE_PRIVATE);
+                if(sp.getString("auth_level", AuthLevels.DEFAULT).equals(AuthLevels.DEFAULT)){
+                    Intent intentLogin = new Intent(PrikazArtikla.this, LoginActivity.class);
+                    startActivity(intentLogin);
+                }
+                sp = getSharedPreferences("user_info", Context.MODE_PRIVATE);
                 Log.d("shared", (String) sp.getAll().get( (Object) "session"));
                 String session_id = (String) sp.getAll().get( (Object) "session");
                 connector.upvote(id_opis[0]
@@ -111,8 +116,15 @@ public class PrikazArtikla extends AppCompatActivity {
 
             downvote.setOnClickListener(event -> {
                 SharedPreferences sp = getSharedPreferences("user_info", Context.MODE_PRIVATE);
-                Log.d("shared", (String) sp.getAll().get( (Object) "session"));
+                if(sp.getString("auth_level", AuthLevels.DEFAULT).equals(AuthLevels.DEFAULT)){
+                    Intent intentLogin = new Intent(PrikazArtikla.this, LoginActivity.class);
+                    startActivity(intentLogin);
+                }
+
+                sp = getSharedPreferences("user_info", Context.MODE_PRIVATE);
                 String session_id = (String) sp.getAll().get( (Object) "session");
+                Log.d("shared", session_id);
+//                String session_id = (String) sp.getAll().get( (Object) "session");
                 if (id_opis == null) return;
 
                 connector.downvote(id_opis[0]

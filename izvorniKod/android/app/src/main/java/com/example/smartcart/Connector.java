@@ -107,6 +107,19 @@ public class Connector {
         getRequestQueue().add(jtsr);
     }
 
+    public void fetchTrgovineByGivenName(String name, Response.Listener<String> onSuccess, Response.ErrorListener onFail) {
+
+        JSONObject jo = new JSONObject();
+        try{
+            jo.put("naz_trgovina", name);
+        }catch (JSONException e){
+            Log.e("Store fetch", e.toString());
+        }
+        String url = HOST + "android/trgovine";
+        JsonToStringRequest jtsr = new JsonToStringRequest(Request.Method.POST, url, jo, onSuccess, onFail);
+        getRequestQueue().add(jtsr);
+    }
+
     public void fetch_artikli_u_trgovini(String sif_trgovina, Response.Listener<JSONArray> onSuccess, Response.ErrorListener onFail){
         JSONObject jsonObject = new JSONObject();
         try {
