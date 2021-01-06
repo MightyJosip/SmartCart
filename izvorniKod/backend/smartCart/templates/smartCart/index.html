@@ -7,19 +7,21 @@
     <title>SmartCart početna stranica</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}" />
+
     <link rel="stylesheet" type="text/css" href="{% static 'site.css' %}" />
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{% static 'site.js' %}"></script>
 </head>
 
 <body>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-2 sclogo">
-                <img src="{% static 'favicon.ico'%}" class="sclogo" alt="SmartCart Logo">
+            <div class="col-sm-2 sclogo m-3">
+                <img src="{% static 'logo.png'%}" class="sclogo" alt="SmartCart Logo">
             </div>
             <div class="col-sm-4 m-3">
                 {% if user.is_authenticated %}
@@ -31,6 +33,10 @@
                     {%csrf_token%}
                     <button type="submit" class="btn btn-info m-3">Edit profile</button>
                 </form>
+            </div>
+            <!-- proba gumba-->
+            <div class="col-sm">
+                <button type="button" onclick="toggle" class="btn btn-info m-3" id="reveal">Edit profile</button>
             </div>
             <div class="col-sm">
                 <form action="/logout" method="get">
@@ -51,6 +57,18 @@
             </div>
             {% endif %}
         </div>
+    </div>
+    <div id="urediProfil">
+    <form action="" method="POST">
+        {%csrf_token%}
+        {% for field in form  %}
+        <div class="form-group">
+            <b>{{ field.label_tag }}</b><br> {{ field }}<br><br>
+        </div>
+        {% endfor %}
+        <input type="submit" value="Submit">
+        <div class="fail-login">{{message}}</div>
+    </form>
     </div>
 
     <h1 class="text-center">Dobro došli na web stranice SmartCart!</h1>
