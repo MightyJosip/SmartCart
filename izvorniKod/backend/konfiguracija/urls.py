@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 from smartCart.views import *
 from smartCart.views.android_views import *
 from smartCart.views.web_account_views import *
+from smartCart.views.stranice_trgovca_view import ArtiklImageView
 from django.views.generic import TemplateView
 from django.urls import path, include
 
@@ -65,7 +66,10 @@ urlpatterns = [
     path('android/closeststores', FindClosestStores.as_view(), name='skenirajbarkod'),
 
     path('accounts/', include('allauth.urls')),
-    path('', TemplateView.as_view(template_name='social_app/index.html'))
+    path('', TemplateView.as_view(template_name='social_app/index.html')),
+
+    #testiranje
+    path('image', ArtiklImageView.as_view(), name='image')
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

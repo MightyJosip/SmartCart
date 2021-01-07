@@ -1,6 +1,8 @@
 package com.example.smartcart;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.example.smartcart.database.Popis;
@@ -17,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +36,25 @@ public class PrikazPopisaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.prikaz_popisa);
+
+        SharedPreferences sp = getSharedPreferences("user_info", Context.MODE_PRIVATE);
+
+        String auth = sp.getString("auth_level", AuthLevels.DEFAULT);
+
+        if( auth.equals(AuthLevels.DEFAULT)){
+            finish();
+        }
+
+        Button obrisi_popis = (Button) findViewById(R.id.btn_obrisi_popis);
+
+        obrisi_popis.setOnClickListener(v -> {
+
+            Intent intent2 = new Intent(PrikazPopisaActivity.this, Odabir_popisa_za_brisanje.class);
+            startActivity(intent2);
+            draw_popisi(); //mozda  obrisi
+        });
+
+        draw_popisi();
 
 
         Button stvori_popis = (Button) findViewById(R.id.stvori_novi_popis);
@@ -52,6 +74,12 @@ public class PrikazPopisaActivity extends AppCompatActivity {
             Toast.makeText(PrikazPopisaActivity.this, "Popis uspjesno dodan", Toast.LENGTH_SHORT).show();
         });
 
+        draw_popisi();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         draw_popisi();
     }
 
