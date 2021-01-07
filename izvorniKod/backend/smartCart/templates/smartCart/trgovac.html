@@ -3,103 +3,142 @@
 <html>
 
 <head>
-    <head>
-        <meta charset="UTF-8">
-        <title>Trgovac {{request.user.email}}</title>
-        <link rel="stylesheet" type="text/css" href="{% static 'tablica.css' %}"/>
-        <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
-    </head>
+    <meta charset="UTF-8">
+    <meta content='maximum-scale=1.0, initial-scale=1.0, width=device-width' name='viewport'>
+    <title>Trgovac {{request.user.email}}</title>
+
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}" />
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{% static 'site.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'site.css' %}" />
+
 </head>
 
 <body>
-    <h1>Welcome, {{request.user.email}}</h1>
-
-    <form action="logout" method="POST">
-        {%csrf_token%}
-        <input type="submit" value="Log out">
-    </form>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <a href="/">
+                    <img src="{% static 'logo.png'%}" class="m-2" alt="SmartCart Logo">
+                </a>
+            </div>
+            <div class="col">
+                <div class="row">
+                    <div class="col text-center m-3">
+                        <div class="naslov-font">
+                            Dobrodošli, {{user}}
+                        </div>
+                    </div>
+                    <div class="col">
+                        <form action="/logout" method="get">
+                            {%csrf_token%}
+                            <button type="submit" class="btn btn-danger m-3">Log out</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <hr />
-
-    <h2>Moje trgovine</h2>
-    <form action="" method="POST">
-        {%csrf_token%}
-        <table>
-            <tr>
-                <td><b>Naziv trgovine</b></td>
-                <td><b>Adresa trgovine</b></td>
-                <td><b>Stranica trgovine</b></td>
-                <td><b>Obriši</b></td>
-            </tr>
-            {% for t in trgovine %}
+    <div class="container-fluid">
+        <button data-toggle="collapse" data-target="#mojeTrgovine" class="btn btn-info btn-block">Moje trgovine</button>
+        <form action="" method="POST" id="mojeTrgovine" class="collapse m-3">
+            {%csrf_token%}
+            <table class="table table-hover mx-auto">
                 <tr>
-                    <td><b>{{ t.naz_trgovina }}</b></td>
-                    <td>{{ t.adresa_trgovina }}</td>
-                    <td><a href="{% url 'trgovina' t.sif_trgovina %}">Stranica trgovine</a></td>
-                    <td><input type="submit" value="Obriši trgovinu" formaction="trgovina/delete/{{t.sif_trgovina}}" onclick="return confirm('Je si li siguran da želiš obrisati trgovinu?')"></td>
+                    <td><b>Naziv trgovine</b></td>
+                    <td><b>Adresa trgovine</b></td>
+                    <td></td>
                 </tr>
-            {% endfor %}
-        </table>
-    </form>
-    
-    <hr>
+                {% for t in trgovine %}
+                <tr>
+                    <td><a href="{% url 'trgovina' t.sif_trgovina %}">{{ t.naz_trgovina }}</a></td>
+                    <td>{{ t.adresa_trgovina }}</td>
+                    <td><input type="submit" value="Obriši" formaction="trgovina/delete/{{t.sif_trgovina}}"
+                            onclick="return confirm('Je si li siguran da želiš obrisati trgovinu?')"
+                            class="btn btn-danger">
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </form>
 
-    <h2>Pregled namirnica</h2>
-    <table>
-        <tr>
-            <td><b>Barkod artikla</b></td>
-            <td><b>Opisi artikla</b></td>
-        </tr>
-        {% for a in artikli %}
+        <hr />
+
+        <button data-toggle="collapse" data-target="#pregledArtikala" class="btn btn-info btn-block">
+            Pregled artikala</button>
+
+        <table id="pregledArtikala" class="table table-hover collapse mx-auto m-3">
+            <tr>
+                <td><b>Barkod</b></td>
+                <td><b>Opis</b></td>
+            </tr>
+            {% for a in artikli %}
             <tr>
                 <td>{{ a.barkod_artikla }}</td>
                 <td><a href="{% url 'artikl' a.barkod_artikla %}">Opisi artikla</a></td>
             </tr>
-        {% endfor %}
-    </table>
-    <hr>
-
-    <h2>Dodavanje trgovina</h2>
-
-    <form action="/trgovac/dodaj-trgovine" method="POST">
-        {%csrf_token%}
-        <table>
-            {% for field in trg_form  %}
-                <tr>
-                    <td>{{ field.label_tag }}</td>
-                    <td>{{ field }}</td>
-                </tr>
             {% endfor %}
         </table>
-        <br>
-        <input type="submit" value="Submit">
-    </form>
 
-    <hr />
+        <hr />
 
-    <h2>Dodavanje namirnica</h2>
+        <button data-toggle="collapse" data-target="#dodavanjeTrgovine" class="btn btn-info btn-block">
+            Dodaj trgovinu</button>
+        <div class="collapse" id="dodavanjeTrgovine">
+            <div class="d-flex justify-content-center m-3">
+                <form action="/trgovac/dodaj-trgovine" method="POST">
+                    {%csrf_token%}
+                    {% for field in trg_form  %}
+                    {{ field.label_tag }}<br>
+                    {{ field }}<br><br>
+                    {% endfor %}
+                    <div class="row">
+                        <input type="submit" class="btn btn-success mx-auto" value="Submit">
+                    </div>
+                </form>
+            </div>
+        </div>
+        <hr />
 
-    <form action="/trgovac/dodaj-artikle" method="POST">
-        {%csrf_token%}
-        <table>
-            {% for field in art_form  %}
-                <tr>
-                    <td>{{ field.label_tag }}</td>
-                    <td>{{ field }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-        <br>
-        <input type="submit" value="Submit">
-    </form>
-    <hr />
-    <h2>Dodavanje proizvođača</h2>
-    <form action="/trgovac/dodaj-proizvodace" method="POST">
-        {%csrf_token%}
-        {% for field in pro_form  %}
-            {{ field.label_tag }}<br> {{ field }}<br><br>
-        {% endfor %}
-        <input type="submit" value="Submit">
-    </form>
+        <button data-toggle="collapse" data-target="#dodavanjeArtikla" class="btn btn-info btn-block">
+            Dodaj artikl</button>
+        <div class="collapse" id="dodavanjeArtikla">
+            <div class="d-flex justify-content-center m-3">
+                <form action="/trgovac/dodaj-artikle" method="POST">
+                    {%csrf_token%}
+                    {% for field in art_form  %}
+                    {{ field.label_tag }}<br>
+                    {{ field }}<br><br>
+                    {% endfor %}
+                    <div class="row">
+                        <input type="submit" class="btn btn-success mx-auto" value="Submit">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <hr />
+
+        <button data-toggle="collapse" data-target="#dodavanjeProizvodaca" class="btn btn-info btn-block">
+            Dodaj proizvođača</button>
+        <div class="d-flex justify-content-center m-3">
+            <form action="/trgovac/dodaj-proizvodace" method="POST" id="dodavanjeProizvodaca" class="collapse">
+                {%csrf_token%}
+                {% for field in pro_form  %}
+                {{ field.label_tag }}<br>
+                {{ field }}<br><br>
+                {% endfor %}
+                <div class="row">
+                    <input type="submit" class="btn btn-success mx-auto" value="Submit">
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
+
 </html>
