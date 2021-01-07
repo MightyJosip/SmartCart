@@ -1,19 +1,9 @@
 package com.example.smartcart;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import com.example.smartcart.database.Popis;
-import com.example.smartcart.database.PopisDao;
-import com.example.smartcart.database.SmartCartDatabase;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,9 +11,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
+import androidx.appcompat.app.AppCompatActivity;
 
-import java.lang.reflect.Array;
+import com.example.smartcart.database.Popis;
+import com.example.smartcart.database.PopisDao;
+import com.example.smartcart.database.SmartCartDatabase;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +26,25 @@ public class PrikazPopisaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.prikaz_popisa);
+
+        SharedPreferences sp = getSharedPreferences("user_info", Context.MODE_PRIVATE);
+
+        String auth = sp.getString("auth_level", AuthLevels.DEFAULT);
+
+        if( auth.equals(AuthLevels.DEFAULT)){
+            finish();
+        }
+
+        Button obrisi_popis = (Button) findViewById(R.id.btn_obrisi_popis);
+
+        obrisi_popis.setOnClickListener(v -> {
+
+            Intent intent2 = new Intent(PrikazPopisaActivity.this, Odabir_popisa_za_brisanje.class);
+            startActivity(intent2);
+            draw_popisi(); //mozda  obrisi
+        });
+
+        draw_popisi();
 
 
         Button stvori_popis = (Button) findViewById(R.id.stvori_novi_popis);
@@ -53,14 +65,12 @@ public class PrikazPopisaActivity extends AppCompatActivity {
         });
 
         draw_popisi();
+    }
 
-
-
-
-
-
-
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        draw_popisi();
     }
 
     protected void draw_popisi(){

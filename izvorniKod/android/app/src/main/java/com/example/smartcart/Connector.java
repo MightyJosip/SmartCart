@@ -20,6 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 public class Connector {
 
@@ -92,7 +93,25 @@ public class Connector {
         String url = HOST + "android/signup";
         JsonToStringRequest jtsr = new JsonToStringRequest(Request.Method.POST, url, jo, onSuccess, onFail);
         getRequestQueue().add(jtsr);
+    }
 
+    public void calculatePrice(double latitude, double longitude, double distance, List<String> barkodovi,
+                               Response.Listener<String> onSuccess, Response.ErrorListener onFail) {
+        JSONObject jo = new JSONObject();
+        JSONArray array = new JSONArray();
+        try {
+            jo.put("latitude", latitude);
+            jo.put("longitude", longitude);
+            jo.put("distance", distance);
+            for (String barkod : barkodovi)
+                array.put(barkod);
+            jo.put("artikli", array);
+        } catch (JSONException e) {
+            Log.e("Signup", e.toString());
+        }
+        String url = HOST + "android/closeststores";
+        JsonToStringRequest jtsr = new JsonToStringRequest(Request.Method.POST, url, jo, onSuccess, onFail);
+        getRequestQueue().add(jtsr);
     }
 
     public void fetchTrgovine( Response.Listener<String> onSuccess, Response.ErrorListener onFail) {
@@ -200,6 +219,20 @@ public class Connector {
         String url = HOST + "android/edit_profile";
         JsonToStringRequest jtsr = new JsonToStringRequest(Request.Method.POST, url, jo, onSuccess, onFail);
         getRequestQueue().add(jtsr);
+    }
+
+    public void fetch_image(String barkod, Response.Listener<JSONArray> onSuccess, Response.ErrorListener onFail) {
+        JSONObject jsonObject = new JSONObject();
+        Log.d("barkodd", barkod);
+        try {
+            jsonObject.put("barkod", barkod);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String url = HOST + "image";
+
+        JsonToJsonArrayRequest request = new JsonToJsonArrayRequest(Request.Method.POST, url, jsonObject, onSuccess, onFail);
+        getRequestQueue().add(request);
     }
 
     private static class JsonToStringRequest extends JsonRequest<String> {
