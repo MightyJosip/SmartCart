@@ -95,7 +95,9 @@ public class LoginActivity extends AppCompatActivity {
             Log.d(TAG, acc.getIdToken());
             editor.putString("session", acc.getIdToken());
             editor.putString("auth_level", AuthLevels.KUPAC);
+            editor.putBoolean("is_google_signed", true);
             editor.apply();
+            startActivity(new Intent(this, HomeScreenActivity.class));
             finish();
         }
     }

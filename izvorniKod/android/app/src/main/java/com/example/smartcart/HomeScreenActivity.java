@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -22,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
@@ -195,22 +197,33 @@ public class HomeScreenActivity extends AppCompatActivity{
 
             case MENU_LOGOUT:
                 SharedPreferences prefs = getSharedPreferences("user_info", Context.MODE_PRIVATE);
-                String sessionId = prefs.getString("session", "");
-                Connector conn = Connector.getInstance(this);
 
-                conn.logOut(sessionId, response -> {
-                    prefs.edit().remove("session").apply();
-                    prefs.edit().remove("auth_level").apply();
-                    if (prefs.getBoolean("is_google_signed", false)) {
-                        prefs.edit().putBoolean("is_google_signed", false).apply();
-                        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                                .requestEmail()
-                                .build();
-                        GoogleSignInClient gsiClient = GoogleSignIn.getClient(this, gso);
-                        gsiClient.signOut(); // Ovo mozda pozvati prije komunikacije sa serverom
-                    }
-                }, error -> Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show());
+                if (prefs.getBoolean("is_google_signed", false)) {
+                    GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                            .requestEmail()
+                            .requestIdToken("197701493351-l5j9llbv8r93kce4ajgf1kque7bcqqhr.apps.googleusercontent.com")
+                            .build();
+                    GoogleSignInClient gsiClient = GoogleSignIn.getClient(this, gso);
+                    gsiClient.signOut().addOnCompleteListener(task -> {
+                        try {
+                            task.getResult(ApiException.class);
+                            prefs.edit().remove("session").apply();
+                            prefs.edit().remove("auth_level").apply();
+                            prefs.edit().putBoolean("is_google_signed", false).apply();
+                        } catch (ApiException e) {
+                            Log.e("HomeScreenActivity", e.getMessage(), e);
+                        }
+                    }); // Ovo mozda pozvati prije komunikacije sa serverom
+                } else {
+                    String sessionId = prefs.getString("session", "");
+                    Connector conn = Connector.getInstance(this);
 
+                    conn.logOut(sessionId, response -> {
+                        prefs.edit().remove("session").apply();
+                        prefs.edit().remove("auth_level").apply();
+
+                    }, error -> Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show());
+                }
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
         }

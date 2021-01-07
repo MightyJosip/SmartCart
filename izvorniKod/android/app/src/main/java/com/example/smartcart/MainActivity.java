@@ -46,6 +46,7 @@ public class MainActivity extends Activity {
         Intent intent = new Intent(this, LoginActivity.class);
         intent.putExtra("isFirstLaunch", true);
         startActivity(intent);
+        finish();
     }
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
@@ -56,8 +57,10 @@ public class MainActivity extends Activity {
                     getSharedPreferences("user_info", Context.MODE_PRIVATE).edit();
             // TODO: provjeriti treba li se tu prvo s ovim tokenom javiti serveru
             editor.putString("session", account.getIdToken());
+            editor.putString("auth_level", AuthLevels.KUPAC);
             editor.putBoolean("is_google_signed", true);
             editor.apply();
+            startActivity(new Intent(this, HomeScreenActivity.class));
         } catch (ApiException e) {
             startLogInActivity();
         }
