@@ -164,7 +164,7 @@ class LoginView(View):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect_to_home_page(request)
+            return render(request, 'smartCart/index.html')
         return root_dispatch(self, request, *args, **kwargs)
 
     def check_user(self, request):
@@ -174,7 +174,7 @@ class LoginView(View):
         if user is not None:
             if (user.omogucen == True):
                 login(request, user)
-                return redirect_to_home_page(request)
+                return render(request, 'smartCart/index.html')
             else:
                 return render_form(self, request, message='You have been banned\n')
         else:
