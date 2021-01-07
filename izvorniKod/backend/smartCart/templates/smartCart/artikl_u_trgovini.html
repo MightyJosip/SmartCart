@@ -1,39 +1,60 @@
 <!DOCTYPE html>
 {% load static %}
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>Uredi artikl</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'tablica.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'login.css' %}"/>
-    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+    <meta content='maximum-scale=1.0, initial-scale=1.0, width=device-width' name='viewport'>
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}" />
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{% static 'site.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'site.css' %}" />
 </head>
+
 <body>
-    <h1>Uredi artikl: "{{artikl}}" u trgovini: "{{trgovina}}"</h1>
-    <br>
-    <form action="" method="POST">
-        {%csrf_token%}
-        <table>
-            {% for field in uredi_artikl_u_trgovini_form  %}
+
+    <div class="container-fluid">
+        <div class="row d-flex justify-content-between">
+            <a class="col" href="/">
+                <img src="{% static 'logo.png'%}" class="m-2 sclogo" alt="SmartCart Logo">
+            </a>
+            <div class="col">
+                <form action="/trgovac" method="GET">
+                    <input type="submit" class="btn btn-success m-3 float-right " value="Povratak na stranicu trgovca">
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid text-center">
+        <h1>Uredi artikl: "{{artikl}}" u trgovini: "{{trgovina}}"</h1>
+        <br>
+        <form action="" method="POST">
+            {%csrf_token%}
+            <table class="table table-borderless table-sm">
+                {% for field in uredi_artikl_u_trgovini_form  %}
                 <tr>
                     <td>{{ field.label_tag }}</td>
                     <td>{{ field }}</td>
                 </tr>
-            {% endfor %}
-        </table>
-        <br>
-        <input type="submit" value="Submit">
-    </form>
+                {% endfor %}
+            </table>
+            <input type="submit" class="btn btn-success" value="Spremi">
+        </form>
+    </div>
 
-    <br><hr>
-
-    <h1>Opisi artikala</h1>
-    {% if opisi == '' %}
-        <h2>Ovdje nema opisa</h2>
-    {% else %}
-    <form action="" method="POST">
-        {% csrf_token %}
-        {% for opis in opisi %}
+    <hr />
+    <div class="container-fluid text-center">
+        <h1>Opisi artikla</h1>
+        {% if opisi == '' %}
+        <p class="font-naslov">Nema opisa za ovaj artikl</p>
+        {% else %}
+        <form action="" method="POST">
+            {% csrf_token %}
+            {% for opis in opisi %}
             <table>
                 <tr>
                     <td><b>Naziv artikla</b></td>
@@ -52,43 +73,51 @@
                     <td>{{opis.broj_glasova}}</td>
                 </tr>
                 {% if opis.prioritiziran %}
-                    <tr><th><label>Prioritiziran:</label></th><td><label>
-                        <input type="checkbox" name={{opis.id}} checked>
-                    </label></td></tr>
+                <tr>
+                    <th><label>Prioritiziran:</label></th>
+                    <td><label>
+                            <input type="checkbox" name={{opis.id}} checked>
+                        </label></td>
+                </tr>
                 {% else %}
-                    <tr><th><label>Prioritiziran:</label></th><td><label>
-                        <input type="checkbox" name={{opis.id}}>
-                </label></td></tr>
-            {% endif %}
+                <tr>
+                    <th><label>Prioritiziran:</label></th>
+                    <td><label>
+                            <input type="checkbox" name={{opis.id}}>
+                        </label></td>
+                </tr>
+                {% endif %}
             </table>
             <br>
-        {% endfor %}
-        <input type="submit" value="Submit">
-    </form>
-    {% endif %}
+            {% endfor %}
+            <input type="submit" value="Submit">
+        </form>
+        {% endif %}
+    </div>
 
-    <br><hr>
-
-    <h1>Upload datoteke s podacima</h1>
-    <form action="" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <table>
-            {% for field in upload_file_form  %}
+    <hr />
+    <div class="container-fluid text-center">
+        <h1>Upload datoteke s podacima</h1>
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <table class="table table-borderless m-2">
+                {% for field in upload_file_form  %}
                 <tr>
+                    
                     <td>{{ field.label_tag }}</td>
                     <td>{{ field }}</td>
                 </tr>
-            {% endfor %}
-        </table>
-        <br>
-        <input type="submit" value="Submit">
-    </form>
-    {% if file_err != None%}
+                {% endfor %}
+            </table>
+            <input type="submit" class="btn btn-success" value="Pohrani">
+        </form>
+        {% if file_err != None%}
         <div class="error">{{file_err}}</div>
-    {% endif %}
-    
-
-
-
+        {% endif %}
+    </div>
 </body>
+<footer class="d-flex justify-content-center">
+    SmartCart
+</footer>
+
 </html>

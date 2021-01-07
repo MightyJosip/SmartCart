@@ -18,20 +18,20 @@
 
 
 <body>
-    <div class="container-fluid">
-        <div class="row d-flex justify-content-between">
-            <a href="/">
+    <div class="container-fluid text-center">
+        <div class="row">
+            <a class="col float-left" href="/">
                 <img src="{% static 'logo.png'%}" class="m-2 sclogo" alt="SmartCart Logo">
             </a>
-            <div class="col">
-                <form action="/trgovac" method="GET">
-                    <input type="submit" class="btn btn-success m-3 float-right " value="Povratak na stranicu trgovca">
+            <div class="col float-right">
+                <form action="/trgovac" method="GET" class="float-right">
+                    <input type="submit" class="btn btn-success m-4" value="Povratak na stranicu trgovca">
                 </form>
             </div>
         </div>
     </div>
 
-    <div class="container text-center">
+    <div class="container-fluid text-center">
         <h1>Podaci o trgovini: {{trgovina}} </h1>
         <p>Radno vrijeme :
             {{trgovina.radno_vrijeme_pocetak|time:"H:i"}}-{{trgovina.radno_vrijeme_kraj|time:"H:i"}}</p>
@@ -43,7 +43,7 @@
             Artikli dostupni u ovoj trgovini</button>
         <div class="d-flex justify-content-center">
             <div class="table-responsive">
-                <table class="table table-hover text-center collapse" id="artikliTable">
+                <table class="table table-hover text-center collapse m-3" id="artikliTable">
                     <tbody class="mx-auto">
                         {% if artikli %}
                         <tr>
@@ -84,7 +84,7 @@
         <button data-toggle="collapse" data-target="#dodavanjeArtikla" class="btn btn-info btn-block naslov-font">
             Dodaj artikl u trgovinu</button>
         <div class="collapse" id="dodavanjeArtikla">
-            <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-center m-3">
                 <form action="/trgovina/{{trgovina.sif_trgovina}}" method="POST">
                     <!-- /0 because of parsing, stupid premanent temporary hack which works -->
                     {%csrf_token%}
