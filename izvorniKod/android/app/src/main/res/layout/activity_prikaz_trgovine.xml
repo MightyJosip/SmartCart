@@ -19,11 +19,11 @@
             android:layout_height="wrap_content"
             android:text="Prikaz artikala u ovoj trgovini" />
 
-        <LinearLayout
-            android:id="@+id/trgovine_dynamic_list"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/artikli_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" />
+            android:layout_height="match_parent" />
+
     </LinearLayout>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/barcode_fab"

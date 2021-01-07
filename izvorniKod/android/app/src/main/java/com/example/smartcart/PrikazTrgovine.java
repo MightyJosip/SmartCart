@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartcart.database.Popis;
 import com.example.smartcart.database.SmartCartDatabase;
@@ -26,7 +28,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 
 public class PrikazTrgovine extends AppCompatActivity {
@@ -34,6 +36,9 @@ public class PrikazTrgovine extends AppCompatActivity {
     private static final int REQUEST_BARCODE = 9901;
     PopupWindow window;
     String scannedBarcode;
+
+    RecyclerView recyclerView;
+    ArtiklAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,46 +55,26 @@ public class PrikazTrgovine extends AppCompatActivity {
         Intent intent = getIntent();
         String name = "";
         if (intent.hasExtra("name")) {
-            name = (String)  intent.getSerializableExtra("name");
-            TextView textView = findViewById(R.id.textView6);
-            textView.setText(name);
+            name = (String) intent.getSerializableExtra("name");
         }
 
         String[] arr = name.split(" ");
-        String id = arr[arr.length -1];
+        String id = arr[arr.length - 1];
 
         Connector conn = Connector.getInstance(this);
+        List<JSONObject> artikli = new LinkedList<JSONObject>();
         conn.fetch_artikli_u_trgovini(id, jsonArray -> {
-            //Log.d("msg", jsonArray.toString());
-            for(int i = 0; i < jsonArray.length(); i++){
+            for (int i = 0; i < jsonArray.length(); i++) {
                 try {
-                    //Log.d("trgovina", jsonArray.getJSONObject(i).toString());
                     JSONObject fields = new JSONObject(jsonArray.getJSONObject(i).get("fields").toString());
-                    TextView textView = new TextView(this);
-                    textView.setText(fields.toString());
-                    ((LinearLayout) findViewById(R.id.trgovine_dynamic_list)).addView(textView);
-
-
-
-
-
-                    textView.setOnClickListener(v -> {
-                        Intent intent1 = new Intent(PrikazTrgovine.this, PrikazArtikla.class);
-                        try {
-                            Log.d("ovi", fields.getString("trgovina") + " " + fields.getString("artikl"));
-                            intent1.putExtra("sif_trgovina", (Serializable) fields.getString("trgovina"));
-                            intent1.putExtra("barkod", (Serializable) fields.getString("artikl"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        startActivity(intent1);
-                    });
-
-
+                    artikli.add(fields);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
+
+            recyclerView = findViewById(R.id.artikli_list);
+            draw_artikli(artikli);
         }, obj -> Log.e("err", obj.toString()));
 
         FloatingActionButton fab = findViewById(R.id.barcode_fab);
@@ -106,6 +91,7 @@ public class PrikazTrgovine extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_BARCODE && resultCode == RESULT_OK) {
             assert data != null;
+            Toast.makeText(this, data.getStringExtra("barcode"), Toast.LENGTH_SHORT).show();
             getStavka(data.getStringExtra("barcode"));
         }
     }
@@ -172,7 +158,11 @@ public class PrikazTrgovine extends AppCompatActivity {
 
         lista.setAdapter(adapter);
         window.showAtLocation(findViewById(R.id.trgovine_div).getRootView(), Gravity.CENTER, 0, 0);
-
+    }
+    private void draw_artikli(List<JSONObject> artikli) {
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        adapter = new ArtiklAdapter(getApplicationContext(), artikli, this);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override

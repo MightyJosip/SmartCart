@@ -11,6 +11,7 @@ import requests
 # x = requests.post(url, json={'sessionId': 'neki session id'}, timeout=2.5)
 #################
 
+"""
 url = 'http://localhost:8000/android/login'
 x = requests.post(url, json={'email': 'trgovac@fer.hr', 'password': 'pwd'}, timeout=2.5)
 
@@ -18,7 +19,12 @@ print(x.json())
 sessionId = x.json()['session_id']
 
 url = 'http://localhost:8000/android/edit_profile'
-x = requests.post(url, json={'session_id': sessionId, 'password': 'abc'})
+x = requests.post(url, json={'session_id': sessionId, 'old_password': 'abc', 'new_password': 'pwd'})
+"""
+url = 'http://localhost:8000/android/signup'
+x = requests.post(url, json={'email': 'test@fer.hr', 'password': 'pwd', 'secret_code': ''}, timeout=2.5)
+
+
 """
 url = 'http://localhost:8000/android/artiklitrgovina'
 x = requests.post(url, json={'sif_trgovina': '1'}, timeout=2.5)

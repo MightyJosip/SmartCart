@@ -1,17 +1,15 @@
 package com.example.smartcart;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +34,26 @@ public class PrikazArtikla extends AppCompatActivity {
             Log.d("artikl - sif_trgovina", sif_trgovina);
             Log.d("artikl - barkod", barkod);
 
+
+            Button dodajnapopis = (Button) findViewById(R.id.btn_dodaj_na_popis);
+            //JSONObject finalOpis = opis;
+            Intent intent2 = new Intent(PrikazArtikla.this, Odabir_popisa.class);
+
+            dodajnapopis.setOnClickListener(v -> {
+
+                intent2.putExtra("sif_trgovina", sif_trgovina);
+                intent2.putExtra("barkod", barkod);
+                            /*try {
+                                intent2.putExtra("naziv", finalOpis.get("naziv_artikla").toString());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }*/
+                startActivity(intent2);
+
+
+
+            });
+
             final String[] id_opis = {null};
             Connector connector = Connector.getInstance(this);
             connector.fetch_artikl_u_trgovini(sif_trgovina, barkod, jsonArray -> {
@@ -54,6 +72,9 @@ public class PrikazArtikla extends AppCompatActivity {
                         txt_naziv.setText(opis.get("naziv_artikla").toString());
                         txt_opis.setText(opis.get("opis_artikla").toString());
                         txt_broj_glasova.setText("Broj glasova : " + opis.get("broj_glasova").toString());
+
+
+
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -75,6 +96,11 @@ public class PrikazArtikla extends AppCompatActivity {
 
             upvote.setOnClickListener(event -> {
                 SharedPreferences sp = getSharedPreferences("user_info", Context.MODE_PRIVATE);
+                if(sp.getString("auth_level", AuthLevels.DEFAULT).equals(AuthLevels.DEFAULT)){
+                    Intent intentLogin = new Intent(PrikazArtikla.this, LoginActivity.class);
+                    startActivity(intentLogin);
+                }
+                sp = getSharedPreferences("user_info", Context.MODE_PRIVATE);
                 Log.d("shared", (String) sp.getAll().get( (Object) "session"));
                 String session_id = (String) sp.getAll().get( (Object) "session");
                 connector.upvote(id_opis[0]
@@ -88,8 +114,15 @@ public class PrikazArtikla extends AppCompatActivity {
 
             downvote.setOnClickListener(event -> {
                 SharedPreferences sp = getSharedPreferences("user_info", Context.MODE_PRIVATE);
-                Log.d("shared", (String) sp.getAll().get( (Object) "session"));
+                if(sp.getString("auth_level", AuthLevels.DEFAULT).equals(AuthLevels.DEFAULT)){
+                    Intent intentLogin = new Intent(PrikazArtikla.this, LoginActivity.class);
+                    startActivity(intentLogin);
+                }
+
+                sp = getSharedPreferences("user_info", Context.MODE_PRIVATE);
                 String session_id = (String) sp.getAll().get( (Object) "session");
+                Log.d("shared", session_id);
+//                String session_id = (String) sp.getAll().get( (Object) "session");
                 if (id_opis == null) return;
 
                 connector.downvote(id_opis[0]
@@ -103,6 +136,8 @@ public class PrikazArtikla extends AppCompatActivity {
                 intent1.putExtra("barkod", barkod);
                 startActivity(intent1);
             });
+
+
 
         }
 

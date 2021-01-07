@@ -23,7 +23,7 @@ import java.io.UnsupportedEncodingException;
 
 public class Connector {
 
-    private static final String HOST = "http://10.0.2.2:8000/";
+    private static final String HOST = "http://192.168.0.24:8000/";
 
     private static Connector singleInstance;
     private static RequestQueue requestQueue;
@@ -102,6 +102,19 @@ public class Connector {
         getRequestQueue().add(jtsr);
     }
 
+    public void fetchTrgovineByGivenName(String name, Response.Listener<String> onSuccess, Response.ErrorListener onFail) {
+
+        JSONObject jo = new JSONObject();
+        try{
+            jo.put("naz_trgovina", name);
+        }catch (JSONException e){
+            Log.e("Store fetch", e.toString());
+        }
+        String url = HOST + "android/trgovine";
+        JsonToStringRequest jtsr = new JsonToStringRequest(Request.Method.POST, url, jo, onSuccess, onFail);
+        getRequestQueue().add(jtsr);
+    }
+
     public void fetch_artikli_u_trgovini(String sif_trgovina, Response.Listener<JSONArray> onSuccess, Response.ErrorListener onFail){
         JSONObject jsonObject = new JSONObject();
         try {
@@ -155,6 +168,10 @@ public class Connector {
         getRequestQueue().add(request);
     }
 
+    public void dodaj_na_popis(){
+
+    }
+
     public void fetch_opisi(String sif_trgovina, String barkod, Response.Listener<JSONArray> onSuccess, Response.ErrorListener onFail) {
         JSONObject jsonObject = new JSONObject();
         String url = HOST + "android/opisi";
@@ -167,6 +184,22 @@ public class Connector {
 
         JsonToJsonArrayRequest request = new JsonToJsonArrayRequest(Request.Method.POST, url, jsonObject, onSuccess, onFail);
         getRequestQueue().add(request);
+    }
+
+    public void changePassword(String sessionId, String oldPassword, String newPassword, Response.Listener<String> onSuccess, Response.ErrorListener onFail){
+
+        JSONObject jo = new JSONObject();
+        try{
+            jo.put("session_id", sessionId);
+            jo.put("old_password", oldPassword);
+            jo.put("new_password", newPassword);
+        }catch (JSONException e) {
+            Log.e("Change password", e.toString());
+        }
+
+        String url = HOST + "android/edit_profile";
+        JsonToStringRequest jtsr = new JsonToStringRequest(Request.Method.POST, url, jo, onSuccess, onFail);
+        getRequestQueue().add(jtsr);
     }
 
     private static class JsonToStringRequest extends JsonRequest<String> {

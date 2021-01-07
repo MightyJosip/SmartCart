@@ -1,19 +1,17 @@
 package com.example.smartcart;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
 
@@ -50,6 +48,8 @@ public class LoginActivity extends AppCompatActivity {
             // TODO: na jednom mjestu
             spe.putString("auth_level", AuthLevels.DEFAULT);
             spe.apply();
+            Intent intent = new Intent(LoginActivity.this, HomeScreenActivity.class);
+            startActivity(intent);
             finish();
         });
     }
@@ -92,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
 
             finish();
         }, err -> {
-            Toast t = Toast.makeText(this, "NEUSPJEH. Poruka: " + err.toString(), Toast.LENGTH_LONG);
+            Toast t = Toast.makeText(this, "NEUSPJEH. Krivo korisničko ime ili lozinka", Toast.LENGTH_LONG);
             t.show();
         });
     }

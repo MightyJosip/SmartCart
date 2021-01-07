@@ -45,4 +45,7 @@
     <string name="submit">Submit</string>
     <string name="successfully_added">Sucessfully added</string>
     <string name="no_barcode_in_store">Could not find item in the store</string>
+    <string name="hiMessage">Hi</string>
+    <string name="change_password">Change Password</string>
+    <string name="title_activity_odabir_popisa">Odabir_popisa</string>
 </resources>

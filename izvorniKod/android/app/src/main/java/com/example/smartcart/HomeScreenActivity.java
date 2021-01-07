@@ -1,49 +1,33 @@
 package com.example.smartcart;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.SearchView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.smartcart.database.Popis;
-import com.example.smartcart.database.SmartCartDatabase;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class HomeScreenActivity extends AppCompatActivity{
 
@@ -113,7 +97,7 @@ public class HomeScreenActivity extends AppCompatActivity{
             if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                     (keyCode == KeyEvent.KEYCODE_ENTER)) {
 
-                conn.fetch_artikl_u_trgovini("naz_trgovina", findStoreOrItem.getText().toString(), response -> {
+                conn.fetchTrgovineByGivenName(findStoreOrItem.getText().toString(), response -> {
 
                     Gson gson = new Gson();
                     Type storeType = new TypeToken<ArrayList<Object>>(){}.getType();
@@ -204,9 +188,7 @@ public class HomeScreenActivity extends AppCompatActivity{
                 break;
             }
 
-            case MENU_ACCOUNTSETTINGS: //startAccountSettingsActivity(); break;
-                Toast.makeText(this, "Nije implementirano :(", Toast.LENGTH_LONG).show();
-                break;
+            case MENU_ACCOUNTSETTINGS: startAccountSettingsActivity(); break;
 
             case MENU_LOGOUT:
                 SharedPreferences prefs = getSharedPreferences("user_info", Context.MODE_PRIVATE);
