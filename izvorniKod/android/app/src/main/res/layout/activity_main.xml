@@ -39,7 +39,7 @@
         android:drawableStart="@drawable/ic_action_user"
         android:ems="10"
         android:hint="@string/username"
-        android:inputType="textPersonName"
+        android:inputType="textEmailAddress"
         android:textSize="20sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

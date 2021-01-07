@@ -75,14 +75,6 @@ public class PrikazPopisaActivity extends AppCompatActivity {
         });
 
         draw_popisi();
-
-
-
-
-
-
-
-
     }
 
     @Override

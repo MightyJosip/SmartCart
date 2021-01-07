@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.smartcart">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -25,6 +27,10 @@
         <activity
             android:name=".PrikazStavkiActivity"
             android:label="@string/title_activity_prikaz_stavki"
+            android:theme="@style/Theme.SmartCart.NoActionBar" />
+        <activity
+            android:name=".IzracunCijeneActivity"
+            android:label="@string/title_activity_izracun_cijene"
             android:theme="@style/Theme.SmartCart.NoActionBar" />
         <activity
             android:name=".PrikazPopisaActivity"
