@@ -64,8 +64,10 @@ public class LoginActivity extends AppCompatActivity {
             // TODO: na jednom mjestu
             spe.putString("auth_level", AuthLevels.DEFAULT);
             spe.apply();
-            Intent intent = new Intent(LoginActivity.this, HomeScreenActivity.class);
-            startActivity(intent);
+            if (isFirstLaunch) {
+                Intent intent = new Intent(LoginActivity.this, HomeScreenActivity.class);
+                startActivity(intent);
+            }
             finish();
         });
     }

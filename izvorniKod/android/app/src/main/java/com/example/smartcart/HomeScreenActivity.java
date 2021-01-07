@@ -208,7 +208,7 @@ public class HomeScreenActivity extends AppCompatActivity{
                         try {
                             task.getResult(ApiException.class);
                             prefs.edit().remove("session").apply();
-                            prefs.edit().remove("auth_level").apply();
+                            prefs.edit().putString("auth_level", AuthLevels.GOST).apply();
                             prefs.edit().putBoolean("is_google_signed", false).apply();
                         } catch (ApiException e) {
                             Log.e("HomeScreenActivity", e.getMessage(), e);
@@ -249,6 +249,12 @@ public class HomeScreenActivity extends AppCompatActivity{
     private void startAccountSettingsActivity(){
         Intent intent = new Intent(this, AccountSettingsActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity();
     }
 
 }
