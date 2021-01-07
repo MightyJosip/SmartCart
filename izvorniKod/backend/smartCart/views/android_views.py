@@ -1,9 +1,11 @@
 import json
+from decimal import Decimal
 from math import cos, asin, sqrt, pi
 
 from django.contrib.auth import authenticate, logout
 from django.contrib.sessions.models import Session
 from django.core import serializers
+from django.forms import model_to_dict
 from django.http import HttpResponse
 
 from .functions import create_json_response, android_login_function, get_user_from_session, User, get_object_or_none
@@ -293,6 +295,12 @@ class SkenirajBarkodView(View):
         return HttpResponse()
 
 
+class DecimalEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Decimal):
+            return float(obj)
+        return json.JSONEncoder.default(self, obj)
+
 class FindClosestStores(View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body)
@@ -311,11 +319,20 @@ class FindClosestStores(View):
             if artikl_u_trgovini.trgovina in trgovine and barkod_artikla in artikli:
                 prethodna_cijena = najnize_cijene[barkod_artikla]
                 if artikl_u_trgovini.dostupan and (prethodna_cijena is None or prethodna_cijena > artikl_u_trgovini.cijena):
-                    najnize_cijene[barkod_artikla] = artikl_u_trgovini.cijena
+                    najnize_cijene[barkod_artikla] = {}
+                    najnize_cijene[barkod_artikla]['cijena'] = artikl_u_trgovini.cijena
+                    najnize_cijene[barkod_artikla]['trgovina'] = artikl_u_trgovini.trgovina
         sum = 0
-        for cijena in najnize_cijene.values():
-            sum += cijena
-        return create_json_response(200, data=round(float(sum), 2))
+        for value in najnize_cijene.values():
+            if value is not None and value['cijena'] is not None:
+                sum += value['cijena']
+            if value is not None and value['trgovina'] is not None:
+                value['trgovina'] = model_to_dict(value['trgovina'], fields=['naz_trgovina'])
+        if sum == 0:
+            sum = -1
+        najnize_cijene['sum'] = sum
+        return create_json_response(200, data=json.dumps(najnize_cijene, cls=DecimalEncoder))
+
 
     def calculate_distance(self, lat1, lon1, lat2, lon2):
         p = pi / 180
