@@ -55,7 +55,10 @@ public class PrikazStavkiActivity extends AppCompatActivity {
         Button btnIzracunCijene = findViewById(R.id.btn_izracun_cijene);
         btnIzracunCijene.setOnClickListener(l -> {
             Intent nextIntent = new Intent(PrikazStavkiActivity.this, IzracunCijeneActivity.class);
+            EditText radius = (EditText) findViewById(R.id.fld_radius);
+
             nextIntent.putExtra("id", myExtra);
+            nextIntent.putExtra("distance", Integer.parseInt(radius.getText().toString()));
             startActivity(nextIntent);
         });
 
