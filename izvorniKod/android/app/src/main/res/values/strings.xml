@@ -45,4 +45,5 @@
     <string name="change_password">Change Password</string>
     <string name="title_activity_odabir_popisa">Odabir_popisa</string>
     <string name="title_activity_izracun_cijene">IzracunCijeneActivity</string>
+    <string name="title_activity_odabir_popisa_za_brisanje">Odabir_popisa_za_brisanje</string>
 </resources>
