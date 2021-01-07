@@ -25,46 +25,43 @@
                 </a>
             </div>
             <div class="col">
-            <div class="row">
-                <div class="col text-center m-3">
-                    <div>
-                        Prijavljeni ste kao {{user.get_auth_level}}
-                        <mark>{{user}}</mark>
+                <div class="row">
+                    <div class="col text-center m-3">
+                        <div>
+                            Prijavljeni ste kao {{user.get_auth_level}}
+                            <mark>{{user}}</mark>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <form action="/logout" method="get">
+                            {%csrf_token%}
+                            <button type="submit" class="btn btn-danger m-3 pomakni">Log out</button>
+                        </form>
                     </div>
                 </div>
-                <div class="col">
-                    <form action="/logout" method="get">
-                        {%csrf_token%}
-                        <button type="submit" class="btn btn-danger m-3 pomakni">Log out</button>
-                    </form>
-                </div>
-            </div>
             </div>
         </div>
     </div>
 
     <h1 class="text-center">Promijeni lozinku</h1>
 
-    <div class="container-fluid">
-        <form action="" method="POST">
-            {%csrf_token%}
-            <div class="form-group">
-                <div class="d-flex flex-column">
-                    {% for field in form  %}
-                    <b>{{ field.label_tag }}</b> {{ field }}<br>
-                    {% endfor %}
-                    <input type="submit" class="btn btn-success" value="Spremi">
-                    <div class="fail-login">{{message}}</div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="d-flex justify-content-center">
-        <form action="delete_account" method="POST">
-            {%csrf_token%}
-            <input type="submit" value="Obriši korisnički račun" class="btn btn-danger"
-                onclick="return confirm('Jeste li sigurni da želite obrisati korisnički račun?')">
-        </form>
+    <div class="container-fluid text-center">
+        <div class="d-flex flex-column">
+            <form action="" method="POST">
+                {%csrf_token%}
+                {% for field in form  %}
+                <b>{{ field.label_tag }}</b><br> {{ field }}<br><br>
+                {% endfor %}
+                <input type="submit" class="btn btn-success" value="Spremi">
+                <div class="fail-login">{{message}}</div>
+            </form>
+
+            <form action="delete_account" method="POST" class="m-4">
+                {%csrf_token%}
+                <input type="submit" value="Obriši korisnički račun" class="btn btn-danger"
+                    onclick="return confirm('Jeste li sigurni da želite obrisati korisnički račun?')">
+            </form>
+        </div>
     </div>
 </body>
 <footer class="d-flex justify-content-center">

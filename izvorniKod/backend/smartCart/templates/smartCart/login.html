@@ -20,35 +20,32 @@
 </head>
 
 <body>
-    <div class="container-fluid">
-
-        <div class="d-flex justify-content-around mx-auto">
+    <div class="container-fluid text-center">
+        <div class="d-flex justify-content-between">
             <a href="/">
-                <img src="{% static 'logo.png'%}" class="m-2" alt="SmartCart Logo">
+                <img src="{% static 'logo.png'%}" class="m-2 sclogo" alt="SmartCart Logo">
             </a>
-
-            <h1 class="text-center m-3">Prijavi se!</h1>
+            <img src="{% static 'logo_smartcart.png'%}" class="m-2 sclogo2" alt="SmartCart Logo2">
         </div>
-    </div>
-    <div class="d-flex justify-content-center m-3">
-        <form action="" method="POST">
-            {%csrf_token%}
-            {% for field in form  %}
-            <b>{{ field.label_tag }}</b>
-            <br>
-            {{ field }}
-            <br><br>
-            {% endfor %}
-            <div class="row">
-                <input type="submit" class="btn btn-success mx-auto" value="Prijavi me">
-            </div>
-            <div class="error">{{message}}</div>
-        </form>
-    </div>
-    <div class="row">
+
+        <div class="d-flex flex-column justify-content-center">
+            <h1>Prijavi se!</h1>
+            <form action="" method="POST">
+                {%csrf_token%}
+                {% for field in form  %}
+                <b>{{ field.label_tag }}</b>
+                <br>
+                {{ field }}
+                <br><br>
+                {% endfor %}
+                <div class="row">
+                    <input type="submit" class="btn btn-success mx-auto" value="Prijavi me">
+                </div>
+                <div class="error">{{message}}</div>
+            </form>
+        </div>
+        <br>
         <a href="nova_lozinka" class="mx-auto">Zaboravio sam lozinku</a> <br />
-    </div>
-    <div class="row">
         <a href="{% provider_login_url 'google' %}" class="mx-auto">Login with Google</a>
     </div>
 
@@ -56,4 +53,5 @@
 <footer class="d-flex justify-content-center">
     SmartCart
 </footer>
+
 </html>
