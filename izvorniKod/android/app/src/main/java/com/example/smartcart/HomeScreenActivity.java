@@ -144,7 +144,7 @@ public class HomeScreenActivity extends AppCompatActivity{
         // treba dodati još opcija
         boolean enableLogin = false;
         boolean enableSignup = false;
-        boolean enableMyLists = true;
+        boolean enableMyLists = false;
         boolean enableLogout = false;
         boolean enableAccountSettings = true;
 
@@ -159,6 +159,7 @@ public class HomeScreenActivity extends AppCompatActivity{
             case AuthLevels.TRGOVAC:
             case AuthLevels.ADMIN:
                 enableLogout = true;
+                enableMyLists = true;
                 break;
         }
 

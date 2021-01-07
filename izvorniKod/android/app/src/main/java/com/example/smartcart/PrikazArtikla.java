@@ -3,18 +3,33 @@ package com.example.smartcart;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.gson.JsonObject;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
+import java.net.CookieHandler;
+
+
 public class PrikazArtikla extends AppCompatActivity {
+
+    private JSONObject tmp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,17 +52,24 @@ public class PrikazArtikla extends AppCompatActivity {
 
             Button dodajnapopis = (Button) findViewById(R.id.btn_dodaj_na_popis);
             //JSONObject finalOpis = opis;
-            Intent intent2 = new Intent(PrikazArtikla.this, Odabir_popisa.class);
+
+            SharedPreferences sp1 = getSharedPreferences("user_info", Context.MODE_PRIVATE);
+            if(sp1.getString("auth_level", AuthLevels.DEFAULT).equals(AuthLevels.DEFAULT)){
+                dodajnapopis.setVisibility(View.GONE);
+            }
+
 
             dodajnapopis.setOnClickListener(v -> {
 
+
+                Intent intent2 = new Intent(PrikazArtikla.this, Odabir_popisa.class);
                 intent2.putExtra("sif_trgovina", sif_trgovina);
                 intent2.putExtra("barkod", barkod);
-                            /*try {
-                                intent2.putExtra("naziv", finalOpis.get("naziv_artikla").toString());
-                            } catch (JSONException e) {
+                            try {
+                                intent2.putExtra("naziv", tmp.get("naziv_artikla").toString());
+                            } catch (Exception e) {
                                 e.printStackTrace();
-                            }*/
+                            }
                 startActivity(intent2);
 
 
@@ -55,6 +77,7 @@ public class PrikazArtikla extends AppCompatActivity {
             });
 
             final String[] id_opis = {null};
+
             Connector connector = Connector.getInstance(this);
             connector.fetch_artikl_u_trgovini(sif_trgovina, barkod, jsonArray -> {
                 Log.d("artikl", jsonArray.toString());
@@ -63,6 +86,7 @@ public class PrikazArtikla extends AppCompatActivity {
                     JSONObject opis = null;
                     try {
                         opis = new JSONObject(jsonArray.getJSONObject(1).get("fields").toString());
+                        tmp = opis;
                         id_opis[0] = jsonArray.getJSONObject(1).get("pk").toString();
 
                         TextView txt_naziv = (TextView) findViewById(R.id.txt_naziv);
@@ -137,7 +161,39 @@ public class PrikazArtikla extends AppCompatActivity {
                 startActivity(intent1);
             });
 
+            connector.fetch_image(barkod, success -> {
+                Log.d("slika1", success.toString());
+                JSONObject obj = null;
+                try {
+                    obj = success.getJSONObject(0);
+                    JSONObject fields = obj.getJSONObject("fields");
+                    Log.d("slika2", fields.toString());
+                    String encoded_image = fields.getString("image");
+                    Log.d("slika3", encoded_image);
+                    /*
+                    byte[] decodedString = Base64.decode(encoded_image, Base64.URL_SAFE);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    Log.d("slika4", "yoo");
+                    ImageView slika = (ImageView) findViewById(R.id.slika);
+                    slika.setImageBitmap(decodedByte);
+                    */
 
+                    ImageView slika = (ImageView) findViewById(R.id.slika);
+                    byte[] decodedString = Base64.decode(encoded_image, Base64.NO_WRAP);
+                    InputStream input=new ByteArrayInputStream(decodedString);
+                    Bitmap ext_pic = BitmapFactory.decodeStream(input);
+                    slika.setImageBitmap(ext_pic);
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }, fail -> {
+                // TODO: stavi neki placeholder, nešto što će se prikazati kad nema slike
+                Toast.makeText(PrikazArtikla.this, "Nema slike", Toast.LENGTH_SHORT).show();
+            });
 
         }
 

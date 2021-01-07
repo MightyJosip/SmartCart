@@ -23,17 +23,17 @@ public class Odabir_popisa extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_odabir_popisa);
-
+        final String naziv;
         final Intent intent = getIntent();
         final int siftrgovina = Integer.parseInt(intent.getStringExtra("sif_trgovina"));
         final String barkod = intent.getStringExtra("barkod");
-        /*if(intent.hasExtra("naziv")){
-            final String naziv = intent.getStringExtra("naziv");
+        if(intent.hasExtra("naziv")){
+             naziv = intent.getStringExtra("naziv");
         }
         else{
-            final String naziv = null;
+            naziv = null;
         }
-        */
+
 
 
         ArrayList<String> array = new ArrayList<>();
@@ -50,10 +50,17 @@ public class Odabir_popisa extends AppCompatActivity {
 
             SmartCartDatabase db = SmartCartDatabase.getInstance(this);
             StavkaDao dao = db.stavkaDao();
+            Stavka novaStavka;
 
-            //Stavka novaStavka = new Stavka(sifpopisa, barkod, naziv, siftrgovina);
+            if(naziv == null){
+                novaStavka = new Stavka(sifpopisa, barkod, siftrgovina);
+            }
+            else{
+                novaStavka = new Stavka(sifpopisa, barkod, siftrgovina, naziv);
+            }
+
             //Stavka novaStavka = new Stavka(sifpopisa, barkod, siftrgovina);
-            Stavka novaStavka = new Stavka(sifpopisa, barkod);
+            //Stavka novaStavka = new Stavka(sifpopisa, barkod);
             dao.dodajStavke(novaStavka);
 
             Toast.makeText(this, "Artikl dodan u popis", Toast.LENGTH_SHORT).show();

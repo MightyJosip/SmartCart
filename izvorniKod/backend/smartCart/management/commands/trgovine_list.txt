@@ -1,6 +1,8 @@
 Atributi redom: sif_trgovina, naz_trgovina,adresa_trgovina,radno_vrijeme_pocetak,radno_vrijeme_kraj,latitude,longitude,vlasnik
-1;Konzum Radnička;Radnička 1a;8:00;16:00;16;30;ante@fer.hr
-2;Konzum Glavni;Radnička 1a;8:00;16:00;16;30;ante@fer.hr
-3;Konzum Samobor;Betonka 6b;8:00;16:00;16;30;ante@fer.hr
-4;Konzum Point;Jarunska 15;8:00;16:00;16;30;trgovac@fer.hr
-5;Konzum Miljevačka;Miljevačka 43;8:00;16:00;16;30;trgovac@fer.hr
+1;Konzum Radnička;Radnička 1a;8:00;16:00;45.8048805746927;15.997090169717334;ante@fer.hr
+2;Konzum Glavni;Trg Ante Starčevića 1;8:00;16:00;45.8057187345423;15.977343783570559;ante@fer.hr
+3;Konzum Samobor;Ul. Grada Wirgesa 2/c, Samobor;8:00;16:00;45.80073483845116;15.725689656225914;ante@fer.hr
+4;Konzum Point;Rudeška cesta 169a;8:00;16:00;45.79151651192678;15.914161842734199;trgovac@fer.hr
+5;Konzum Črnomerec;Ilica 298a;8:00;16:00;45.81440064614392;15.928162827389992;trgovac@fer.hr
+6;Spar Savska;Savska cesta 58;8:00;16:00;45.79879111890751;15.961417698553486;trgovac@fer.hr
+7;Spar Trešnjevka-jug;Ul. Tina Ujevića 17;8:00;16:00;45.79003950354209;15.949555869716962;trgovac@fer.hr

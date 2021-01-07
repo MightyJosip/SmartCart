@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.smartcart">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-feature android:name="android.hardware.camera.any" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -15,15 +17,23 @@
         android:theme="@style/Theme.SmartCart"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Odabir_popisa_za_brisanje"
+            android:label="@string/title_activity_odabir_popisa_za_brisanje"
+            android:theme="@style/Theme.SmartCart.NoActionBar"></activity>
+        <activity
             android:name=".Odabir_popisa"
             android:label="@string/title_activity_odabir_popisa"
-            android:theme="@style/Theme.SmartCart.NoActionBar"></activity>
+            android:theme="@style/Theme.SmartCart.NoActionBar" />
         <activity android:name=".PrikazOpisaActivity" />
         <activity android:name=".PrikazArtikla" />
         <activity android:name=".PrikazTrgovine" />
         <activity
             android:name=".PrikazStavkiActivity"
             android:label="@string/title_activity_prikaz_stavki"
+            android:theme="@style/Theme.SmartCart.NoActionBar" />
+        <activity
+            android:name=".IzracunCijeneActivity"
+            android:label="@string/title_activity_izracun_cijene"
             android:theme="@style/Theme.SmartCart.NoActionBar" />
         <activity
             android:name=".PrikazPopisaActivity"
