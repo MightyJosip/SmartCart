@@ -37,11 +37,6 @@
                         {%csrf_token%}
                         <button type="submit" class="btn btn-info m-3">Edit profile</button>
                     </form>
-                    <!-- proba gumba za skrivanje/otkrivanje
-                    <div class="col-sm">
-                    <button type="button" onclick="toggle" class="btn btn-info m-3" id="reveal">Edit profile</button>
-                    </div>
-                    -->
                     <form action="/logout" method="get">
                         {%csrf_token%}
                         <button type="submit" class="btn btn-danger m-3">Log out</button>
@@ -50,12 +45,10 @@
             </div>
 
             {% else %}
-            <div class="col"></div>
-            <div class="col"></div>
             <div class="col">
                 <form action="login" method="GET">
                     {%csrf_token%}
-                    <button type="submit" class="btn btn-primary">Prijavi se</button>
+                    <button type="submit" class="btn btn-primary m-3">Prijavi se</button>
                 </form>
             </div>
             {% endif %}
@@ -72,7 +65,7 @@
     </div>
     {% endif %}
 
-    <hr />
+    <hr/>
     <div class="container-fluid">
         <div class="row p-3">
             <div class="col-sm-6 text-center mx-auto m-2">
