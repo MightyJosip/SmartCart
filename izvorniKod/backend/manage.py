@@ -15,6 +15,10 @@ def main():
             "available on your PYTHONPATH environment variable? Did you "
             "forget to activate a virtual environment?"
         ) from exc
+    if "CREATE_DB" in os.environ and os.environ["CREATE_DB"] == "True":
+        import create_database
+    if "FILL_DB" in os.environ and os.environ["FILL_DB"] == "True":
+        import fill_database
     execute_from_command_line(sys.argv)
 
 

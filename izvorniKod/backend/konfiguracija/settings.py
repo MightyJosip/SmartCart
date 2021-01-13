@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from pathlib import Path
-#import dj_database_url
 
 CONST = {}
 CONST_PATH = os.path.join(os.path.join(Path(os.path.dirname(__file__)).parent, "constants.txt"))
@@ -33,6 +32,7 @@ if os.path.exists(CONST_PATH):
         }
     }
 else:
+    import dj_database_url # needed for heroku!
     CONST['SECRET_CODE'] = os.environ['SECRET_CODE']
     CONST['GOOGLE_CLIENT_SECRET'] = os.environ['GOOGLE_CLIENT_SECRET']
     DATABASES = {}
@@ -52,7 +52,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 #10.0.2.2 služi za spajanje emulatora iz android studia.
 # Možete dodati lokalni ip s mobitela da možete s njega pokretati server, a pristupati s Windowsa
