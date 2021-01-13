@@ -17,13 +17,16 @@ def main():
             "forget to activate a virtual environment?"
         ) from exc
     if "CREATE_DB" in os.environ and os.environ["CREATE_DB"] == "True":
+        print("Creating database")
         migrations_path = os.path.join("smartCart", "migrations")
         if os.path.isdir(migrations_path):
+            print("Deleting existing migrations directory")
             rmtree(migrations_path)
         if "--noreload" not in sys.argv:
             sys.argv.append("--noreload")
         import create_database
     if "FILL_DB" in os.environ and os.environ["FILL_DB"] == "True":
+        print("Filling database")
         if "--noreload" not in sys.argv:
             sys.argv.append("--noreload")
         import fill_database
