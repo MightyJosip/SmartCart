@@ -23,6 +23,11 @@ import json
 
 #from allauth.account.views import *
 
+
+def error_404(request, exception):
+    return redirect('index')
+
+
 class IndexView(View):
     template_name = "smartCart/index.html"
 
