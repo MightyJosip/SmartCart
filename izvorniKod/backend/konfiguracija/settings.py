@@ -222,6 +222,7 @@ if "CREATE_DB" in os.environ and os.environ["CREATE_DB"] == "True":
 else:
     with open(siptxt, 'w') as outFile:
         outFile.write("filling_db\n" if filling_db else "")
+    creating_db = False
 if "FILL_DB" in os.environ and os.environ["FILL_DB"] == "True":
     if not filling_db:
         with open(siptxt, 'a') as outFile:
@@ -230,3 +231,4 @@ if "FILL_DB" in os.environ and os.environ["FILL_DB"] == "True":
 else:
     with open(siptxt, 'w') as outFile:
         outFile.write("creating_db\n" if creating_db else "")
+    filling_db = False
