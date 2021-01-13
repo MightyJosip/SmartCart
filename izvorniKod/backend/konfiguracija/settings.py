@@ -51,7 +51,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 #10.0.2.2 služi za spajanje emulatora iz android studia.
 # Možete dodati lokalni ip s mobitela da možete s njega pokretati server, a pristupati s Windowsa

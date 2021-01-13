@@ -11,7 +11,7 @@
 <body>
     <h1>Uredi artikl: "{{artikl}}" u trgovini: "{{trgovina}}"</h1>
     <br>
-    <form action="" method="POST">
+    <form name="uredi_artikl" action="" method="POST">
         {%csrf_token%}
         <table>
             {% for field in uredi_artikl_u_trgovini_form  %}
