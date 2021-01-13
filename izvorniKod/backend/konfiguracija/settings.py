@@ -38,7 +38,6 @@ else:
     DATABASES = {}
     DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
-
 KEY = CONST['SECRET_CODE']
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -200,3 +199,34 @@ SOCIALACCOUNT_PROVIDERS = {
 LOGIN_REDIRECT_URL = 'index'
 
 ACCOUNT_LOGOUT_ON_GET = True
+
+# next section is needed for running create_database and fill_database scripts
+# scripts_in_progress blocks running scripts again until env flags are changed
+# that prevents crashing
+import sys
+sys.path.append(BASE_DIR)
+
+creating_db = False
+filling_db = False
+siptxt = str(BASE_DIR/"smartCart"/"management"/"commands"/"scripts_in_progress.txt")
+with open(siptxt, 'r') as inFile:
+    data = inFile.read()
+    creating_db = "creating_db" in data
+    filling_db = "filling_db" in data
+print("Starting again", creating_db, filling_db)
+if "CREATE_DB" in os.environ and os.environ["CREATE_DB"] == "True":
+    if not creating_db:
+        with open(siptxt, 'a') as outFile:
+            outFile.write("creating_db\n")
+        import create_database
+else:
+    with open(siptxt, 'w') as outFile:
+        outFile.write("filling_db\n" if filling_db else "")
+if "FILL_DB" in os.environ and os.environ["FILL_DB"] == "True":
+    if not filling_db:
+        with open(siptxt, 'a') as outFile:
+            outFile.write("filling_db\n")
+        import fill_database
+else:
+    with open(siptxt, 'w') as outFile:
+        outFile.write("creating_db\n" if creating_db else "")
