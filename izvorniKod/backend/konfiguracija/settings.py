@@ -34,6 +34,7 @@ if os.path.exists(CONST_PATH):
     }
 else:
     CONST['SECRET_CODE'] = os.environ['SECRET_CODE']
+    CONST['GOOGLE_CLIENT_SECRET'] = os.environ['GOOGLE_CLIENT_SECRET']
     DATABASES = {}
     DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
