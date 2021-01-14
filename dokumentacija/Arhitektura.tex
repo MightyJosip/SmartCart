@@ -418,7 +418,55 @@
 			\caption{Dijagram razreda na poslužitelju}
 			\label{fig:class_posluzitelj}
 		\end{figure}
+	
+		\section{Dijagram stanja}
+			Priložena su dva dijagrama stanja. Jedan prikazuje web stranicu na kojoj korisnik nije ulogiran, a drugi dijagram stanja prikazuje web stranicu na kojoj je ulogiran trgovac.
 			
+			Dijagram stanja koji opisuje web stranicu na kojoj korisnik nije ulogiran nudi nekoliko opcija: prijava, registracija kao kupac i registracija kao trgovac. Registrirati se kao može bilo tko samo jednom s istom email adresom. Za registraciju kao kupac nisu potrebni nikakvi preduvjeti, dok je za registraciju kao trgovac potreban odgovarajući kod.
+			
+			Dijagram stanja opisuje web stranicu na kojoj je ulogiran trgovac. On ima već nabrojane opcije kao što su pregled trgovina, dodavanje trgovine, pregled proizvoda u trgovini, brisanje proizvoda u trgovini itd. Preduvjet za svaku akciju brisanja je naravno da proizvod koji se želi obrisati postoji. Također, što se tiče pregleda trgovine, trgovac može pregledati samo onu trgovinu za koju je on zadužen.
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=1.0\linewidth]{dijagrami/web-neulogiran.jpg}
+				\caption{Dijagram stanja web stranice za neulogiranog korisnika}
+				\label{fig:state-web-neulogiran}
+			\end{figure}
+		
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=1.0\linewidth]{dijagrami/web-trgovac.jpg}
+				\caption{Dijagram stanja web stranice za trgovca}
+				\label{fig:state-web-trgovac}
+			\end{figure}
+			
+		
+		\section{Dijagram aktivnosti}
+			Na slici prikazan je dijagram aktivnosti. On obuhvaća sve aktivnosti koje se događaju na Android aplikaciji, serveru, serverskoj i Android bazi podataka. Obuhvaćeni skup aktivnosti obuhvaća sve od ulogiravanja korisnika na Android uređaju pa do dodavanja artikla na popis.
+			
+			Korisnik se dakle prvo ulogira, zatim odabere trgovinu te proizvod koji je ponuđen u toj trgovini. Odabirom proizvoda, prikazuje se detaljni opis tog proizvoda, njegova slika te opcije "upvote", "downvote" te "Dodaj na popis". Ovdje sam prikazao postupak dodavanja na popis. Jedan od preduvjeta je taj da postoji barem jedan popis na uređaju.
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=1.0\linewidth]{dijagrami/dodavanje-art.png}
+				\caption{Dijagram aktivnosti za prijavu i dodavanje artikla na popis (Android)}
+				\label{fig:act-dodavanje-art}
+			\end{figure}
+		
+		\section{Dijagram komponenti}
+		
+			Dijagram prikazuje komponente naše aplikacije koje komuniciraju preko sučelja. Web aplikacija od servera, uz podatke u JSON formatu, mora dobiti i izgled stranice - HTML i CSS. Android aplikacija ne traži HTML i CSS zbog toga što je prikaz primljenih podataka od servera (koji se također dobijaju u JSON formatu) definiran na samom Androidu.
+			
+			Server ima vlastitu bazu podataka s kojom komunicira preko sučelja koje dolazi u paketu Django, a svaki Android uređaj komunicira sa svojom bazom podataka preko sučelja definiranim paketom DBRoom.
+			
+			Također, Google pruža svoje sučelje koje se može iskoristiti za automatsko slanje mailova. Tu funkcionalnost koristi server kako bi korisniku poslao potvrdu o promjeni lozinke.
+		
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=1.0\linewidth]{dijagrami/component.png}
+				\caption{Dijagram komponenti}
+				\label{fig:cmp-component}
+			\end{figure}
 			
 			
 			\eject
