@@ -15,7 +15,6 @@ static/
 /dokumentacija/*.aux
 /dokumentacija/*.lof
 /dokumentacija/*.lot
-/dokumentacija/*.pdf
 /dokumentacija/*.synctex.gz
 /dokumentacija/*.toc
 .~lock.*
