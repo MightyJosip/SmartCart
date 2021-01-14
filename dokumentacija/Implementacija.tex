@@ -119,6 +119,40 @@ def test_page_permissions(self):
 			\end{figure}
 		\eject
 	\section{Upute za puštanje u pogon}
-		Ovo treba napisati.
+		Upute za puštanje u pogon napisane su za linux operacijski sustav.
+		Za pokretanje aplikacije na javnom poslužitelju potrebno je napraviti račun za Heroku na stranici \url{https://signup.heroku.com/}.
+		Zatim treba instalirati heroku na računalo i ulogirati se naredbama: \\
+		\code{sudo snap install --classic heroku}\\
+		\code{heroku login}
+		\\
+		Nakon toga treba se pozicionirati u korijensku mapu repositoryja (preljevstoga) i stvoriti heroku projekt naredbom: \\
+		\code{heroku create ime-projekta} \\
+		Za stvaranje baze podataka pokrenite \\
+		\code{heroku addons:create heroku-postgresql} \\
+		Dohvatite url baze podataka i kopirajte ga u varijablu okruženja na Heroku. \\
+		\code{heroku pg:info} \\
+		\code{heroku config:set DATABASE\_URL=postgres://kopirani/url CREATE\_DB=True FILL\_DB=True} \\
+		Zatim je potrebno stvoriti ključ za django aplikaciju naredbom \\
+		\code{python3 izvorniKod/backend/generate\_django\_key.py} \\
+		Taj ključ spremljen je u datoteci temp u mapi izvorniKod/backend. Spremite ga na Heroku, ali ne kopiranjem, da ne ostane u povijesti terminala nego sljedećom naredbom: \\
+		\code{heroku config:set SECRET\_CODE=\$(< izvorniKod/backend/temp)} \\
+		Kako biste omogućili Google sign in u Vašoj aplikaciji, stvorite pomoću Vašeg Google računa
+		Google ID i ključ za svoj projekt prema uputama u odlomku"Create authorization credentials" na stranici \url{https://developers.google.com/identity/sign-in/web/sign-in}. Google ID zalijepite u red 192 u izvorniKod/backend/settings.py, a gmail adresu tog raučuna 166. red iste datoteke. Tajni ključ kopirajte u neku novu datoteku (npr. umjesto django ključa u izvorniKod/backend/temp. Pošaljite taj ključ na Heroku naredbom: \\
+		\code{heroku config:set GOOGLE\_CLIENT\_SECRET=\$(< izvorniKod/backend/temp)} \\
+		\textbf{Maknite datoteke s ključevima iz repozitorija!}
+		Commitajte promjene i pushajte na Heroku. \\
+		\code{git add .} \\
+		\code{git commit -m "Promijenjena gmail adresa za slanje poruka"} \\
+		\code{git push heroku master} \\
+		Na kraju onemogućite stvaranje i punjenje baze podataka jer već sadrži sve što treba. \\
+		\code{heroku config:set CREATE\_DB=False FILL\_DB=False} \\
+		Ako je sve prošlo kako treba, aplikacija je dostupna na ime-projekta.herokuapp.com.
+		\\
+		\\
+		Za pokretanje aplikacije na mobitelu otvorite izvorniKod/android pomoću Android studija i u klasi Connector izmijenite varijablu host u url vašeg Heroku projekta. Spojite mobitel i pokrenite aplikaciju
+		pritiskom na "run".
+		
+		
+		
 		\eject
 			
