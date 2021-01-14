@@ -48,7 +48,7 @@ class StraniceTrgovcaTest(unittest.TestCase):
         self.driver.find_element(By.NAME, "confirm_password").send_keys(NEW_PASSWORD)
         self.driver.find_element(By.NAME, "submit_button").click()
         self.fill_login_form(NEW_USERNAME, NEW_PASSWORD)
-        self.assertTrue("Logged in as new_user_test@smartestcart.com" in self.driver.page_source)
+        self.assertTrue(f"Logged in as {NEW_USERNAME}" in self.driver.page_source)
 
     def test_adding_new_barcode(self):
         self.fill_login_form("ante@fer.hr", "pwd")

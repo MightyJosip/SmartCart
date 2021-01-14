@@ -21,8 +21,9 @@ sessionId = x.json()['session_id']
 url = 'http://localhost:8000/android/edit_profile'
 x = requests.post(url, json={'session_id': sessionId, 'old_password': 'abc', 'new_password': 'pwd'})
 
-url = 'http://localhost:8000/android/signup'
-x = requests.post(url, json={'email': 'test@fer.hr', 'password': 'pwd', 'secret_code': ''}, timeout=2.5)
+
+url = 'http://localhost:8000/android/closeststores'
+x = requests.post(url, json={'latitude': 45.690050, 'longitude': 16.025267, 'distance': 15}, timeout=2.5)
 
 
 
@@ -38,6 +39,7 @@ x = requests.post(url, json={'sif_trgovina': '1', 'barkod': '3850104008597'}, ti
 
 try:
     print(x.json())
+    print(len(x.json()))
     print("dan je json")
 except:
     print(x)
