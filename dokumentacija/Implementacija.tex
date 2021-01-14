@@ -2,24 +2,17 @@
 	\section{Korištene tehnologije i alati}
 		Programsko rješenje sastoji se od dva dijela - Android aplikacija i web aplikacija.
 		
-		Android dio pisan je u okruženju AndroidStudio, u nativnom jeziku Java. Za testiranje aplikacije koristili smo ili Android Virtual Device kojeg smo pokretali u okruženju AndroidStudio ili smo aplikaciju direktno instalirali i pokretali na Android uređaju. Baza podataka koju smo koristili za Android je RoomDB koja koristi jezik MySQL.
+		Android dio pisan je u okruženju AndroidStudio (https://developer.android.com/studio), u nativnom jeziku Java. Za testiranje aplikacije koristili smo ili Android Virtual Device kojeg smo pokretali u okruženju AndroidStudio ili smo aplikaciju direktno instalirali i pokretali na Android uređaju. Baza podataka koju smo koristili za Android je RoomDB koja koristi jezik MySQL.
 		
-		Web dio pisan je u jeziku Python 3, a korišteni framework je Django. Django omogućava lakše razvijanje i upravljanje bazom podataka, funkcijama kao što su login i logout te nudi dinamičko generiranje HTML stranica. Okruženje koje je smo koristili za razvoj serverskog dijela većinom je ovisilo od osobe do osobe. Neki su preferirali Visual Studio Code, a neki PyCharm, okruženje za Python temeljeno na okruženju IntelliJ. I VSCode i PyCharm nude ugrađene funkcionalnosti za VCS tj. Version Control System.
+		Web dio pisan je u jeziku Python 3, a korišteni framework je Django. Django omogućava lakše razvijanje i upravljanje bazom podataka, funkcijama kao što su login i logout te nudi dinamičko generiranje HTML stranica. Okruženje koje je smo koristili za razvoj serverskog dijela većinom je ovisilo od osobe do osobe. Neki su preferirali Visual Studio Code (https://code.visualstudio.com/), a neki PyCharm (https://www.jetbrains.com/pycharm/), okruženje za Python temeljeno na okruženju IntelliJ. I VSCode i PyCharm nude ugrađene funkcionalnosti za VCS tj. Version Control System.
 		
-		Baza podataka na serverskom dijelu (tj. glavna baza podataka) je Postgres baza podataka. Korišteni SQL jezik je dakle PostgreSQL, a korišteni DB Manager je pgAdmin.
+		Baza podataka na serverskom dijelu (tj. glavna baza podataka) je Postgres baza podataka. Korišteni SQL jezik je dakle PostgreSQL, a korišteni DB Manager je pgAdmin (https://www.pgadmin.org/).
 		
-		Komunikacija članova tima je realizirana preko aplikacije Slack i Whatsapp, a samim verzijama koda se upravljalo preko sustava git stranici Gitlab.
+		Komunikacija članova tima je realizirana preko aplikacije Slack (https://slack.com/) i Whatsapp, a samim verzijama koda se upravljalo preko sustava git stranici Gitlab (https://about.gitlab.com/).
 		
-		Dokumentacija je pisana u okruženju TexStudio
+		Dokumentacija je pisana u okruženju TexStudio (https://www.texstudio.org/).
 		
-		https://developer.android.com/studio
-		https://www.djangoproject.com/
-		https://code.visualstudio.com/
-		https://www.jetbrains.com/pycharm/
-		https://www.pgadmin.org/
-		https://about.gitlab.com/
-		https://slack.com/
-		https://www.texstudio.org/
+		
 		
 		
 		\eject
@@ -116,7 +109,7 @@ def test_page_permissions(self):
 			\end{figure}
 		\eject
 	\section{Dijagram razmještaja}
-			Server, i serverska baza podataka nalaze se na jednom računalu. Korisnik ima nekoliko opcija ako želi pristupiti aplikaciji. Korisni može web aplikaciji pristupiti iz bilo kojeg web preglednika. Nadalje, korisnik može aplikaciji pristupiti i preko Android uređaja na kojem je instalirao SmartCart aplikaciju. Android aplikacija, kao i web aplikacija, komunikaciju sa serverom obavljaju HTTP protokolom.
+			Server i serverska baza podataka nalaze se na jednom računalu. Korisnik ima nekoliko opcija ako želi pristupiti aplikaciji. Korisnik može web aplikaciji pristupiti iz bilo kojeg web preglednika. Nadalje, korisnik može aplikaciji pristupiti i preko Android uređaja na kojem je instalirao SmartCart aplikaciju. Android aplikacija, kao i web aplikacija, komunikaciju sa serverom obavljaju HTTP protokolom.
 		
 			\begin{figure}[H]
 				\centering
