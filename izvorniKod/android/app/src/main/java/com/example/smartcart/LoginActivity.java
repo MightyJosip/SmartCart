@@ -62,8 +62,8 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+
     public void sendData(View v) {
-        //Toast.makeText(this, "Hah", Toast.LENGTH_LONG).show();
         EditText userNameField = findViewById(R.id.editTextTextPersonName);
         String userName = userNameField.getText().toString();
 
@@ -73,8 +73,6 @@ public class LoginActivity extends AppCompatActivity {
         Connector conn = Connector.getInstance(this);
 
         conn.logIn(userName, pw, response -> {
-            //Toast t = Toast.makeText(this, "Uspjeh. Poruka: " + response.toString(), Toast.LENGTH_LONG);
-            //t.show();
 
             SharedPreferences sp = getSharedPreferences("user_info", Context.MODE_PRIVATE);
             SharedPreferences.Editor spe = sp.edit();

@@ -24,7 +24,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     LayoutInflater inflater;
     List<Trgovina> trgovinas;
     Context context;
-    Integer tmp_pk;
 
     public Adapter(Context ctx, List<Trgovina> trgovinas, Context homeScreenActivityContext){
         this.inflater = LayoutInflater.from(ctx);
@@ -58,7 +57,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     public  class ViewHolder extends  RecyclerView.ViewHolder{
         TextView storeName,storeLocation, storeTimeOfOpening, storeTimeOfCloseing;
         ImageView mapIcon;
-        TextView primaryKey;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

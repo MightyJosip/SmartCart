@@ -3,7 +3,7 @@ package com.example.smartcart;
 import java.util.Map;
 import java.util.TreeMap;
 
-public abstract class Proizvod {
+public class Proizvod {
 
     private String ime;
     private String masa;
