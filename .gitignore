@@ -10,7 +10,6 @@ izvorniKod/backend/test.py
 izvorniKod/backend/local_settings.py
 izvorniKod/backend/db.sqlite3
 venv/
-static/
 
 # Documentation residues
 /dokumentacija/*.aux
