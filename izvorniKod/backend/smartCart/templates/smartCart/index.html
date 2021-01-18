@@ -28,8 +28,10 @@
                     <div class="mx-auto text-center m-3">
                         Prijavljeni ste kao {{user.get_auth_level}} <mark>{{user}}</mark>
                     </div>
+                    {% endif %}
                 </div>
             </div>
+            {% if user.is_authenticated %}
             <div class="col">
                 <div class="d-flex justify-content-around mx-auto">
                     <form action="/edit_profile" method="get">
@@ -42,8 +44,9 @@
                     </form>
                 </div>
             </div>
+            {% endif %}
 
-            {% else %}
+            {% if user.is_authenticated == False%}
             <div class="col">
                 <form action="login" method="GET">
                     {%csrf_token%}
@@ -86,9 +89,13 @@
             </div>
         </div>
     </div>
-</body>
+
 <footer class="d-flex justify-content-center">
+
     SmartCart
+    
 </footer>
+</body>
+
 
 </html>
