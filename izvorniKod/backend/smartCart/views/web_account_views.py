@@ -179,7 +179,7 @@ class LoginView(View):
         if user is not None:
             if (user.omogucen == True):
                 login(request, user)
-                return redirect_to_home_page(request)
+                return render(request, 'smartCart/index.html', {})
             else:
                 return render_form(self, request, message='You have been banned\n')
         else:
