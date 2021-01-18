@@ -162,6 +162,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = '/static/'
+import mimetypes
+mimetypes.add_type("text/css", ".css", True)
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
