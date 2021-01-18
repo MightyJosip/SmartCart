@@ -3,31 +3,52 @@
 {% load static %}
 {% load socialaccount %}
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Prijava</title>
-        <link rel="stylesheet" type="text/css" href="{% static 'login.css' %}"/>
-        <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
-    </head>
+
 <head>
+    <meta charset="UTF-8">
+    <meta content='maximum-scale=1.0, initial-scale=1.0, width=device-width' name='viewport'>
+    <title>Prijava</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}" />
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'site.css' %}" />
 
 </head>
 
 <body>
-    <h1>Login stranica</h1>
+    <div class="container-fluid text-center">
+        <div class="d-flex justify-content-between">
+            <a href="/">
+                <img src="{% static 'logo.png'%}" class="m-2 sclogo" alt="SmartCart Logo">
+            </a>
+            <img src="{% static 'logo_smartcart.png'%}" class="m-2 sclogo2" alt="SmartCart Logo2">
+        </div>
 
-    <form name="login_form" action="" method="POST">
-        {%csrf_token%}
-        {% for field in form  %}
-            <b>{{ field.label_tag }}</b><br> {{ field }}<br><br>
-        {% endfor %}
-        <input name="submit_button" type="submit" value="Submit">
-        <div class="error">{{message}}</div>
-    </form>
-
-    <a href="nova_lozinka">Zaboravio sam lozinku</a> <br />
-    <a href="{% provider_login_url 'google' %}">Login with Google</a>
-
+        <div class="d-flex flex-column justify-content-center">
+            <h1>Prijavi se!</h1>
+            <form action="" method="POST">
+                {%csrf_token%}
+                {% for field in form  %}
+                <b>{{ field.label_tag }}</b>
+                <br>
+                {{ field }}
+                <br><br>
+                {% endfor %}
+                <div class="row">
+                    <input type="submit" class="btn btn-success mx-auto" value="Prijavi me">
+                </div>
+                <div class="error">{{message}}</div>
+            </form>
+        </div>
+        <br>
+        <a href="nova_lozinka" class="mx-auto">Zaboravio sam lozinku</a> <br />
+        <a href="{% provider_login_url 'google' %}" class="mx-auto">Login with Google</a>
+    </div>
+    <footer class="d-flex justify-content-center">
+        SmartCart
+    </footer>
 </body>
 
 </html>

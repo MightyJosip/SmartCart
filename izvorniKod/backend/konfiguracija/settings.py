@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 
+import mimetypes
+mimetypes.add_type("text/css", ".css", True)
+
 CONST = {}
 CONST_PATH = os.path.join(os.path.join(Path(os.path.dirname(__file__)).parent, "constants.txt"))
 if os.path.exists(CONST_PATH):
@@ -157,8 +160,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = '/static/'
+import mimetypes
+mimetypes.add_type("text/css", ".css", True)
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

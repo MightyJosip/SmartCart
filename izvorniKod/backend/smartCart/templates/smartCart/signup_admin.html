@@ -1,23 +1,49 @@
 <!DOCTYPE html>
 <html lang="hr">
 {% load static %}
+
 <head>
     <meta charset="UTF-8">
     <title>Registriraj se kao admin</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'login.css' %}"/>
-    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}" />
+    <meta content='maximum-scale=1.0, initial-scale=1.0, width=device-width' name='viewport'>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'site.css' %}" />
 </head>
+
 <body>
-    <h1>Sign up as admin stranica</h1>
-    To get Secret code please contact SmartCart admin on the following email: smart_cart_app@gmail.com
-    <br><br>
-    <form action="" method="POST">
-        {%csrf_token%}
-        {% for field in form  %}
-            <b>{{ field.label_tag }}</b><br> {{ field }}<br><br>
-        {% endfor %}
-        <input type="submit" value="Submit">
-        <div class="error">{{message}}</div>
-    </form>
+    <div class="container-fluid text-center">
+        <div class="d-flex justify-content-between">
+            <a href="/">
+                <img src="{% static 'logo.png'%}" class="m-2 sclogo" alt="SmartCart Logo">
+            </a>
+            <img src="{% static 'logo_smartcart.png'%}" class="sclogo2 m-2" alt="SmartCart Logo2">
+        </div>
+        <h1 class="text-center">Postani administrator!</h1>
+        <p class="text-center">Za tajni kod, molimo kontaktirajte SmartCart administratore, email:
+            smart_cart_app@gmail.com<p>
+                <hr />
+
+                <div class="d-flex justify-content-center">
+                    <form action="" method="POST">
+                        {%csrf_token%}
+                        {% for field in form  %}
+                        <b>{{ field.label_tag }}</b><br> {{ field }}<br><br>
+                        {% endfor %}
+                        <div class="row">
+                            <input type="submit" class="btn btn-success mx-auto" value="Submit">
+                        </div>
+
+                        <div class="error">{{message}}</div>
+                    </form>
+                </div>
+                <hr />
+    </div>
 </body>
+<footer class="d-flex justify-content-center">
+    SmartCart
+</footer>
 </html>
