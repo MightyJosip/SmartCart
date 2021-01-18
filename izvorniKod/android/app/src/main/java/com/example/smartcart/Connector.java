@@ -24,7 +24,7 @@ import java.util.List;
 
 public class Connector {
 
-    private static final String HOST = "http://192.168.0.24:8000/";
+    private static final String HOST = "http://preljevstoga-smartcart.herokuapp.com/";
 
     private static Connector singleInstance;
     private static RequestQueue requestQueue;
